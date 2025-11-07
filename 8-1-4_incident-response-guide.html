@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Bridge Incident Response Guide</title>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .main-content {
+            margin-left: 0;
+            padding: 0;
+            max-width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .bridge-header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 24px 32px;
+            border-bottom: 3px solid #0056B3;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vessel-info-section {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .vessel-main-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .vessel-name-large {
+            font-size: 36px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .vessel-imo-large {
+            font-size: 18px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .time-display-large {
+            font-size: 24px;
+            color: #cbd5e1;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .status-badge-huge {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .status-badge-huge.danger {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(239, 68, 68, 0.2) 100%);
+            color: #ef4444;
+            border: 3px solid #ef4444;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: currentColor;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+
+        /* Main Content */
+        .bridge-content {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+        }
+
+        .page-title-large {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 24px;
+        }
+
+        /* Incident Info */
+        .incident-info-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(239, 68, 68, 0.1) 100%);
+            border: 3px solid #ef4444;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .incident-title-large {
+            font-size: 26px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .incident-meta {
+            font-size: 18px;
+            color: #cbd5e1;
+            display: flex;
+            gap: 24px;
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar-container {
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 20px;
+            height: 50px;
+            overflow: hidden;
+            border: 2px solid #334155;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        /* Checklist */
+        .checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .checklist-item {
+            background: rgba(30, 41, 59, 0.6);
+            border: 3px solid #334155;
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s;
+        }
+
+        .checklist-item:hover {
+            background: rgba(30, 41, 59, 0.9);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .checklist-item.completed {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border-color: #10b981;
+        }
+
+        .checklist-item.collapsed {
+            padding: 20px 28px;
+            cursor: pointer;
+        }
+
+        .checklist-item.collapsed .step-desc,
+        .checklist-item.collapsed .step-time,
+        .checklist-item.collapsed .checkbox-large {
+            display: none;
+        }
+
+        /* Current Step - Large Focus */
+        .checklist-item.current {
+            background: linear-gradient(135deg, rgba(0, 86, 179, 0.25) 0%, rgba(0, 86, 179, 0.15) 100%);
+            border: 4px solid #0056B3;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 16px 48px rgba(0, 86, 179, 0.4), 0 0 0 1px rgba(0, 86, 179, 0.2);
+        }
+
+        .current-step-header {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            margin-bottom: 24px;
+        }
+
+        .current-step-body {
+            margin-left: 120px;
+        }
+
+        .current-step-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+
+        .current-step-desc {
+            font-size: 20px;
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .step-timer-section {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 32px;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            border: 2px solid rgba(0, 86, 179, 0.3);
+        }
+
+        .timer-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .timer-label {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .timer-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timer-value.warning {
+            color: #f59e0b;
+        }
+
+        .current-step-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn-current-step {
+            flex: 1;
+            padding: 24px 40px;
+            border-radius: 16px;
+            font-size: 24px;
+            font-weight: 800;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-transform: none;
+        }
+
+        .btn-current-step.complete {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: 3px solid #10b981;
+        }
+
+        .btn-current-step.complete:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 12px 32px rgba(16, 185, 129, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .btn-current-step.support {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 3px solid #f59e0b;
+        }
+
+        .btn-current-step.support:hover {
+            background: rgba(245, 158, 11, 0.3);
+            box-shadow: 0 12px 32px rgba(245, 158, 11, 0.4);
+            transform: translateY(-3px);
+        }
+
+        /* Collapsed Item Styles */
+        .collapsed-item-header {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .collapsed-item-header .step-title {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .expand-icon {
+            margin-left: auto;
+            font-size: 24px;
+            color: #94a3b8;
+            transition: transform 0.3s;
+        }
+
+        .checklist-item.collapsed:hover .expand-icon {
+            color: #ffffff;
+        }
+
+        .step-number {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 800;
+            border: 3px solid;
+            flex-shrink: 0;
+        }
+
+        .step-number.pending {
+            background: rgba(51, 65, 85, 0.3);
+            color: #94a3b8;
+            border-color: #334155;
+        }
+
+        .step-number.current {
+            background: rgba(0, 86, 179, 0.3);
+            color: #ffffff;
+            border-color: #0056B3;
+            width: 88px;
+            height: 88px;
+            font-size: 40px;
+        }
+
+        .step-number.completed {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border-color: #10b981;
+        }
+
+        .step-number.collapsed {
+            width: 56px;
+            height: 56px;
+            font-size: 24px;
+        }
+
+        .checkbox-large {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            font-size: 16px;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .step-time {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-top: 8px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .btn-huge {
+            padding: 20px 32px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .btn-huge.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: 2px solid #10b981;
+        }
+
+        .btn-huge.success:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-huge.secondary {
+            background: rgba(30, 41, 59, 0.6);
+            color: #cbd5e1;
+            border: 2px solid #334155;
+        }
+
+        .btn-huge.secondary:hover {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: #475569;
+        }
+
+        /* Bridge Navigation */
+        .bridge-nav {
+            background: rgba(30, 41, 59, 0.95);
+            border-bottom: 2px solid rgba(0, 86, 179, 0.4);
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 32px;
+        }
+
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(0, 86, 179, 0.2);
+            color: #ffffff;
+            border-color: rgba(0, 86, 179, 0.4);
+        }
+
+        .nav-link.active {
+            background: rgba(0, 86, 179, 0.3);
+            color: #ffffff;
+            border-color: #0056B3;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Header -->
+    <div class="bridge-header">
+        <div class="vessel-info-section">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" style="height: 48px; filter: brightness(0) invert(1);">
+            <div class="vessel-main-info">
+                <div class="vessel-name-large">MV Pacific Star</div>
+                <div class="vessel-imo-large">IMO: 9876543</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="time-display-large" id="currentTime">2025. 10. 14. 17:30:15</div>
+            <div class="status-badge-huge danger">
+                <span class="status-dot"></span>
+                CRITICAL
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bridge-nav">
+        <a href="8-1-1_bridge-main-dashboard.html" class="nav-link">
+            <span style="font-size: 24px;">🏠</span>
+            <span>Main</span>
+        </a>
+        <a href="8-1-2_incident-alert-list.html" class="nav-link">
+            <span style="font-size: 24px;">🚨</span>
+            <span>Alerts</span>
+        </a>
+        <a href="8-1-3_network-status.html" class="nav-link">
+            <span style="font-size: 24px;">🔗</span>
+            <span>Network</span>
+        </a>
+        <a href="8-1-4_incident-response-guide.html" class="nav-link active">
+            <span style="font-size: 24px;">📋</span>
+            <span>Response</span>
+        </a>
+        <a href="8-1-5_remote-access-control.html" class="nav-link">
+            <span style="font-size: 24px;">🔒</span>
+            <span>Remote</span>
+        </a>
+        <a href="8-2-1_bridge-system-settings.html" class="nav-link">
+            <span style="font-size: 24px;">⚙️</span>
+            <span>Settings</span>
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="bridge-content">
+            <h1 class="page-title-large">Incident Response Guide</h1>
+
+            <!-- Incident Info -->
+            <div class="incident-info-card">
+                <div class="incident-title-large">ECR Zone Ransomware Detection</div>
+                <div class="incident-meta">
+                    <span>Detected: 2025-10-14 14:35</span>
+                    <span>•</span>
+                    <span>Severity: Critical</span>
+                    <span>•</span>
+                    <span>Location: Engine Control Room</span>
+                </div>
+            </div>
+
+            <!-- Progress -->
+            <div class="progress-section">
+                <div class="section-title">Response Progress</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: 28.57%;"></div>
+                    <div class="progress-text">Progress: 3 / 7 Steps (43%)</div>
+                </div>
+            </div>
+
+            <!-- Checklist -->
+            <div class="section-title">Response Playbook Checklist</div>
+            <div class="checklist">
+                <!-- Step 1 - Completed & Collapsed -->
+                <div class="checklist-item completed collapsed" onclick="toggleStep(this)">
+                    <div class="collapsed-item-header">
+                        <div class="step-number completed collapsed">1</div>
+                        <div class="step-content">
+                            <div class="step-title">✓ Immediate Network Isolation</div>
+                        </div>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="step-desc">Immediately isolate the affected zone from other networks to prevent spread</div>
+                    <div class="step-time">✓ Completed: 2025-10-14 14:40</div>
+                </div>
+
+                <!-- Step 2 - Completed & Collapsed -->
+                <div class="checklist-item completed collapsed" onclick="toggleStep(this)">
+                    <div class="collapsed-item-header">
+                        <div class="step-number completed collapsed">2</div>
+                        <div class="step-content">
+                            <div class="step-title">✓ Contact Shore Control Center</div>
+                        </div>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="step-desc">Immediately report incident to shore control center and request remote support</div>
+                    <div class="step-time">✓ Completed: 2025-10-14 14:42</div>
+                </div>
+
+                <!-- Step 3 - Current (LARGE FOCUS) -->
+                <div class="checklist-item current">
+                    <div class="current-step-header">
+                        <div class="step-number current">3</div>
+                    </div>
+                    <div class="current-step-body">
+                        <div class="current-step-title">3. Verify Critical Systems Backup</div>
+                        <div class="current-step-desc">
+                            Verify the latest backup status of unaffected systems and perform immediate backup if necessary.
+                            This is a critical step to minimize ransomware damage and ensure recovery capability.
+                        </div>
+
+                        <div class="step-timer-section">
+                            <div class="timer-item">
+                                <div class="timer-label">Expected Duration</div>
+                                <div class="timer-value">15 min</div>
+                            </div>
+                            <div class="timer-item">
+                                <div class="timer-label">Elapsed Time</div>
+                                <div class="timer-value warning" id="elapsedTime">03:12</div>
+                            </div>
+                        </div>
+
+                        <div class="current-step-actions">
+                            <button class="btn-current-step complete" onclick="completeStep()">
+                                <span style="font-size: 32px;">✓</span>
+                                <span>Mark Complete</span>
+                            </button>
+                            <button class="btn-current-step support" onclick="requestSupport()">
+                                <span style="font-size: 32px;">❓</span>
+                                <span>Request Shore Support</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 - Pending & Collapsed -->
+                <div class="checklist-item collapsed" onclick="toggleStep(this)">
+                    <div class="collapsed-item-header">
+                        <div class="step-number pending collapsed">4</div>
+                        <div class="step-content">
+                            <div class="step-title">Document Affected Systems</div>
+                        </div>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="step-desc">Document detailed list of affected systems, files, and databases impacted by ransomware</div>
+                    <div class="step-time">Pending</div>
+                </div>
+
+                <!-- Step 5 - Pending & Collapsed -->
+                <div class="checklist-item collapsed" onclick="toggleStep(this)">
+                    <div class="collapsed-item-header">
+                        <div class="step-number pending collapsed">5</div>
+                        <div class="step-content">
+                            <div class="step-title">Coordinate with Shore Experts</div>
+                        </div>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="step-desc">Follow shore cybersecurity expert instructions for recovery procedures</div>
+                    <div class="step-time">Pending</div>
+                </div>
+
+                <!-- Step 6 - Pending & Collapsed -->
+                <div class="checklist-item collapsed" onclick="toggleStep(this)">
+                    <div class="collapsed-item-header">
+                        <div class="step-number pending collapsed">6</div>
+                        <div class="step-content">
+                            <div class="step-title">System Recovery and Verification</div>
+                        </div>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="step-desc">Restore systems from backup and verify complete ransomware removal</div>
+                    <div class="step-time">Pending</div>
+                </div>
+
+                <!-- Step 7 - Pending & Collapsed -->
+                <div class="checklist-item collapsed" onclick="toggleStep(this)">
+                    <div class="collapsed-item-header">
+                        <div class="step-number pending collapsed">7</div>
+                        <div class="step-content">
+                            <div class="step-title">Post-Incident Report</div>
+                        </div>
+                        <span class="expand-icon">▼</span>
+                    </div>
+                    <div class="step-desc">Create detailed report including incident timeline, response actions, damages, and improvement recommendations</div>
+                    <div class="step-time">Pending</div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('currentTime').textContent = `${year}. ${month}. ${day}. ${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Timer for elapsed time
+        let elapsedSeconds = 192; // Starting at 3:12 (3 * 60 + 12)
+        function updateElapsedTime() {
+            elapsedSeconds++;
+            const minutes = Math.floor(elapsedSeconds / 60);
+            const seconds = elapsedSeconds % 60;
+            const timeStr = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+            const elapsedElement = document.getElementById('elapsedTime');
+            if (elapsedElement) {
+                elapsedElement.textContent = timeStr;
+                // Warning color if over 10 minutes
+                if (minutes >= 10) {
+                    elapsedElement.classList.add('warning');
+                }
+            }
+        }
+        setInterval(updateElapsedTime, 1000);
+
+        // Toggle step expansion
+        function toggleStep(element) {
+            element.classList.toggle('collapsed');
+            const icon = element.querySelector('.expand-icon');
+            if (icon) {
+                icon.textContent = element.classList.contains('collapsed') ? '▼' : '▲';
+            }
+        }
+
+        // Complete current step
+        function completeStep() {
+            if (confirm('Mark current step as complete?')) {
+                alert('Step 3 completed. Proceeding to next step.');
+                // In a real app, this would update the backend and refresh the page
+            }
+        }
+
+        // Request support
+        function requestSupport() {
+            if (confirm('Request shore control center support?')) {
+                alert('Support request sent. Shore control center will contact you shortly.');
+                // In a real app, this would send a support request to the shore control
+            }
+        }
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>

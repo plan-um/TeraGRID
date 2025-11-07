@@ -1,0 +1,21 @@
+Translation mapping for bridge files:
+선상 → Bridge/Onboard
+메인 → Main
+사고경보 → Alerts/Incidents
+네트워크 → Network
+대응가이드 → Response Guide
+원격접속 → Remote Access
+시스템설정 → System Settings
+위험 상태 → CRITICAL
+정상 상태 → Normal
+긴급 모드 → Emergency Mode
+즉시 격리 → Immediate Isolation
+플레이북 시작 → Start Playbook
+세션 종료 → Terminate Session
+육상 연락 → Contact Shore
+격리 → Isolate
+격리 해제 → Restore
+온라인 → Online
+오프라인 → Offline
+완료 → Complete
+대기 중 → Pending

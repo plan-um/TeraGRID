@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - OT Traffic Log</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Detail</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item active">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Config</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>        </div>
+    </aside>
+
+<main class="main-content"><div class="page-header"><h1>OT Traffic Log</h1><p>View collected OT protocol traffic logs</p></div>
+<div class="card"><div class="card-header"><select class="form-input" style="max-width: 150px;"><option>All Protocols</option><option>Modbus</option><option>DNP3</option><option>OPC UA</option></select></div>
+<table class="table"><thead><tr><th>Time</th><th>Protocol</th><th>Source</th><th>Destination</th><th>Function Code</th><th>Details</th></tr></thead><tbody><tr><td>14:35:22</td><td>Modbus</td><td>192.168.1.10</td><td>192.168.1.20</td><td>0x03 (Read Holding)</td><td>Register 40001</td></tr><tr><td>14:35:18</td><td>OPC UA</td><td>192.168.1.11</td><td>192.168.1.21</td><td>Read</td><td>Node Temperature</td></tr><tr><td>14:35:15</td><td>DNP3</td><td>192.168.1.12</td><td>192.168.1.22</td><td>Read</td><td>Analog Input 0</td></tr><tr><td>14:35:10</td><td>Modbus</td><td>192.168.1.13</td><td>192.168.1.23</td><td>0x06 (Write Single)</td><td>Register 40010</td></tr><tr><td>14:35:05</td><td>OPC UA</td><td>192.168.1.14</td><td>192.168.1.24</td><td>Write</td><td>Node SetPoint</td></tr><tr><td>14:35:00</td><td>Profinet</td><td>192.168.1.15</td><td>192.168.1.25</td><td>Cyclic Data</td><td>I/O Module 1</td></tr><tr><td>14:34:55</td><td>EtherNet/IP</td><td>192.168.1.16</td><td>192.168.1.26</td><td>CIP Request</td><td>Tag Read</td></tr></tbody></table></div>
+</main>    <script>
+        lucide.createIcons();
+    </script>
+</body></html>

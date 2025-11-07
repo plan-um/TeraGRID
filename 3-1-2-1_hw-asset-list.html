@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Hardware Asset Inventory</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item active">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Details</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Config</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="breadcrumb">
+            <a href="2-1_fleet-dashboard.html">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="3-1-1_vessel-detail-dashboard.html">Vessel Analysis</a>
+            <span class="breadcrumb-separator">/</span>
+            <span>Hardware Asset Inventory</span>
+        </div>
+
+        <div class="page-header">
+            <h1>Hardware Asset Inventory</h1>
+            <p>View and manage all hardware (CBS) assets on the vessel</p>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div style="display: flex; gap: 12px; flex: 1;">
+                    <input type="text" class="form-input" placeholder="Search by IP address or manufacturer..." style="max-width: 300px;">
+                    <select class="form-input" style="max-width: 150px;">
+                        <option>All Status</option>
+                        <option>Online</option>
+                        <option>Offline</option>
+                        <option>Warning</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="location.href='3-1-2-3_hw-asset-form.html'">Register HW Asset</button>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>IP Address</th>
+                        <th>MAC Address</th>
+                        <th>Manufacturer</th>
+                        <th>Model</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Last Checked</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr onclick="location.href='3-1-2-2_hw-asset-detail.html'" style="cursor: pointer;">
+                        <td>192.168.1.10</td>
+                        <td>00:1A:2B:3C:4D:5E</td>
+                        <td>Siemens</td>
+                        <td>SIMATIC S7-1500</td>
+                        <td>Engine Room</td>
+                        <td><span class="badge badge-success">Online</span></td>
+                        <td>5 min ago</td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                    <tr onclick="location.href='3-1-2-2_hw-asset-detail.html'" style="cursor: pointer;">
+                        <td>192.168.1.11</td>
+                        <td>00:1A:2B:3C:4D:5F</td>
+                        <td>Schneider Electric</td>
+                        <td>Modicon M580</td>
+                        <td>Bridge</td>
+                        <td><span class="badge badge-success">Online</span></td>
+                        <td>2 min ago</td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                    <tr onclick="location.href='3-1-2-2_hw-asset-detail.html'" style="cursor: pointer;">
+                        <td>192.168.1.12</td>
+                        <td>00:1A:2B:3C:4D:60</td>
+                        <td>ABB</td>
+                        <td>AC800M</td>
+                        <td>Cargo Control</td>
+                        <td><span class="badge badge-warning">Warning</span></td>
+                        <td>1 hour ago</td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                    <tr onclick="location.href='3-1-2-2_hw-asset-detail.html'" style="cursor: pointer;">
+                        <td>192.168.1.13</td>
+                        <td>00:1A:2B:3C:4D:61</td>
+                        <td>Honeywell</td>
+                        <td>Experion PKS</td>
+                        <td>HVAC Control</td>
+                        <td><span class="badge badge-success">Online</span></td>
+                        <td>10 min ago</td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                    <tr onclick="location.href='3-1-2-2_hw-asset-detail.html'" style="cursor: pointer;">
+                        <td>192.168.1.14</td>
+                        <td>00:1A:2B:3C:4D:62</td>
+                        <td>Rockwell</td>
+                        <td>ControlLogix 5580</td>
+                        <td>Safety System</td>
+                        <td><span class="badge badge-danger">Offline</span></td>
+                        <td>3 hours ago</td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                    <tr onclick="location.href='3-1-2-2_hw-asset-detail.html'" style="cursor: pointer;">
+                        <td>192.168.1.15</td>
+                        <td>00:1A:2B:3C:4D:63</td>
+                        <td>Emerson</td>
+                        <td>DeltaV System</td>
+                        <td>Process Control</td>
+                        <td><span class="badge badge-success">Online</span></td>
+                        <td>8 min ago</td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--gray-200);">
+                <div style="font-size: 14px; color: var(--gray-500);">
+                    Showing 1-5 of 23 assets
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-secondary" style="padding: 8px 12px;">Previous</button>
+                    <button class="btn btn-primary" style="padding: 8px 12px;">1</button>
+                    <button class="btn btn-secondary" style="padding: 8px 12px;">2</button>
+                    <button class="btn btn-secondary" style="padding: 8px 12px;">Next</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

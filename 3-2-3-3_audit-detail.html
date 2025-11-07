@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Audit Detail</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+        <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Details</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item active">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Configuration</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>        </div>
+    </aside>
+
+<main class="main-content">
+        <div class="breadcrumb">
+            <a href="2-1_fleet-dashboard.html">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="3-2-1_compliance-dashboard.html">Compliance</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="3-2-3-1_audit-list.html">Audit List</a>
+            <span class="breadcrumb-separator">/</span>
+            <span>Audit Detail</span>
+        </div>
+
+        <div class="page-header">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div>
+                    <h1>External Audit Detail</h1>
+                    <p>MV Pacific Star • Lloyd's Register • 2024-08-15</p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-secondary">Upload Report</button>
+                    <button class="btn btn-primary" onclick="location.href='3-2-3-2_audit-form.html'">Edit</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Basic Information</h3>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                <div>
+                    <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Audit Type</div>
+                    <div style="font-size: 16px; font-weight: 600;">External Audit</div>
+                </div>
+                <div>
+                    <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Target Vessel</div>
+                    <div style="font-size: 16px; font-weight: 600;">MV Pacific Star (IMO: 9876543)</div>
+                </div>
+                <div>
+                    <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Schedule</div>
+                    <div style="font-size: 16px; font-weight: 600;">2024-08-15</div>
+                </div>
+                <div>
+                    <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Auditor</div>
+                    <div style="font-size: 16px; font-weight: 600;">Lloyd's Register</div>
+                </div>
+                <div>
+                    <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Status</div>
+                    <div><span class="badge badge-success">Completed</span></div>
+                </div>
+                <div>
+                    <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Result</div>
+                    <div><span class="badge badge-success">Compliant</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+                <h3 class="card-title">Inspection Checklist</h3>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <label style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--gray-50); border-radius: 8px;">
+                    <input type="checkbox" checked disabled style="width: 20px; height: 20px;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">Asset Inventory</div>
+                        <div style="font-size: 13px; color: var(--gray-500);">All assets registered and documented</div>
+                    </div>
+                    <span class="badge badge-success">Compliant</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--gray-50); border-radius: 8px;">
+                    <input type="checkbox" checked disabled style="width: 20px; height: 20px;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">Network Segmentation</div>
+                        <div style="font-size: 13px; color: var(--gray-500);">Network properly segmented</div>
+                    </div>
+                    <span class="badge badge-success">Compliant</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--gray-50); border-radius: 8px;">
+                    <input type="checkbox" checked disabled style="width: 20px; height: 20px;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">Access Control</div>
+                        <div style="font-size: 13px; color: var(--gray-500);">Access control policy implemented</div>
+                    </div>
+                    <span class="badge badge-success">Compliant</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--gray-50); border-radius: 8px;">
+                    <input type="checkbox" checked disabled style="width: 20px; height: 20px;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">Incident Response</div>
+                        <div style="font-size: 13px; color: var(--gray-500);">Incident response plan established</div>
+                    </div>
+                    <span class="badge badge-success">Compliant</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+                <h3 class="card-title">Audit Report</h3>
+            </div>
+            <div style="background: var(--gray-50); padding: 24px; border-radius: 8px;">
+                <p style="line-height: 1.6; color: var(--gray-700); margin-bottom: 16px;">
+                    The external audit conducted on MV Pacific Star has demonstrated full compliance
+                    with IACS UR E26 requirements. All critical systems are properly documented and
+                    secured.
+                </p>
+                <p style="line-height: 1.6; color: var(--gray-700);">
+                    No major non-conformities were identified. Minor recommendations for improvement
+                    have been provided separately.
+                </p>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+                <h3 class="card-title">Supporting Documents</h3>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px;">
+                    <div style="width: 40px; height: 40px; background: var(--gray-200); border-radius: 8px;"></div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 14px;">Audit_Report_MV_Pacific_Star_2024.pdf</div>
+                        <div style="font-size: 13px; color: var(--gray-500);">2.4 MB</div>
+                    </div>
+                    <button class="btn btn-secondary" style="padding: 6px 12px;">Download</button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px;">
+                    <div style="width: 40px; height: 40px; background: var(--gray-200); border-radius: 8px;"></div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 14px;">Evidence_Photos.zip</div>
+                        <div style="font-size: 13px; color: var(--gray-500);">18.7 MB</div>
+                    </div>
+                    <button class="btn btn-secondary" style="padding: 6px 12px;">Download</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Alert Detail</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+        <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Detail</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item active">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Config</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>        </div>
+    </aside>
+
+<main class="main-content">
+        <div class="breadcrumb"><a href="2-1_fleet-dashboard.html">Home</a><span class="breadcrumb-separator">/</span><a href="4-1-1_alert-list.html">Alert List</a><span class="breadcrumb-separator">/</span><span>Alert Detail</span></div>
+        <div class="page-header">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div><h1>Ransomware Detected</h1><p>MV Pacific Star • ECR Zone • Critical</p></div>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-primary" onclick="location.href='4-1-3_incident-management.html'">Convert to Incident</button>
+                    <button class="btn btn-secondary">Suggest Playbook</button>
+                    <button class="btn btn-secondary">Close Alert</button>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header"><h3 class="card-title">Alert Information</h3></div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                <div><div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Severity</div><div><span class="badge badge-danger">Critical</span></div></div>
+                <div><div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Timestamp</div><div style="font-size: 16px; font-weight: 600;">2024-10-04 14:35:22</div></div>
+                <div><div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Target Vessel</div><div style="font-size: 16px; font-weight: 600;">MV Pacific Star</div></div>
+                <div><div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Location</div><div style="font-size: 16px; font-weight: 600;">ECR Zone</div></div>
+                <div><div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Target Asset</div><div style="font-size: 16px; font-weight: 600;">192.168.1.10 (SIMATIC S7-1500)</div></div>
+                <div><div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Status</div><div><span class="badge badge-warning">In Progress</span></div></div>
+            </div>
+        </div>
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-header"><h3 class="card-title">MITRE ATT&CK Mapping</h3></div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="padding: 12px; background: var(--gray-50); border-radius: 8px;"><div style="font-weight: 600;">T1486 - Data Encrypted for Impact</div><div style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">Ransomware encryption detected</div></div>
+                <div style="padding: 12px; background: var(--gray-50); border-radius: 8px;"><div style="font-weight: 600;">T1490 - Inhibit System Recovery</div><div style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">Backup deletion attempts</div></div>
+            </div>
+        </div>
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-header"><h3 class="card-title">Related Logs</h3></div>
+            <table class="table"><thead><tr><th>Time</th><th>Event</th><th>Details</th></tr></thead>
+            <tbody>
+                <tr><td>14:35:22</td><td>File Encryption</td><td>Multiple files encrypted in system directory</td></tr>
+                <tr><td>14:34:18</td><td>Suspicious Process</td><td>Unknown process spawned: crypto.exe</td></tr>
+                <tr><td>14:33:45</td><td>Network Activity</td><td>Outbound connection to suspicious IP</td></tr>
+            </tbody></table>
+        </div>
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-header"><h3 class="card-title">Threat Intelligence</h3></div>
+            <div style="background: var(--gray-50); padding: 16px; border-radius: 8px;"><p style="line-height: 1.6; color: var(--gray-700);">Similar ransomware activity detected in maritime sector. Known variant: LockBit 3.0. Recommend immediate network isolation.</p></div>
+        </div>
+    </main>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

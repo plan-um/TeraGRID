@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Vessel Detail Dashboard</title>
+    <link rel="stylesheet" href="common.css">
+    <style>
+        .vessel-header {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .vessel-title-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+
+        .vessel-info-main {
+            flex: 1;
+        }
+
+        .vessel-name-large {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .vessel-meta {
+            display: flex;
+            gap: 24px;
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        .vessel-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .resilience-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            padding: 20px;
+            background-color: var(--gray-50);
+            border-radius: 8px;
+        }
+
+        .resilience-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .resilience-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .resilience-icon.green {
+            background-color: #d1fae5;
+            color: var(--success);
+        }
+
+        .resilience-icon.yellow {
+            background-color: #fef3c7;
+            color: var(--warning);
+        }
+
+        .resilience-icon.red {
+            background-color: #fee2e2;
+            color: var(--danger);
+        }
+
+        .resilience-label {
+            font-size: 13px;
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+
+        .content-grid-3col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .widget {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .widget-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .incident-item {
+            padding: 12px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .incident-item:hover {
+            border-color: var(--primary);
+            background-color: var(--gray-50);
+        }
+
+        .incident-severity {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .incident-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .incident-time {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .network-diagram {
+            padding: 20px;
+            background: linear-gradient(180deg, #f9fafb 0%, #ffffff 100%);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .network-level {
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .network-level.safe {
+            background-color: #d1fae5;
+            color: var(--success);
+        }
+
+        .network-level.warning {
+            background-color: #fef3c7;
+            color: var(--warning);
+        }
+
+        .remote-session {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background-color: var(--gray-50);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .session-info {
+            flex: 1;
+        }
+
+        .session-label {
+            font-size: 13px;
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+
+        .session-status {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .status-badge-large {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .status-badge-large.danger {
+            background-color: #fee2e2;
+            color: var(--danger);
+        }
+
+        .status-badge-large.warning {
+            background-color: #fef3c7;
+            color: var(--warning);
+        }
+
+        .status-badge-large.success {
+            background-color: #d1fae5;
+            color: var(--success);
+        }
+
+        .playbook-status {
+            padding: 16px;
+            background-color: var(--gray-50);
+            border-radius: 8px;
+            margin-top: 12px;
+        }
+
+        .playbook-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .playbook-progress {
+            width: 100%;
+            height: 8px;
+            background-color: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .playbook-progress-bar {
+            height: 100%;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+
+        @media (max-width: 1200px) {
+            .content-grid-3col {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-grid-3col {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item active">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Details</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Config</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="breadcrumb">
+            <a href="2-1_fleet-dashboard.html">Dashboard</a>
+            <span class="breadcrumb-separator">/</span>
+            <span>Vessel Details</span>
+        </div>
+
+        <!-- Vessel Header -->
+        <div class="vessel-header">
+            <div class="vessel-title-section">
+                <div class="vessel-info-main">
+                    <h1 class="vessel-name-large">MV Pacific Star</h1>
+                    <div class="vessel-meta">
+                        <span><strong>IMO:</strong> 9876543</span>
+                        <span><strong>Type:</strong> Container Ship</span>
+                        <span><strong>Gross Tonnage:</strong> 95,000 GT</span>
+                        <span><strong>Location:</strong> North Pacific (35.2°N, 140.1°E)</span>
+                    </div>
+                </div>
+                <div class="vessel-actions">
+                    <span class="status-badge-large danger">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background-color: var(--danger);"></span>
+                        Critical
+                    </span>
+                </div>
+            </div>
+
+            <div class="resilience-status">
+                <div class="resilience-item">
+                    <div class="resilience-icon red">!</div>
+                    <span class="resilience-label">Security Incident</span>
+                </div>
+                <div class="resilience-item">
+                    <div class="resilience-icon yellow">⚠</div>
+                    <span class="resilience-label">Network</span>
+                </div>
+                <div class="resilience-item">
+                    <div class="resilience-icon green">✓</div>
+                    <span class="resilience-label">Asset Management</span>
+                </div>
+                <div class="resilience-item">
+                    <div class="resilience-icon green">✓</div>
+                    <span class="resilience-label">Compliance</span>
+                </div>
+                <div class="resilience-item">
+                    <div class="resilience-icon yellow">⚠</div>
+                    <span class="resilience-label">Vulnerabilities</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid-3col">
+            <!-- Incident Alarms -->
+            <div class="widget">
+                <h3 class="widget-title">
+                    <span style="color: var(--danger);">●</span>
+                    Incident Alerts
+                </h3>
+                <div>
+                    <div class="incident-item">
+                        <div class="incident-title">
+                            <span class="incident-severity" style="background-color: var(--danger);"></span>
+                            Ransomware Detected
+                        </div>
+                        <div class="incident-time">ECR Zone • 5 min ago</div>
+                    </div>
+                    <div class="incident-item">
+                        <div class="incident-title">
+                            <span class="incident-severity" style="background-color: var(--warning);"></span>
+                            Unauthorized USB Connection Attempt
+                        </div>
+                        <div class="incident-time">Bridge Network • 15 min ago</div>
+                    </div>
+                    <div class="incident-item">
+                        <div class="incident-title">
+                            <span class="incident-severity" style="background-color: #3b82f6;"></span>
+                            SW Vulnerability Detected
+                        </div>
+                        <div class="incident-time">Navigation System • 1 hour ago</div>
+                    </div>
+                    <div class="incident-item">
+                        <div class="incident-title">
+                            <span class="incident-severity" style="background-color: var(--warning);"></span>
+                            Network Scan Detected
+                        </div>
+                        <div class="incident-time">Cargo Control • 2 hours ago</div>
+                    </div>
+                    <div class="incident-item">
+                        <div class="incident-title">
+                            <span class="incident-severity" style="background-color: #3b82f6;"></span>
+                            Policy Violation Detected
+                        </div>
+                        <div class="incident-time">HVAC Zone • 3 hours ago</div>
+                    </div>
+                    <div class="incident-item">
+                        <div class="incident-title">
+                            <span class="incident-severity" style="background-color: var(--warning);"></span>
+                            Abnormal Traffic Detected
+                        </div>
+                        <div class="incident-time">IT Zone • 4 hours ago</div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 12px;" onclick="location.href='4-1-1_alert-list.html'">
+                    View All Alerts
+                </button>
+            </div>
+
+            <!-- Network Status (Purdue Model) -->
+            <div class="widget">
+                <h3 class="widget-title">
+                    <span style="color: var(--warning);">●</span>
+                    Network Status (Purdue Model)
+                </h3>
+                <div class="network-diagram">
+                    <div class="network-level safe">Level 5: Enterprise Network ✓</div>
+                    <div class="network-level safe">Level 4: IT Zone ✓</div>
+                    <div class="network-level warning">Level 3: Operations Zone ⚠</div>
+                    <div class="network-level safe">Level 2: Control Zone ✓</div>
+                    <div class="network-level safe">Level 1: I/O Zone ✓</div>
+                </div>
+                <div style="margin-top: 12px; padding: 12px; background-color: #fef3c7; border-radius: 8px;">
+                    <div style="font-size: 13px; font-weight: 600; color: var(--warning); margin-bottom: 4px;">⚠ Warning</div>
+                    <div style="font-size: 12px; color: var(--gray-700);">Abnormal traffic detected in Operations Zone</div>
+                </div>
+            </div>
+
+            <!-- Remote Access -->
+            <div class="widget">
+                <h3 class="widget-title">
+                    <span style="color: var(--success);">●</span>
+                    Remote Access Status
+                </h3>
+                <div class="remote-session">
+                    <div class="session-info">
+                        <div class="session-label">No Active Sessions</div>
+                        <div class="session-status">Last Access: 2 hours ago</div>
+                    </div>
+                    <span class="badge badge-success">Normal</span>
+                </div>
+                <div style="padding: 12px; background-color: var(--gray-50); border-radius: 8px; margin-top: 8px;">
+                    <div style="font-size: 13px; color: var(--gray-700); margin-bottom: 8px;">
+                        <strong>Access Permission:</strong> Enabled
+                    </div>
+                    <div style="font-size: 13px; color: var(--gray-700);">
+                        <strong>Allowed IP:</strong> 203.xxx.xxx.xxx
+                    </div>
+                </div>
+                <button class="btn btn-danger" style="width: 100%; margin-top: 12px;">
+                    Terminate Remote Session
+                </button>
+            </div>
+        </div>
+
+        <!-- Playbook Status -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Response Playbook Status</h3>
+            </div>
+            <div class="playbook-status">
+                <div class="playbook-title">
+                    Active Playbook: Ransomware Response Protocol
+                </div>
+                <div style="font-size: 13px; color: var(--gray-600); margin-bottom: 8px;">
+                    Progress: Step 1 of 3 completed (Isolation Complete)
+                </div>
+                <div class="playbook-progress">
+                    <div class="playbook-progress-bar" style="width: 33%;"></div>
+                </div>
+                <div style="margin-top: 16px; display: flex; gap: 12px;">
+                    <button class="btn btn-primary">
+                        Continue Playbook
+                    </button>
+                    <button class="btn btn-secondary">
+                        Pause Playbook
+                    </button>
+                    <button class="btn btn-secondary">
+                        View Details
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+                <h3 class="card-title">Quick Actions</h3>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+                <button class="btn btn-secondary">
+                    View Asset Intelligence
+                </button>
+                <button class="btn btn-secondary">
+                    View Network Topology
+                </button>
+                <button class="btn btn-secondary">
+                    Start Vulnerability Scan
+                </button>
+                <button class="btn btn-secondary">
+                    Run Backup
+                </button>
+                <button class="btn btn-primary">
+                    Start New Playbook
+                </button>
+                <button class="btn btn-danger">
+                    Isolate Zone
+                </button>
+            </div>
+        </div>
+    </main>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

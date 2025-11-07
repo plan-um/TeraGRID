@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Authorized Device List</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Details</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item active">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Configuration</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>        </div>
+    </aside>
+
+<main class="main-content"><div class="page-header"><div style="display: flex; justify-content: space-between;"><div><h1>Authorized Device List</h1><p>Manage the whitelist of external devices (USB, Bluetooth, etc.) allowed to connect to CBS</p></div><button class="btn btn-primary" onclick="location.href='6-2-2-2_authorized-device-form.html'">Add Authorized Device</button></div></div>
+<div class="card"><table class="table"><thead><tr><th>Type</th><th>Model</th><th>Hardware ID</th><th>Registration Date</th><th></th></tr></thead><tbody><tr><td>USB</td><td>SanDisk Ultra</td><td>VID_0781&PID_5567</td><td>2024-06-15</td><td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td></tr><tr><td>Bluetooth</td><td>Logitech MX Master</td><td>00:1A:7D:DA:71:13</td><td>2024-07-20</td><td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td></tr><tr><td>USB</td><td>Kingston DataTraveler</td><td>VID_0951&PID_1666</td><td>2024-08-05</td><td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td></tr><tr><td>USB</td><td>Samsung T7</td><td>VID_04E8&PID_4001</td><td>2024-08-20</td><td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td></tr><tr><td>Bluetooth</td><td>Apple Magic Keyboard</td><td>00:1B:63:84:45:E6</td><td>2024-09-01</td><td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td></tr><tr><td>USB</td><td>Western Digital My Passport</td><td>VID_1058&PID_25A2</td><td>2024-09-10</td><td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td></tr><tr><td>Bluetooth</td><td>Microsoft Sculpt Mouse</td><td>00:1D:D8:1C:10:5C</td><td>2024-09-25</td><td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td></tr></tbody></table></div>
+</main>    <script>
+        lucide.createIcons();
+    </script>
+</body></html>

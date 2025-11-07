@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Bridge Incident Alert List</title>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .main-content {
+            margin-left: 0;
+            padding: 0;
+            max-width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .bridge-header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 24px 32px;
+            border-bottom: 3px solid #0056B3;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vessel-info-section {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .vessel-main-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .vessel-name-large {
+            font-size: 36px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .vessel-imo-large {
+            font-size: 18px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .time-display-large {
+            font-size: 24px;
+            color: #cbd5e1;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .status-badge-huge {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .status-badge-huge.danger {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.3) 0%, rgba(239, 68, 68, 0.2) 100%);
+            color: #ef4444;
+            border: 3px solid #ef4444;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: currentColor;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+
+        /* Main Content */
+        .bridge-content {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title-large {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .filter-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid #334155;
+            background: rgba(30, 41, 59, 0.6);
+            color: #cbd5e1;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: rgba(0, 86, 179, 0.3);
+            border-color: #0056B3;
+            color: #ffffff;
+        }
+
+        /* Alert Cards */
+        .alert-list-large {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .alert-card-large {
+            background: rgba(30, 41, 59, 0.6);
+            border-left: 6px solid;
+            padding: 28px;
+            border-radius: 12px;
+            transition: all 0.3s;
+            border: 2px solid rgba(51, 65, 85, 0.5);
+        }
+
+        .alert-card-large:hover {
+            background: rgba(30, 41, 59, 0.9);
+            transform: translateX(4px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .alert-card-large.critical {
+            border-left-color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .alert-card-large.high {
+            border-left-color: #f59e0b;
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .alert-card-large.medium {
+            border-left-color: #3b82f6;
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .alert-card-content {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .alert-severity-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .alert-severity-icon.critical {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 3px solid #ef4444;
+        }
+
+        .alert-severity-icon.high {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 3px solid #f59e0b;
+        }
+
+        .alert-severity-icon.medium {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 3px solid #3b82f6;
+        }
+
+        .alert-info {
+            flex: 1;
+        }
+
+        .alert-title-large {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .alert-desc-large {
+            font-size: 16px;
+            color: #cbd5e1;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .alert-meta {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .alert-time-large {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .alert-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .alert-badge.critical {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 2px solid #ef4444;
+        }
+
+        .alert-badge.high {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 2px solid #f59e0b;
+        }
+
+        .alert-badge.medium {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+        }
+
+        .alert-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-huge {
+            padding: 16px 28px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .btn-huge.primary {
+            background: linear-gradient(135deg, #0056B3 0%, #005BAA 100%);
+            color: white;
+            border: 2px solid #0056B3;
+        }
+
+        .btn-huge.primary:hover {
+            background: linear-gradient(135deg, #005BAA 0%, #0066FF 100%);
+            box-shadow: 0 8px 24px rgba(0, 86, 179, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-huge.danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: 2px solid #ef4444;
+        }
+
+        .btn-huge.danger:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-huge.secondary {
+            background: rgba(30, 41, 59, 0.6);
+            color: #cbd5e1;
+            border: 2px solid #334155;
+        }
+
+        .btn-huge.secondary:hover {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: #475569;
+        }
+
+        /* Bridge Navigation */
+        .bridge-nav {
+            background: rgba(30, 41, 59, 0.95);
+            border-bottom: 2px solid rgba(0, 86, 179, 0.4);
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 32px;
+        }
+
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(0, 86, 179, 0.2);
+            color: #ffffff;
+            border-color: rgba(0, 86, 179, 0.4);
+        }
+
+        .nav-link.active {
+            background: rgba(0, 86, 179, 0.3);
+            color: #ffffff;
+            border-color: #0056B3;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Header -->
+    <div class="bridge-header">
+        <div class="vessel-info-section">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" style="height: 48px; filter: brightness(0) invert(1);">
+            <div class="vessel-main-info">
+                <div class="vessel-name-large">MV Pacific Star</div>
+                <div class="vessel-imo-large">IMO: 9876543</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="time-display-large" id="currentTime">2025. 10. 14. 17:30:15</div>
+            <div class="status-badge-huge danger">
+                <span class="status-dot"></span>
+                CRITICAL
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bridge-nav">
+        <a href="8-1-1_bridge-main-dashboard.html" class="nav-link">
+            <span style="font-size: 24px;">🏠</span>
+            <span>Main</span>
+        </a>
+        <a href="8-1-2_incident-alert-list.html" class="nav-link active">
+            <span style="font-size: 24px;">🚨</span>
+            <span>Alerts</span>
+        </a>
+        <a href="8-1-3_network-status.html" class="nav-link">
+            <span style="font-size: 24px;">🔗</span>
+            <span>Network</span>
+        </a>
+        <a href="8-1-4_incident-response-guide.html" class="nav-link">
+            <span style="font-size: 24px;">📋</span>
+            <span>Response</span>
+        </a>
+        <a href="8-1-5_remote-access-control.html" class="nav-link">
+            <span style="font-size: 24px;">🔒</span>
+            <span>Access</span>
+        </a>
+        <a href="8-2-1_bridge-system-settings.html" class="nav-link">
+            <span style="font-size: 24px;">⚙️</span>
+            <span>Settings</span>
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="bridge-content">
+            <div class="content-header">
+                <h1 class="page-title-large">Incident Alert List</h1>
+                <div class="filter-buttons">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">Critical</button>
+                    <button class="filter-btn">High</button>
+                    <button class="filter-btn">Medium</button>
+                </div>
+            </div>
+
+            <div class="alert-list-large">
+                <!-- Critical Alert 1 -->
+                <div class="alert-card-large critical">
+                    <div class="alert-card-content">
+                        <div class="alert-severity-icon critical">!</div>
+                        <div class="alert-info">
+                            <div class="alert-title-large">Ransomware Detected</div>
+                            <div class="alert-desc-large">Malicious file activity detected in ECR Zone - Immediate action required</div>
+                            <div class="alert-meta">
+                                <div class="alert-time-large">⏱ 5 min ago • Engine Control Room</div>
+                                <span class="alert-badge critical">Critical</span>
+                            </div>
+                        </div>
+                        <div class="alert-actions">
+                            <button class="btn-huge danger">Start Playbook</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- High Alert 1 -->
+                <div class="alert-card-large high">
+                    <div class="alert-card-content">
+                        <div class="alert-severity-icon high">!</div>
+                        <div class="alert-info">
+                            <div class="alert-title-large">Unauthorized USB Connection Attempt</div>
+                            <div class="alert-desc-large">USB connection blocked on Bridge Network - Review required</div>
+                            <div class="alert-meta">
+                                <div class="alert-time-large">⏱ 15 min ago • Bridge Network</div>
+                                <span class="alert-badge high">High</span>
+                            </div>
+                        </div>
+                        <div class="alert-actions">
+                            <button class="btn-huge primary">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- High Alert 2 -->
+                <div class="alert-card-large high">
+                    <div class="alert-card-content">
+                        <div class="alert-severity-icon high">⚠</div>
+                        <div class="alert-info">
+                            <div class="alert-title-large">Network Scan Detected</div>
+                            <div class="alert-desc-large">Port scanning activity detected in Cargo Control Zone</div>
+                            <div class="alert-meta">
+                                <div class="alert-time-large">⏱ 1 hour ago • Cargo Control</div>
+                                <span class="alert-badge high">High</span>
+                            </div>
+                        </div>
+                        <div class="alert-actions">
+                            <button class="btn-huge primary">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medium Alert 1 -->
+                <div class="alert-card-large medium">
+                    <div class="alert-card-content">
+                        <div class="alert-severity-icon medium">i</div>
+                        <div class="alert-info">
+                            <div class="alert-title-large">Vulnerability Found (CVE-2024-1234)</div>
+                            <div class="alert-desc-large">Known vulnerability detected in HVAC Control system</div>
+                            <div class="alert-meta">
+                                <div class="alert-time-large">⏱ 2 hours ago • HVAC Control</div>
+                                <span class="alert-badge medium">Medium</span>
+                            </div>
+                        </div>
+                        <div class="alert-actions">
+                            <button class="btn-huge secondary">Review</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- High Alert 3 -->
+                <div class="alert-card-large high">
+                    <div class="alert-card-content">
+                        <div class="alert-severity-icon high">⚠</div>
+                        <div class="alert-info">
+                            <div class="alert-title-large">Privilege Escalation Attempt</div>
+                            <div class="alert-desc-large">Admin privilege acquisition attempt detected on Bridge System</div>
+                            <div class="alert-meta">
+                                <div class="alert-time-large">⏱ 3 hours ago • Bridge System</div>
+                                <span class="alert-badge high">High</span>
+                            </div>
+                        </div>
+                        <div class="alert-actions">
+                            <button class="btn-huge primary">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medium Alert 2 -->
+                <div class="alert-card-large medium">
+                    <div class="alert-card-content">
+                        <div class="alert-severity-icon medium">i</div>
+                        <div class="alert-info">
+                            <div class="alert-title-large">Abnormal Network Traffic</div>
+                            <div class="alert-desc-large">Unusual traffic pattern detected in IT Zone</div>
+                            <div class="alert-meta">
+                                <div class="alert-time-large">⏱ 4 hours ago • IT Zone</div>
+                                <span class="alert-badge medium">Medium</span>
+                            </div>
+                        </div>
+                        <div class="alert-actions">
+                            <button class="btn-huge secondary">Review</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('currentTime').textContent = `${year}. ${month}. ${day}. ${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Filter buttons
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>

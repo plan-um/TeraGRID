@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - CBS Detection/Blocking Log</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Details</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item active">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Configuration</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>        </div>
+    </aside>
+
+<main class="main-content"><div class="page-header"><h1>Detection/Blocking Log (CBS)</h1><p>View detection and blocking logs of unauthorized CBS network connection attempts</p></div>
+<div class="card"><table class="table"><thead><tr><th>Time</th><th>Status</th><th>MAC Address</th><th>IP Address</th><th>Location</th></tr></thead><tbody><tr><td>2024-10-04 13:45</td><td><span class="badge badge-danger">Blocked</span></td><td>AA:BB:CC:DD:EE:FF</td><td>192.168.1.99</td><td>Bridge Network</td></tr><tr><td>2024-10-04 12:30</td><td><span class="badge badge-warning">Detected</span></td><td>11:22:33:44:55:66</td><td>192.168.1.88</td><td>ECR Zone</td></tr><tr><td>2024-10-04 11:15</td><td><span class="badge badge-danger">Blocked</span></td><td>22:33:44:55:66:77</td><td>192.168.1.77</td><td>Cargo Control</td></tr><tr><td>2024-10-04 10:00</td><td><span class="badge badge-warning">Detected</span></td><td>33:44:55:66:77:88</td><td>192.168.1.66</td><td>Navigation Zone</td></tr><tr><td>2024-10-03 16:20</td><td><span class="badge badge-danger">Blocked</span></td><td>44:55:66:77:88:99</td><td>192.168.1.55</td><td>HVAC Zone</td></tr><tr><td>2024-10-03 14:50</td><td><span class="badge badge-warning">Detected</span></td><td>55:66:77:88:99:AA</td><td>192.168.1.44</td><td>IT Zone</td></tr><tr><td>2024-10-03 09:30</td><td><span class="badge badge-danger">Blocked</span></td><td>66:77:88:99:AA:BB</td><td>192.168.1.33</td><td>Safety System</td></tr></tbody></table></div>
+</main>    <script>
+        lucide.createIcons();
+    </script>
+</body></html>

@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Fleet Dashboard</title>
+    <link rel="stylesheet" href="common.css">
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- Leaflet.js for interactive maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        .map-stats-wrapper {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .map-container {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 24px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 400px;
+            background: #f9fafb;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #fleet-map {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            z-index: 1;
+        }
+
+        .world-map {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            opacity: 0.6;
+        }
+
+        .vessel-marker {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .vessel-marker:hover {
+            transform: scale(1.3);
+            z-index: 10;
+        }
+
+        .vessel-marker.status-normal {
+            background-color: var(--success);
+        }
+
+        .vessel-marker.status-warning {
+            background-color: var(--warning);
+        }
+
+        .vessel-marker.status-danger {
+            background-color: var(--danger);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--gray-500);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 6px;
+        }
+
+        .stat-change {
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-change.positive {
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .widget-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .view-all {
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        .alert-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .alert-item {
+            padding: 16px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+
+        .alert-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.1);
+        }
+
+        .alert-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .alert-icon.critical {
+            background-color: #fee2e2;
+            color: var(--danger);
+        }
+
+        .alert-icon.high {
+            background-color: #fef3c7;
+            color: var(--warning);
+        }
+
+        .alert-icon.medium {
+            background-color: #dbeafe;
+            color: #3b82f6;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .alert-meta {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .vessel-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .vessel-item {
+            padding: 14px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .vessel-item:hover {
+            border-color: var(--primary);
+            background-color: var(--gray-50);
+        }
+
+        .vessel-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 6px;
+        }
+
+        .vessel-info {
+            font-size: 13px;
+            color: var(--gray-500);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        @media (max-width: 1200px) {
+            .map-stats-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            min-height: 200px;
+        }
+
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .charts-grid > .card {
+            min-width: 0;
+        }
+
+        @media (max-width: 1400px) {
+            .chart-container {
+                height: 280px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .chart-container {
+                height: 260px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .chart-container {
+                height: 220px;
+            }
+        }
+    </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item active">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Details</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Config</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Fleet Dashboard</h1>
+            <p>Real-time overview of your entire fleet operations</p>
+        </div>
+
+        <!-- Map and Stats Wrapper -->
+        <div class="map-stats-wrapper">
+            <!-- Fleet Map -->
+            <div class="map-container">
+                <div class="widget-header">
+                    <h3 class="widget-title">Fleet Location Overview</h3>
+                    <div style="display: flex; gap: 16px; font-size: 18px; font-weight: 600;">
+                        <span style="color: var(--success); display: flex; align-items: center; gap: 6px;">
+                            <span style="font-size: 24px;">🟢</span>
+                            <span>Normal: <strong style="font-size: 20px;">18</strong></span>
+                        </span>
+                        <span style="color: var(--warning); display: flex; align-items: center; gap: 6px;">
+                            <span style="font-size: 24px;">🟡</span>
+                            <span>Warning: <strong style="font-size: 20px;">4</strong></span>
+                        </span>
+                        <span style="color: var(--danger); display: flex; align-items: center; gap: 6px;">
+                            <span style="font-size: 24px;">🔴</span>
+                            <span>Critical: <strong style="font-size: 20px;">2</strong></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="map-placeholder" id="fleet-map">
+                    <!-- Leaflet map will be initialized here -->
+                </div>
+            </div>
+
+            <!-- Stats Grid - Expanded to 8 KPIs -->
+            <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="stat-card">
+                    <span class="stat-label">Total Vessels</span>
+                    <div class="stat-value">24</div>
+                    <div class="stat-change positive">
+                        <span>▲ 2 (vs last month)</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Fleet Risk Score</span>
+                    <div class="stat-value">7.2<span style="font-size: 16px; color: var(--gray-500);">/10</span></div>
+                    <div class="stat-change positive">
+                        <span>▲ 0.3 (improved)</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Active Alerts</span>
+                    <div class="stat-value">8</div>
+                    <div class="stat-change positive">
+                        <span>▼ 3 (resolved)</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Compliance Rate</span>
+                    <div class="stat-value">92%</div>
+                    <div class="stat-change positive">
+                        <span>▲ 5% (improved)</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Open Vulnerabilities</span>
+                    <div class="stat-value">34</div>
+                    <div class="stat-change negative">
+                        <span>▲ 5 (increased)</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Avg Response Time</span>
+                    <div class="stat-value">42<span style="font-size: 16px; color: var(--gray-500);">min</span></div>
+                    <div class="stat-change positive">
+                        <span>▼ 8min (improved)</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Active Remote Sessions</span>
+                    <div class="stat-value">2</div>
+                    <div class="stat-change">
+                        <span style="color: var(--gray-500);">→ No change</span>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="stat-label">Patch Coverage</span>
+                    <div class="stat-value">87%</div>
+                    <div class="stat-change positive">
+                        <span>▲ 12% (improved)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions Section -->
+        <div class="card" style="margin-bottom: 24px;">
+            <div class="widget-header">
+                <h3 class="widget-title">Quick Actions</h3>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+                <button class="btn btn-primary" onclick="location.href='4-1-1_alert-list.html'" style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 20px;">
+                    <i data-lucide="alert-circle" style="width: 24px; height: 24px;"></i>
+                    <span>View Alerts</span>
+                </button>
+                <button class="btn btn-outline" onclick="location.href='4-1-3_사고관리.html'" style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 20px;">
+                    <i data-lucide="shield-alert" style="width: 24px; height: 24px;"></i>
+                    <span>Incident Response</span>
+                </button>
+                <button class="btn btn-outline" onclick="location.href='4-2-4_스캔관리.html'" style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 20px;">
+                    <i data-lucide="search" style="width: 24px; height: 24px;"></i>
+                    <span>Vulnerability Scan</span>
+                </button>
+                <button class="btn btn-outline" onclick="location.href='3-2-2-2_URE26문서생성.html'" style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 20px;">
+                    <i data-lucide="file-text" style="width: 24px; height: 24px;"></i>
+                    <span>Compliance Report</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-grid">
+            <!-- Threat Trends Chart -->
+            <div class="card">
+                <div class="widget-header">
+                    <h3 class="widget-title">Threat Detection Trends (7 days)</h3>
+                    <select style="padding: 6px 12px; border: 1px solid var(--gray-200); border-radius: 6px; font-size: 14px;">
+                        <option>Last 7 days</option>
+                        <option>Last 30 days</option>
+                        <option>Last 90 days</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="threatTrendsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Compliance Status Chart -->
+            <div class="card">
+                <div class="widget-header">
+                    <h3 class="widget-title">Compliance Status</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="complianceChart"></canvas>
+                </div>
+                <div style="margin-top: 16px; font-size: 13px; color: var(--gray-600);">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>UR E26 Compliance</span>
+                        <span style="font-weight: 600; color: var(--success);">92%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Pending Documents</span>
+                        <span style="font-weight: 600; color: var(--warning);">8 items</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Left Column - Alerts -->
+            <div class="card">
+                <div class="widget-header">
+                    <h3 class="widget-title">Recent Alerts</h3>
+                    <a href="4-1-1_alert-list.html" class="view-all">View All →</a>
+                </div>
+                <div class="alert-list">
+                    <div class="alert-item">
+                        <div class="alert-icon critical">!</div>
+                        <div class="alert-content">
+                            <div class="alert-title">Ransomware Detected - VESSEL-A</div>
+                            <div class="alert-meta">ECR Zone • 5 minutes ago • Immediate action required</div>
+                        </div>
+                        <span class="badge badge-danger">Critical</span>
+                    </div>
+
+                    <div class="alert-item">
+                        <div class="alert-icon high">!</div>
+                        <div class="alert-content">
+                            <div class="alert-title">Unauthorized USB Connection Attempt - VESSEL-B</div>
+                            <div class="alert-meta">Bridge Network • 15 minutes ago</div>
+                        </div>
+                        <span class="badge badge-warning">High</span>
+                    </div>
+
+                    <div class="alert-item">
+                        <div class="alert-icon medium">i</div>
+                        <div class="alert-content">
+                            <div class="alert-title">SW Vulnerability Found - VESSEL-C</div>
+                            <div class="alert-meta">Navigation System • 1 hour ago</div>
+                        </div>
+                        <span class="badge badge-info">Medium</span>
+                    </div>
+
+                    <div class="alert-item">
+                        <div class="alert-icon high">!</div>
+                        <div class="alert-content">
+                            <div class="alert-title">Network Scan Detected - VESSEL-D</div>
+                            <div class="alert-meta">IT Zone • 2 hours ago</div>
+                        </div>
+                        <span class="badge badge-warning">High</span>
+                    </div>
+
+                    <div class="alert-item">
+                        <div class="alert-icon high">!</div>
+                        <div class="alert-content">
+                            <div class="alert-title">Privilege Escalation Attempt - VESSEL-E</div>
+                            <div class="alert-meta">Cargo Control • 3 hours ago</div>
+                        </div>
+                        <span class="badge badge-warning">High</span>
+                    </div>
+
+                    <div class="alert-item">
+                        <div class="alert-icon medium">i</div>
+                        <div class="alert-content">
+                            <div class="alert-title">Policy Violation Detected - VESSEL-F</div>
+                            <div class="alert-meta">HVAC Zone • 4 hours ago</div>
+                        </div>
+                        <span class="badge badge-info">Medium</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Vessels -->
+            <div class="card">
+                <div class="widget-header">
+                    <h3 class="widget-title">Vessel Status</h3>
+                    <a href="3-1-1_vessel-detail-dashboard.html" class="view-all">Details →</a>
+                </div>
+                <div class="vessel-list">
+                    <div class="vessel-item" onclick="location.href='3-1-1_vessel-detail-dashboard.html'">
+                        <div class="vessel-name">VESSEL-A (MV Pacific Star)</div>
+                        <div class="vessel-info">
+                            <span class="status-indicator" style="background-color: var(--danger);"></span>
+                            <span>IMO: 9876543 • Critical</span>
+                        </div>
+                    </div>
+
+                    <div class="vessel-item" onclick="location.href='3-1-1_vessel-detail-dashboard.html'">
+                        <div class="vessel-name">VESSEL-B (MV Atlantic Ocean)</div>
+                        <div class="vessel-info">
+                            <span class="status-indicator" style="background-color: var(--warning);"></span>
+                            <span>IMO: 9876542 • Warning</span>
+                        </div>
+                    </div>
+
+                    <div class="vessel-item" onclick="location.href='3-1-1_vessel-detail-dashboard.html'">
+                        <div class="vessel-name">VESSEL-C (MV Indian Breeze)</div>
+                        <div class="vessel-info">
+                            <span class="status-indicator" style="background-color: var(--success);"></span>
+                            <span>IMO: 9876541 • Normal</span>
+                        </div>
+                    </div>
+
+                    <div class="vessel-item" onclick="location.href='3-1-1_vessel-detail-dashboard.html'">
+                        <div class="vessel-name">VESSEL-D (MV Arctic Wind)</div>
+                        <div class="vessel-info">
+                            <span class="status-indicator" style="background-color: var(--success);"></span>
+                            <span>IMO: 9876540 • Normal</span>
+                        </div>
+                    </div>
+
+                    <div class="vessel-item" onclick="location.href='3-1-1_vessel-detail-dashboard.html'">
+                        <div class="vessel-name">VESSEL-E (MV Southern Cross)</div>
+                        <div class="vessel-info">
+                            <span class="status-indicator" style="background-color: var(--success);"></span>
+                            <span>IMO: 9876539 • Normal</span>
+                        </div>
+                    </div>
+
+                    <div class="vessel-item" onclick="location.href='3-1-1_vessel-detail-dashboard.html'">
+                        <div class="vessel-name">VESSEL-F (MV Northern Star)</div>
+                        <div class="vessel-info">
+                            <span class="status-indicator" style="background-color: var(--warning);"></span>
+                            <span>IMO: 9876538 • Warning</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Grid: Timeline + Network Status -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-top: 24px;">
+            <!-- Activity Timeline -->
+            <div class="card">
+                <div class="widget-header">
+                    <h3 class="widget-title">Real-time Activity Timeline</h3>
+                    <span style="color: var(--gray-500); font-size: 13px;">🔴 Live</span>
+                </div>
+                <div style="max-height: 300px; overflow-y: auto;">
+                    <div style="border-left: 2px solid var(--gray-200); padding-left: 20px; position: relative;">
+                        <div style="margin-bottom: 20px; position: relative;">
+                            <div style="position: absolute; left: -26px; width: 10px; height: 10px; border-radius: 50%; background-color: var(--danger); border: 2px solid white;"></div>
+                            <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 4px;">Just now</div>
+                            <div style="font-weight: 600; color: var(--gray-900); margin-bottom: 4px;">Ransomware Detected - VESSEL-A</div>
+                            <div style="font-size: 13px; color: var(--gray-600);">Malicious file activity detected in ECR Zone. Immediate response required.</div>
+                        </div>
+
+                        <div style="margin-bottom: 20px; position: relative;">
+                            <div style="position: absolute; left: -26px; width: 10px; height: 10px; border-radius: 50%; background-color: var(--warning); border: 2px solid white;"></div>
+                            <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 4px;">5 minutes ago</div>
+                            <div style="font-weight: 600; color: var(--gray-900); margin-bottom: 4px;">Unauthorized USB Connection Blocked - VESSEL-B</div>
+                            <div style="font-size: 13px; color: var(--gray-600);">Unauthorized device automatically blocked on Bridge Network.</div>
+                        </div>
+
+                        <div style="margin-bottom: 20px; position: relative;">
+                            <div style="position: absolute; left: -26px; width: 10px; height: 10px; border-radius: 50%; background-color: var(--success); border: 2px solid white;"></div>
+                            <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 4px;">15 minutes ago</div>
+                            <div style="font-weight: 600; color: var(--gray-900); margin-bottom: 4px;">Vulnerability Scan Completed - VESSEL-C</div>
+                            <div style="font-size: 13px; color: var(--gray-600);">Regular vulnerability scan completed. 3 medium-risk issues found.</div>
+                        </div>
+
+                        <div style="margin-bottom: 20px; position: relative;">
+                            <div style="position: absolute; left: -26px; width: 10px; height: 10px; border-radius: 50%; background-color: #3b82f6; border: 2px solid white;"></div>
+                            <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 4px;">30 minutes ago</div>
+                            <div style="font-weight: 600; color: var(--gray-900); margin-bottom: 4px;">Compliance Document Approved - VESSEL-D</div>
+                            <div style="font-size: 13px; color: var(--gray-600);">UR E26 security plan reviewed and approved.</div>
+                        </div>
+
+                        <div style="margin-bottom: 20px; position: relative;">
+                            <div style="position: absolute; left: -26px; width: 10px; height: 10px; border-radius: 50%; background-color: var(--success); border: 2px solid white;"></div>
+                            <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 4px;">1 hour ago</div>
+                            <div style="font-weight: 600; color: var(--gray-900); margin-bottom: 4px;">Patch Applied Successfully - VESSEL-E</div>
+                            <div style="font-size: 13px; color: var(--gray-600);">5 security patches successfully applied.</div>
+                        </div>
+
+                        <div style="margin-bottom: 0; position: relative;">
+                            <div style="position: absolute; left: -26px; width: 10px; height: 10px; border-radius: 50%; background-color: var(--gray-400); border: 2px solid white;"></div>
+                            <div style="font-size: 12px; color: var(--gray-500); margin-bottom: 4px;">2 hours ago</div>
+                            <div style="font-weight: 600; color: var(--gray-900); margin-bottom: 4px;">Scheduled Backup Completed - All Fleet</div>
+                            <div style="font-size: 13px; color: var(--gray-600);">Daily automated backup completed successfully.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Network Status Summary -->
+            <div class="card">
+                <div class="widget-header">
+                    <h3 class="widget-title">Network Status Summary</h3>
+                </div>
+                <div class="stats-grid">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 48px; height: 48px; border-radius: 50%; background-color: #d1fae5; display: flex; align-items: center; justify-content: center; font-size: 24px;">✓</div>
+                        <div>
+                            <div style="font-size: 14px; color: var(--gray-500);">Normal Networks</div>
+                            <div style="font-size: 20px; font-weight: 700;">18 vessels</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 48px; height: 48px; border-radius: 50%; background-color: #fef3c7; display: flex; align-items: center; justify-content: center; font-size: 24px;">⚠</div>
+                        <div>
+                            <div style="font-size: 14px; color: var(--gray-500);">Isolation Mode</div>
+                            <div style="font-size: 20px; font-weight: 700;">4 vessels</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 48px; height: 48px; border-radius: 50%; background-color: #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 24px;">🔗</div>
+                        <div>
+                            <div style="font-size: 14px; color: var(--gray-500);">Remote Access</div>
+                            <div style="font-size: 20px; font-weight: 700;">2 sessions</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        lucide.createIcons();
+
+        // Initialize Leaflet Map
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize map centered on world view
+            const map = L.map('fleet-map', {
+                center: [20, 0],
+                zoom: 2,
+                minZoom: 2,
+                maxZoom: 10
+            });
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            // Vessel data with coordinates
+            const vessels = [
+                { name: 'VESSEL-A (MV Pacific Star)', lat: 35.6762, lng: -121.6555, status: 'danger', statusText: 'Critical' },
+                { name: 'VESSEL-B (MV Atlantic Ocean)', lat: 40.7128, lng: -40.0060, status: 'warning', statusText: 'Warning' },
+                { name: 'VESSEL-C (MV Indian Breeze)', lat: 1.3521, lng: 103.8198, status: 'normal', statusText: 'Normal' },
+                { name: 'VESSEL-D (MV Arctic Wind)', lat: 51.5074, lng: 0.1278, status: 'normal', statusText: 'Normal' },
+                { name: 'VESSEL-E (MV Southern Cross)', lat: -33.8688, lng: 151.2093, status: 'normal', statusText: 'Normal' },
+                { name: 'VESSEL-F (MV Northern Star)', lat: 59.9139, lng: 10.7522, status: 'warning', statusText: 'Warning' },
+                { name: 'VESSEL-G (MV Eastern Horizon)', lat: 35.6895, lng: 139.6917, status: 'normal', statusText: 'Normal' },
+                { name: 'VESSEL-H (MV Western Pride)', lat: -22.9068, lng: -43.1729, status: 'normal', statusText: 'Normal' }
+            ];
+
+            // Define marker colors based on status
+            const statusColors = {
+                danger: '#ef4444',
+                warning: '#f59e0b',
+                normal: '#10b981'
+            };
+
+            // Add markers for each vessel
+            vessels.forEach(vessel => {
+                const marker = L.circleMarker([vessel.lat, vessel.lng], {
+                    radius: 8,
+                    fillColor: statusColors[vessel.status],
+                    color: '#ffffff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                }).addTo(map);
+
+                // Add popup
+                marker.bindPopup(`
+                    <div style="min-width: 200px;">
+                        <strong>${vessel.name}</strong><br>
+                        Status: <span style="color: ${statusColors[vessel.status]}; font-weight: bold;">${vessel.statusText}</span>
+                    </div>
+                `);
+
+                // Add click handler to navigate to vessel details
+                marker.on('click', function() {
+                    // In production, this would navigate to vessel detail page with ID
+                    console.log('Clicked vessel:', vessel.name);
+                });
+            });
+
+            // Initialize Threat Trends Chart
+            const threatCtx = document.getElementById('threatTrendsChart').getContext('2d');
+            const threatChart = new Chart(threatCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [
+                        {
+                            label: 'Critical',
+                            data: [2, 1, 3, 1, 2, 4, 3],
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'High',
+                            data: [5, 7, 4, 8, 6, 5, 9],
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Medium',
+                            data: [12, 15, 10, 14, 11, 13, 16],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 5
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Initialize Compliance Chart
+            const complianceCtx = document.getElementById('complianceChart').getContext('2d');
+            const complianceChart = new Chart(complianceCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Completed', 'In Progress', 'Pending'],
+                    datasets: [{
+                        data: [92, 5, 3],
+                        backgroundColor: [
+                            '#10b981',
+                            '#f59e0b',
+                            '#ef4444'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Handle window resize to ensure charts update properly
+            let resizeTimeout;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(function() {
+                    if (threatChart && complianceChart) {
+                        threatChart.resize();
+                        complianceChart.resize();
+                    }
+                }, 250);
+            });
+        });
+    </script>
+</body>
+</html>

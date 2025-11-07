@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Device Detection/Blocking Log</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Details</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item active">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Configuration</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>        </div>
+    </aside>
+
+<main class="main-content"><div class="page-header"><h1>Detection/Blocking Log (Devices)</h1><p>View detection and blocking logs of unauthorized device connection attempts</p></div>
+<div class="card"><table class="table"><thead><tr><th>Time</th><th>CBS</th><th>Device Type</th><th>Hardware ID</th><th>Status</th></tr></thead><tbody><tr><td>2024-10-04 15:20</td><td>192.168.1.10</td><td>USB</td><td>VID_XXXX&PID_YYYY</td><td><span class="badge badge-danger">Blocked</span></td></tr><tr><td>2024-10-04 14:10</td><td>192.168.1.11</td><td>Bluetooth</td><td>AA:BB:CC:DD:EE:FF</td><td><span class="badge badge-warning">Detected</span></td></tr><tr><td>2024-10-04 13:00</td><td>192.168.1.12</td><td>USB</td><td>VID_1234&PID_5678</td><td><span class="badge badge-danger">Blocked</span></td></tr><tr><td>2024-10-04 11:45</td><td>192.168.1.13</td><td>USB</td><td>VID_ABCD&PID_EF01</td><td><span class="badge badge-warning">Detected</span></td></tr><tr><td>2024-10-03 16:30</td><td>192.168.1.14</td><td>Bluetooth</td><td>BB:CC:DD:EE:FF:00</td><td><span class="badge badge-danger">Blocked</span></td></tr><tr><td>2024-10-03 14:20</td><td>192.168.1.15</td><td>USB</td><td>VID_2468&PID_1357</td><td><span class="badge badge-warning">Detected</span></td></tr><tr><td>2024-10-03 10:00</td><td>192.168.1.16</td><td>Bluetooth</td><td>CC:DD:EE:FF:00:11</td><td><span class="badge badge-danger">Blocked</span></td></tr></tbody></table></div>
+</main>    <script>
+        lucide.createIcons();
+    </script>
+</body></html>

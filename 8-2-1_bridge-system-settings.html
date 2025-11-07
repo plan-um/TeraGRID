@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Bridge System Settings</title>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .main-content {
+            margin-left: 0;
+            padding: 0;
+            max-width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .bridge-header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 24px 32px;
+            border-bottom: 3px solid #0056B3;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vessel-info-section {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .vessel-main-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .vessel-name-large {
+            font-size: 36px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .vessel-imo-large {
+            font-size: 18px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .time-display-large {
+            font-size: 24px;
+            color: #cbd5e1;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .status-badge-huge {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .status-badge-huge.safe {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(16, 185, 129, 0.2) 100%);
+            color: #10b981;
+            border: 3px solid #10b981;
+        }
+
+        .status-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: currentColor;
+        }
+
+        /* Main Content */
+        .bridge-content {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .settings-container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .page-title-large {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 32px;
+        }
+
+        /* Settings Groups */
+        .settings-group {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(30, 41, 59, 0.4) 100%);
+            border: 2px solid #334155;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .group-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #334155;
+        }
+
+        /* Form Elements */
+        .form-group-large {
+            margin-bottom: 28px;
+        }
+
+        .form-group-large:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label-large {
+            display: block;
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .form-input-large,
+        .form-select-large {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 18px;
+            border: 2px solid #334155;
+            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.8);
+            color: #ffffff;
+            transition: all 0.3s;
+        }
+
+        .form-input-large:focus,
+        .form-select-large:focus {
+            outline: none;
+            border-color: #0056B3;
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2);
+        }
+
+        .form-select-large {
+            cursor: pointer;
+        }
+
+        /* Toggle Switch */
+        .toggle-group {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 10px;
+            border: 2px solid #334155;
+            transition: all 0.3s;
+        }
+
+        .toggle-item:hover {
+            background: rgba(15, 23, 42, 0.9);
+            border-color: #475569;
+        }
+
+        .toggle-label {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .toggle-label-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .toggle-label-desc {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 80px;
+            height: 40px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #334155;
+            transition: 0.3s;
+            border-radius: 34px;
+            border: 2px solid #475569;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 28px;
+            width: 28px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #10b981;
+            border-color: #10b981;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(40px);
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .btn-huge {
+            padding: 20px 32px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .btn-huge.primary {
+            background: linear-gradient(135deg, #0056B3 0%, #005BAA 100%);
+            color: white;
+            border: 2px solid #0056B3;
+        }
+
+        .btn-huge.primary:hover {
+            background: linear-gradient(135deg, #005BAA 0%, #0066FF 100%);
+            box-shadow: 0 8px 24px rgba(0, 86, 179, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-huge.secondary {
+            background: rgba(30, 41, 59, 0.6);
+            color: #cbd5e1;
+            border: 2px solid #334155;
+        }
+
+        .btn-huge.secondary:hover {
+            background: rgba(30, 41, 59, 0.9);
+            border-color: #475569;
+        }
+
+        /* Bridge Navigation */
+        .bridge-nav {
+            background: rgba(30, 41, 59, 0.95);
+            border-bottom: 2px solid rgba(0, 86, 179, 0.4);
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 32px;
+        }
+
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(0, 86, 179, 0.2);
+            color: #ffffff;
+            border-color: rgba(0, 86, 179, 0.4);
+        }
+
+        .nav-link.active {
+            background: rgba(0, 86, 179, 0.3);
+            color: #ffffff;
+            border-color: #0056B3;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Header -->
+    <div class="bridge-header">
+        <div class="vessel-info-section">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" style="height: 48px; filter: brightness(0) invert(1);">
+            <div class="vessel-main-info">
+                <div class="vessel-name-large">MV Pacific Star</div>
+                <div class="vessel-imo-large">IMO: 9876543</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="time-display-large" id="currentTime">2025. 10. 14. 17:30:15</div>
+            <div class="status-badge-huge safe">
+                <span class="status-dot"></span>
+                NORMAL
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bridge-nav">
+        <a href="8-1-1_bridge-main-dashboard.html" class="nav-link">
+            <span style="font-size: 24px;">🏠</span>
+            <span>Main</span>
+        </a>
+        <a href="8-1-2_incident-alert-list.html" class="nav-link">
+            <span style="font-size: 24px;">🚨</span>
+            <span>Alerts</span>
+        </a>
+        <a href="8-1-3_network-status.html" class="nav-link">
+            <span style="font-size: 24px;">🔗</span>
+            <span>Network</span>
+        </a>
+        <a href="8-1-4_incident-response-guide.html" class="nav-link">
+            <span style="font-size: 24px;">📋</span>
+            <span>Response</span>
+        </a>
+        <a href="8-1-5_remote-access-control.html" class="nav-link">
+            <span style="font-size: 24px;">🔒</span>
+            <span>Remote</span>
+        </a>
+        <a href="8-2-1_bridge-system-settings.html" class="nav-link active">
+            <span style="font-size: 24px;">⚙️</span>
+            <span>Settings</span>
+        </a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="bridge-content">
+            <div class="settings-container">
+                <h1 class="page-title-large">System Settings</h1>
+
+                <!-- Display Settings -->
+                <div class="settings-group">
+                    <h2 class="group-title">Display Settings</h2>
+
+                    <div class="form-group-large">
+                        <label class="form-label-large">Display Mode</label>
+                        <select class="form-select-large">
+                            <option>Auto (Time-based)</option>
+                            <option>Day Mode</option>
+                            <option selected>Night Mode (Current)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group-large">
+                        <label class="form-label-large">Brightness Control</label>
+                        <input type="range" class="form-input-large" min="30" max="100" value="80"
+                               style="padding: 8px;">
+                    </div>
+                </div>
+
+                <!-- Language Settings -->
+                <div class="settings-group">
+                    <h2 class="group-title">Language Settings</h2>
+
+                    <div class="form-group-large">
+                        <label class="form-label-large">Display Language</label>
+                        <select class="form-select-large">
+                            <option>Korean</option>
+                            <option selected>English</option>
+                            <option>Japanese</option>
+                            <option>Chinese</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Notification Settings -->
+                <div class="settings-group">
+                    <h2 class="group-title">Notification Settings</h2>
+
+                    <div class="toggle-group">
+                        <div class="toggle-item">
+                            <div class="toggle-label">
+                                <span class="toggle-label-text">Critical Alert Voice Notifications</span>
+                                <span class="toggle-label-desc">Voice warning for critical situations</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-item">
+                            <div class="toggle-label">
+                                <span class="toggle-label-text">Screen Notifications</span>
+                                <span class="toggle-label-desc">Show popup and banner notifications</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-item">
+                            <div class="toggle-label">
+                                <span class="toggle-label-text">High/Medium Alert Notifications</span>
+                                <span class="toggle-label-desc">Notify for lower severity alerts</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-item">
+                            <div class="toggle-label">
+                                <span class="toggle-label-text">Auto Playbook Suggestions</span>
+                                <span class="toggle-label-desc">Automatically show response guide on incidents</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Settings -->
+                <div class="settings-group">
+                    <h2 class="group-title">System Settings</h2>
+
+                    <div class="form-group-large">
+                        <label class="form-label-large">Screen Refresh Rate</label>
+                        <select class="form-select-large">
+                            <option>1 sec (Real-time)</option>
+                            <option selected>5 sec</option>
+                            <option>10 sec</option>
+                            <option>30 sec</option>
+                        </select>
+                    </div>
+
+                    <div class="toggle-group">
+                        <div class="toggle-item">
+                            <div class="toggle-label">
+                                <span class="toggle-label-text">Auto Logout</span>
+                                <span class="toggle-label-desc">Auto logout after 30 minutes of inactivity</span>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="button-group">
+                    <button class="btn-huge secondary">Cancel</button>
+                    <button class="btn-huge primary">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('currentTime').textContent = `${year}. ${month}. ${day}. ${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>

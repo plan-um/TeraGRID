@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Bridge Main Dashboard (Normal)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .bridge-header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 20px 40px;
+            border-bottom: 3px solid #0056B3;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vessel-info-section {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .vessel-main-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .vessel-name-large {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .vessel-imo-large {
+            font-size: 16px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .time-display-large {
+            font-size: 20px;
+            color: #cbd5e1;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .status-badge-huge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .status-badge-huge.safe {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(16, 185, 129, 0.2) 100%);
+            color: #10b981;
+            border: 3px solid #10b981;
+        }
+
+        .status-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: currentColor;
+        }
+
+        /* Navigation */
+        .bridge-nav {
+            background: rgba(30, 41, 59, 0.95);
+            border-bottom: 2px solid rgba(0, 86, 179, 0.4);
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 32px;
+        }
+
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(0, 86, 179, 0.2);
+            color: #ffffff;
+            border-color: rgba(0, 86, 179, 0.4);
+        }
+
+        .nav-link.active {
+            background: rgba(0, 86, 179, 0.3);
+            color: #ffffff;
+            border-color: #0056B3;
+        }
+
+        /* Main Content */
+        .bridge-container {
+            padding: 40px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* Info Section */
+        .info-section {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border: 3px solid #10b981;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .info-title {
+            font-size: 36px;
+            font-weight: 900;
+            color: #10b981;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .info-icon {
+            font-size: 48px;
+        }
+
+        .info-desc {
+            font-size: 20px;
+            color: #cbd5e1;
+        }
+
+        /* Action Buttons Grid */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .action-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
+            border: 3px solid rgba(0, 86, 179, 0.4);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .action-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 86, 179, 0.5);
+            border-color: #0056B3;
+        }
+
+        .action-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .action-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .action-desc {
+            font-size: 16px;
+            color: #94a3b8;
+            margin-bottom: 24px;
+        }
+
+        .action-button {
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0056B3 0%, #005BAA 100%);
+            color: white;
+            border: 2px solid #0056B3;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #005BAA 0%, #0066FF 100%);
+            box-shadow: 0 8px 24px rgba(0, 86, 179, 0.6);
+            transform: scale(1.05);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: 2px solid #10b981;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.6);
+            transform: scale(1.05);
+        }
+
+        /* Status Grid */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .status-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
+            border: 2px solid #334155;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .status-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 86, 179, 0.4);
+            border-color: #0056B3;
+        }
+
+        .status-icon-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 700;
+            margin: 0 auto 16px;
+        }
+
+        .status-icon-circle.green {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 3px solid #10b981;
+        }
+
+        .status-label {
+            font-size: 16px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .status-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        /* Alerts Section */
+        .alerts-section {
+            margin-top: 40px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .alert-card {
+            background: rgba(30, 41, 59, 0.6);
+            border-left: 5px solid;
+            padding: 24px;
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .alert-card:hover {
+            background: rgba(30, 41, 59, 0.9);
+            transform: translateX(8px);
+        }
+
+        .alert-card.info { border-left-color: #3b82f6; }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .alert-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .alert-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .alert-badge.info {
+            background: rgba(59, 130, 246, 0.3);
+            color: #3b82f6;
+        }
+
+        .alert-desc {
+            font-size: 16px;
+            color: #cbd5e1;
+            margin-bottom: 8px;
+        }
+
+        .alert-time {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #64748b;
+            font-size: 20px;
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 12px;
+            border: 2px dashed #334155;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="bridge-header">
+        <div class="vessel-info-section">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" style="height: 44px; filter: brightness(0) invert(1);">
+            <div class="vessel-main-info">
+                <div class="vessel-name-large">MV Pacific Star</div>
+                <div class="vessel-imo-large">IMO: 9876543</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="time-display-large" id="currentTime">2025. 10. 14. 17:30:15</div>
+            <div class="status-badge-huge safe">
+                <span class="status-dot"></span>
+                NORMAL STATUS
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bridge-nav">
+        <a href="8-1-1-1_bridge-dashboard-normal.html" class="nav-link active">
+            <span style="font-size: 24px;">🏠</span>
+            <span>Main</span>
+        </a>
+        <a href="8-1-2_incident-alert-list.html" class="nav-link">
+            <span style="font-size: 24px;">🚨</span>
+            <span>Alerts</span>
+        </a>
+        <a href="8-1-3_network-status.html" class="nav-link">
+            <span style="font-size: 24px;">🔗</span>
+            <span>Network</span>
+        </a>
+        <a href="8-1-4_incident-response-guide.html" class="nav-link">
+            <span style="font-size: 24px;">📋</span>
+            <span>Response</span>
+        </a>
+        <a href="8-1-5_remote-access-control.html" class="nav-link">
+            <span style="font-size: 24px;">🔒</span>
+            <span>Remote</span>
+        </a>
+        <a href="8-2-1_bridge-system-settings.html" class="nav-link">
+            <span style="font-size: 24px;">⚙️</span>
+            <span>Settings</span>
+        </a>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="bridge-container">
+        <!-- Status Info -->
+        <div class="info-section">
+            <div class="info-title">
+                <span class="info-icon">✓</span>
+                All Systems Operating Normally
+            </div>
+            <div class="info-desc">All vessel cybersecurity systems are functioning properly.</div>
+        </div>
+
+        <!-- Quick Action Buttons -->
+        <div class="action-grid">
+            <div class="action-card" onclick="location.href='8-1-2_incident-alert-list.html'">
+                <span class="action-icon">📊</span>
+                <div class="action-title">Security Status</div>
+                <div class="action-desc">Real-time security monitoring</div>
+                <button class="action-button btn-primary">View</button>
+            </div>
+
+            <div class="action-card" onclick="location.href='8-1-3_network-status.html'">
+                <span class="action-icon">🔗</span>
+                <div class="action-title">Network Status</div>
+                <div class="action-desc">Complete network monitoring</div>
+                <button class="action-button btn-primary">View</button>
+            </div>
+
+            <div class="action-card" onclick="location.href='2-1_fleet-dashboard.html'">
+                <span class="action-icon">📡</span>
+                <div class="action-title">Shore Communication</div>
+                <div class="action-desc">Regular communication with HQ</div>
+                <button class="action-button btn-success">Connect</button>
+            </div>
+        </div>
+
+        <!-- Status Overview -->
+        <div class="status-grid">
+            <div class="status-card">
+                <div class="status-icon-circle green">✓</div>
+                <div class="status-label">Security Incidents</div>
+                <div class="status-value">Normal</div>
+            </div>
+
+            <div class="status-card">
+                <div class="status-icon-circle green">✓</div>
+                <div class="status-label">Network</div>
+                <div class="status-value">Normal</div>
+            </div>
+
+            <div class="status-card">
+                <div class="status-icon-circle green">✓</div>
+                <div class="status-label">Asset Management</div>
+                <div class="status-value">Normal</div>
+            </div>
+
+            <div class="status-card">
+                <div class="status-icon-circle green">0</div>
+                <div class="status-label">Vulnerabilities</div>
+                <div class="status-value">0 items</div>
+            </div>
+        </div>
+
+        <!-- Recent Alerts -->
+        <div class="alerts-section">
+            <h2 class="section-title">
+                <span style="font-size: 32px;">📋</span>
+                Recent Activity
+            </h2>
+            <div class="alert-list">
+                <div class="alert-card info">
+                    <div class="alert-header">
+                        <div class="alert-title">Regular System Inspection Completed</div>
+                        <div class="alert-badge info">Info</div>
+                    </div>
+                    <div class="alert-desc">Regular security inspection completed for all systems</div>
+                    <div class="alert-time">⏱ 2 hours ago • No issues found</div>
+                </div>
+
+                <div class="alert-card info">
+                    <div class="alert-header">
+                        <div class="alert-title">Automatic Backup Completed</div>
+                        <div class="alert-badge info">Info</div>
+                    </div>
+                    <div class="alert-desc">Critical system data backup completed automatically</div>
+                    <div class="alert-time">⏱ 6 hours ago • Completed successfully</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('currentTime').textContent = `${year}. ${month}. ${day}. ${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body>
+</html>

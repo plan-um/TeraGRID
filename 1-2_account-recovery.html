@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Account Recovery</title>
+    <link rel="stylesheet" href="common.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .recovery-container {
+            background: white;
+            border-radius: 16px;
+            padding: 48px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .recovery-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .recovery-logo {
+            height: 48px;
+            margin-bottom: 24px;
+        }
+
+        .recovery-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .recovery-subtitle {
+            font-size: 15px;
+            color: var(--gray-500);
+        }
+
+        .recovery-form {
+            margin-top: 32px;
+        }
+
+        .form-actions {
+            margin-top: 24px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+        }
+
+        .back-to-login {
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .back-to-login a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .back-to-login a:hover {
+            text-decoration: underline;
+        }
+
+        .success-message {
+            background-color: #d1fae5;
+            color: #065f46;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+    </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="recovery-container">
+        <div class="recovery-header">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="recovery-logo">
+            <h1 class="recovery-title">Account Recovery</h1>
+            <p class="recovery-subtitle">Verify your account information with your registered email</p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            Account recovery information has been sent to your email.
+        </div>
+
+        <form class="recovery-form">
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-input" placeholder="name@company.com" required>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">Submit</button>
+            </div>
+
+            <div class="back-to-login">
+                <a href="index.html">Back to Login</a>
+            </div>
+        </form>
+    </div>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Compliance Dashboard</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Circular Progress Gauge */
+        .compliance-gauge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .gauge-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin-bottom: 16px;
+        }
+
+        .gauge-svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .gauge-bg {
+            fill: none;
+            stroke: var(--gray-200);
+            stroke-width: 12;
+        }
+
+        .gauge-progress {
+            fill: none;
+            stroke: var(--success);
+            stroke-width: 12;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1.5s ease-in-out;
+        }
+
+        .gauge-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .gauge-percentage {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--gray-900);
+            line-height: 1;
+        }
+
+        .gauge-label {
+            font-size: 14px;
+            color: var(--gray-500);
+            margin-top: 8px;
+        }
+
+        /* Document Progress List */
+        .doc-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .doc-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .doc-item:hover {
+            border-color: var(--primary);
+            background-color: var(--gray-50);
+        }
+
+        .doc-status-icon {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .doc-status-icon.completed {
+            background-color: #d1fae5;
+            color: var(--success);
+        }
+
+        .doc-status-icon.in-progress {
+            background-color: #dbeafe;
+            color: #2563eb;
+        }
+
+        .doc-status-icon.not-started {
+            background-color: var(--gray-100);
+            color: var(--gray-400);
+        }
+
+        .doc-info {
+            flex: 1;
+        }
+
+        .doc-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .doc-progress {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .doc-progress-bar {
+            flex: 1;
+            height: 6px;
+            background-color: var(--gray-200);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .doc-progress-fill {
+            height: 100%;
+            background-color: var(--success);
+            border-radius: 3px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .doc-progress-fill.in-progress {
+            background-color: #2563eb;
+        }
+
+        .doc-progress-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-600);
+            min-width: 40px;
+            text-align: right;
+        }
+
+        /* Vessel Filter */
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 16px;
+            background-color: var(--gray-50);
+            border-radius: 8px;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid var(--gray-300);
+            border-radius: 6px;
+            font-size: 14px;
+            color: var(--gray-700);
+            background-color: white;
+            cursor: pointer;
+            min-width: 200px;
+        }
+
+        /* Deadline Alert */
+        .deadline-alert {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background-color: #fef3c7;
+            border-left: 4px solid var(--warning);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .deadline-alert-icon {
+            color: var(--warning);
+        }
+
+        .deadline-alert-text {
+            font-size: 14px;
+            color: #92400e;
+        }
+
+        .deadline-alert-text strong {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Details</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item active">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Configuration</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="breadcrumb">
+            <a href="2-1_fleet-dashboard.html">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <span>Compliance Dashboard</span>
+        </div>
+
+        <div class="page-header">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div>
+                    <h1>Compliance Dashboard</h1>
+                    <p>Monitor UR E26 compliance status across all vessels</p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-primary" onclick="location.href='3-2-2-2_ure26-document-generator.html'">Generate Document</button>
+                    <button class="btn btn-secondary" onclick="location.href='3-2-3-1_audit-list.html'">Manage Audits</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deadline Alert -->
+        <div class="deadline-alert">
+            <i data-lucide="alert-triangle" class="deadline-alert-icon"></i>
+            <div class="deadline-alert-text">
+                <strong>Next Regulatory Inspection Deadline:</strong> All vessels must complete UR E26 documentation by December 31, 2024
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <span class="filter-label">Select Vessel:</span>
+            <select class="filter-select" id="vesselFilter">
+                <option value="all">All Vessels</option>
+                <option value="9876543">MV Pacific Star (IMO: 9876543)</option>
+                <option value="9876542">MV Atlantic Ocean (IMO: 9876542)</option>
+                <option value="9876541">MV Indian Breeze (IMO: 9876541)</option>
+                <option value="9876540">MV Arctic Wind (IMO: 9876540)</option>
+                <option value="9876539">MV Southern Cross (IMO: 9876539)</option>
+                <option value="9876538">MV Northern Star (IMO: 9876538)</option>
+            </select>
+            <button class="btn btn-secondary" style="margin-left: auto;">
+                <i data-lucide="download" style="width: 16px; height: 16px; margin-right: 8px;"></i>
+                Download Report
+            </button>
+        </div>
+
+        <!-- Main Stats and Circular Gauge -->
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-bottom: 24px;">
+            <!-- Circular Compliance Gauge -->
+            <div class="card compliance-gauge">
+                <div class="gauge-container">
+                    <svg class="gauge-svg" viewBox="0 0 200 200">
+                        <circle class="gauge-bg" cx="100" cy="100" r="88"></circle>
+                        <circle class="gauge-progress" cx="100" cy="100" r="88"
+                                id="gaugeProgress"
+                                stroke-dasharray="552.92"
+                                stroke-dashoffset="44.23">
+                        </circle>
+                    </svg>
+                    <div class="gauge-text">
+                        <div class="gauge-percentage">92%</div>
+                        <div class="gauge-label">Overall Compliance</div>
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 14px; color: var(--success); margin-bottom: 8px;">
+                        <i data-lucide="trending-up" style="width: 16px; height: 16px; vertical-align: middle;"></i>
+                        5% improvement from last month
+                    </div>
+                    <div style="font-size: 13px; color: var(--gray-500);">
+                        Target: Maintain 95% or above
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other Stats -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                <div class="card">
+                    <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 8px;">Completed Documents</div>
+                    <div style="font-size: 32px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px;">156</div>
+                    <div style="font-size: 14px; color: var(--gray-500);">out of 170 total</div>
+                </div>
+                <div class="card">
+                    <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 8px;">Scheduled Audits</div>
+                    <div style="font-size: 32px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px;">8</div>
+                    <div style="font-size: 14px; color: var(--warning);">This month</div>
+                </div>
+                <div class="card">
+                    <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 8px;">Outstanding Issues</div>
+                    <div style="font-size: 32px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px;">14</div>
+                    <div style="font-size: 14px; color: var(--danger);">Action required</div>
+                </div>
+                <div class="card">
+                    <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 8px;">In Progress Documents</div>
+                    <div style="font-size: 32px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px;">8</div>
+                    <div style="font-size: 14px; color: #2563eb;">In progress</div>
+                </div>
+                <div class="card">
+                    <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 8px;">Pending Review</div>
+                    <div style="font-size: 32px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px;">6</div>
+                    <div style="font-size: 14px; color: var(--gray-500);">Approval needed</div>
+                </div>
+                <div class="card">
+                    <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 8px;">Average Compliance Rate</div>
+                    <div style="font-size: 32px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px;">92.3%</div>
+                    <div style="font-size: 14px; color: var(--success);">Good</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UR E26 12 Documents Progress -->
+        <div class="card" style="margin-bottom: 24px;">
+            <div class="card-header">
+                <h3 class="card-title">UR E26 Mandatory Document Progress (12 Required)</h3>
+                <span style="font-size: 14px; color: var(--gray-500);">Based on MV Pacific Star</span>
+            </div>
+            <div class="doc-list">
+                <!-- 1. Cyber Resilience Assessment -->
+                <div class="doc-item">
+                    <div class="doc-status-icon completed">✓</div>
+                    <div class="doc-info">
+                        <div class="doc-title">1. Cyber Resilience Assessment</div>
+                        <div class="doc-progress">
+                            <div class="doc-progress-bar">
+                                <div class="doc-progress-fill" style="width: 100%;"></div>
+                            </div>
+                            <span class="doc-progress-text">100%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Incident Response Plan -->
+                <div class="doc-item">
+                    <div class="doc-status-icon completed">✓</div>
+                    <div class="doc-info">
+                        <div class="doc-title">2. Incident Response Plan</div>
+                        <div class="doc-progress">
+                            <div class="doc-progress-bar">
+                                <div class="doc-progress-fill" style="width: 100%;"></div>
+                            </div>
+                            <span class="doc-progress-text">100%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Risk Assessment -->
+                <div class="doc-item">
+                    <div class="doc-status-icon in-progress">⟳</div>
+                    <div class="doc-info">
+                        <div class="doc-title">3. Risk Assessment</div>
+                        <div class="doc-progress">
+                            <div class="doc-progress-bar">
+                                <div class="doc-progress-fill in-progress" style="width: 85%;"></div>
+                            </div>
+                            <span class="doc-progress-text">85%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Security Plan -->
+                <div class="doc-item">
+                    <div class="doc-status-icon completed">✓</div>
+                    <div class="doc-info">
+                        <div class="doc-title">4. Security Plan</div>
+                        <div class="doc-progress">
+                            <div class="doc-progress-bar">
+                                <div class="doc-progress-fill" style="width: 100%;"></div>
+                            </div>
+                            <span class="doc-progress-text">100%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Recovery Procedures -->
+                <div class="doc-item">
+                    <div class="doc-status-icon completed">✓</div>
+                    <div class="doc-info">
+                        <div class="doc-title">5. Recovery Procedures</div>
+                        <div class="doc-progress">
+                            <div class="doc-progress-bar">
+                                <div class="doc-progress-fill" style="width: 100%;"></div>
+                            </div>
+                            <span class="doc-progress-text">100%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Asset Inventory -->
+                <div class="doc-item">
+                    <div class="doc-status-icon completed">✓</div>
+                    <div class="doc-info">
+                        <div class="doc-title">6. Asset Inventory</div>
+                        <div class="doc-progress">
+                            <div class="doc-progress-bar">
+                                <div class="doc-progress-fill" style="width: 100%;"></div>
+                            </div>
+                            <span class="doc-progress-text">100%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Network Architecture -->
+                <div class="doc-item">
+                    <div class="doc-status-icon completed">✓</div>
+                    <div class="doc-info">
+                        <div class="doc-title">7. Network Architecture</div>
+                        <div class="doc-progress">
+                            <div class="doc-progress-bar">
+                                <div class="doc-progress-fill" style="width: 100%;"></div>
+                            </div>
+                            <span class="doc-progress-text">100%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. Access Control Policy -->
+                <div class="doc-item">
+                    <div class="doc-status-icon completed">✓</div>
+                    <div class="doc-info">
+                        <div class="doc-title">8. Access Control Policy</div>
+                        <div class="doc-progress">
+                            <div class="doc-progress-bar">
+                                <div class="doc-progress-fill" style="width: 100%;"></div>
+                            </div>
+                            <span class="doc-progress-text">100%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. Backup and Recovery Plan -->
+                <div class="doc-item">
+                    <div class="doc-status-icon completed">✓</div>
+                    <div class="doc-info">
+                        <div class="doc-title">9. Backup and Recovery Plan</div>
+                        <div class="doc-progress">
+                            <div class="doc-progress-bar">
+                                <div class="doc-progress-fill" style="width: 100%;"></div>
+                            </div>
+                            <span class="doc-progress-text">100%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10. Vulnerability Management -->
+                <div class="doc-item">
+                    <div class="doc-status-icon in-progress">⟳</div>
+                    <div class="doc-info">
+                        <div class="doc-title">10. Vulnerability Management</div>
+                        <div class="doc-progress">
+                            <div class="doc-progress-bar">
+                                <div class="doc-progress-fill in-progress" style="width: 70%;"></div>
+                            </div>
+                            <span class="doc-progress-text">70%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 11. Training and Awareness -->
+                <div class="doc-item">
+                    <div class="doc-status-icon completed">✓</div>
+                    <div class="doc-info">
+                        <div class="doc-title">11. Training and Awareness</div>
+                        <div class="doc-progress">
+                            <div class="doc-progress-bar">
+                                <div class="doc-progress-fill" style="width: 100%;"></div>
+                            </div>
+                            <span class="doc-progress-text">100%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 12. Audit and Review Records -->
+                <div class="doc-item">
+                    <div class="doc-status-icon completed">✓</div>
+                    <div class="doc-info">
+                        <div class="doc-title">12. Audit and Review Records</div>
+                        <div class="doc-progress">
+                            <div class="doc-progress-bar">
+                                <div class="doc-progress-fill" style="width: 100%;"></div>
+                            </div>
+                            <span class="doc-progress-text">100%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Regulatory Compliance Status by Vessel</h3>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Vessel Name</th>
+                        <th>IMO Number</th>
+                        <th>Compliance Rate</th>
+                        <th>Completed Docs</th>
+                        <th>Incomplete Docs</th>
+                        <th>Last Audit</th>
+                        <th>Next Audit</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>MV Pacific Star</td>
+                        <td>9876543</td>
+                        <td><span class="badge badge-success">95%</span></td>
+                        <td>19</td>
+                        <td>1</td>
+                        <td>2024-08-15</td>
+                        <td>2025-02-15</td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>MV Atlantic Ocean</td>
+                        <td>9876542</td>
+                        <td><span class="badge badge-success">92%</span></td>
+                        <td>18</td>
+                        <td>2</td>
+                        <td>2024-07-20</td>
+                        <td>2025-01-20</td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>MV Indian Breeze</td>
+                        <td>9876541</td>
+                        <td><span class="badge badge-warning">85%</span></td>
+                        <td>17</td>
+                        <td>3</td>
+                        <td>2024-09-10</td>
+                        <td>2025-03-10</td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>MV Arctic Wind</td>
+                        <td>9876540</td>
+                        <td><span class="badge badge-success">98%</span></td>
+                        <td>20</td>
+                        <td>0</td>
+                        <td>2024-06-05</td>
+                        <td>2024-12-05</td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>MV Southern Cross</td>
+                        <td>9876539</td>
+                        <td><span class="badge badge-success">94%</span></td>
+                        <td>19</td>
+                        <td>1</td>
+                        <td>2024-07-20</td>
+                        <td>2025-01-20</td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>MV Northern Star</td>
+                        <td>9876538</td>
+                        <td><span class="badge badge-success">90%</span></td>
+                        <td>18</td>
+                        <td>2</td>
+                        <td>2024-06-10</td>
+                        <td>2024-12-10</td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px;">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Recent Document Generation</h3>
+                    <a href="3-2-2-1_ure26-document-list.html" style="color: var(--primary); font-size: 14px; text-decoration: none;">View All</a>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600;">Cyber Resilience Assessment</div>
+                        <div style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">MV Pacific Star • 2024-10-02</div>
+                    </div>
+                    <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600;">Incident Response Plan</div>
+                        <div style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">MV Atlantic Ocean • 2024-10-01</div>
+                    </div>
+                    <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600;">Asset Inventory</div>
+                        <div style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">MV Indian Breeze • 2024-09-28</div>
+                    </div>
+                    <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600;">Network Architecture</div>
+                        <div style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">MV Arctic Wind • 2024-09-25</div>
+                    </div>
+                    <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600;">Security Policy</div>
+                        <div style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">MV Pacific Star • 2024-09-20</div>
+                    </div>
+                    <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600;">Recovery Procedures</div>
+                        <div style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">MV Southern Cross • 2024-09-15</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Scheduled Audits</h3>
+                    <a href="3-2-3-1_audit-list.html" style="color: var(--primary); font-size: 14px; text-decoration: none;">View All</a>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600;">Annual Survey</div>
+                        <div style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">MV Arctic Wind • 2024-12-05</div>
+                    </div>
+                    <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600;">Internal Audit</div>
+                        <div style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">MV Atlantic Ocean • 2025-01-20</div>
+                    </div>
+                    <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600;">External Audit</div>
+                        <div style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">MV Pacific Star • 2025-02-15</div>
+                    </div>
+                    <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600;">Annual Survey</div>
+                        <div style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">MV Southern Cross • 2025-01-20</div>
+                    </div>
+                    <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600;">External Audit</div>
+                        <div style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">MV Northern Star • 2024-12-10</div>
+                    </div>
+                    <div style="padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px;">
+                        <div style="font-size: 14px; font-weight: 600;">Internal Audit</div>
+                        <div style="font-size: 13px; color: var(--gray-500); margin-top: 4px;">MV Indian Breeze • 2025-03-10</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Animate circular gauge on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const gaugeProgress = document.getElementById('gaugeProgress');
+            const percentage = 92; // 92% compliance
+            const radius = 88;
+            const circumference = 2 * Math.PI * radius; // 552.92
+            const offset = circumference - (percentage / 100) * circumference;
+
+            // Start from 0 (full circle)
+            gaugeProgress.style.strokeDashoffset = circumference;
+
+            // Animate to 92%
+            setTimeout(() => {
+                gaugeProgress.style.strokeDashoffset = offset;
+            }, 200);
+
+            // Vessel filter functionality
+            const vesselFilter = document.getElementById('vesselFilter');
+            vesselFilter.addEventListener('change', function() {
+                const selectedVessel = this.value;
+                if (selectedVessel === 'all') {
+                    alert('Displaying all vessels status');
+                } else {
+                    alert('Displaying detailed status for vessel IMO ' + selectedVessel);
+                }
+                // In real implementation, this would filter the table and update the 12-document list
+            });
+
+            // Add click handlers to document items for navigation
+            const docItems = document.querySelectorAll('.doc-item');
+            docItems.forEach(item => {
+                item.style.cursor = 'pointer';
+                item.addEventListener('click', function() {
+                    // In real implementation, navigate to document detail page
+                    window.location.href = '3-2-2-3_ure26-document-detail.html';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

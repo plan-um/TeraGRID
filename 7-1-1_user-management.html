@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - User Management</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Detail</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Config</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item active">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>        </div>
+    </aside>
+
+<main class="main-content"><div class="page-header"><div style="display: flex; justify-content: space-between;"><div><h1>User Management</h1><p>View and manage system user accounts</p></div><button class="btn btn-primary">Add User</button></div></div>
+<div class="card"><table class="table"><thead><tr><th>Name</th><th>Email</th><th>Role/Permission</th><th>Status</th><th>Last Login</th><th></th></tr></thead><tbody><tr><td>Kim Minsu</td><td>minsu@teragrid.com</td><td>Administrator</td><td><span class="badge badge-success">Active</span></td><td>2024-10-04 09:00</td><td><div style="display: flex; gap: 8px;"><button class="btn btn-secondary" style="padding: 6px 12px;">Edit</button><button class="btn btn-danger" style="padding: 6px 12px;">Delete</button></div></td></tr><tr><td>Lee Sujin</td><td>sujin@teragrid.com</td><td>Operator</td><td><span class="badge badge-success">Active</span></td><td>2024-10-03 17:30</td><td><div style="display: flex; gap: 8px;"><button class="btn btn-secondary" style="padding: 6px 12px;">Edit</button><button class="btn btn-danger" style="padding: 6px 12px;">Delete</button></div></td></tr><tr><td>Park Jihoon</td><td>jihoon@teragrid.com</td><td>Security Analyst</td><td><span class="badge badge-success">Active</span></td><td>2024-10-04 08:15</td><td><div style="display: flex; gap: 8px;"><button class="btn btn-secondary" style="padding: 6px 12px;">Edit</button><button class="btn btn-danger" style="padding: 6px 12px;">Delete</button></div></td></tr><tr><td>Choi Younghee</td><td>younghee@teragrid.com</td><td>Operator</td><td><span class="badge badge-success">Active</span></td><td>2024-10-03 14:22</td><td><div style="display: flex; gap: 8px;"><button class="btn btn-secondary" style="padding: 6px 12px;">Edit</button><button class="btn btn-danger" style="padding: 6px 12px;">Delete</button></div></td></tr><tr><td>Jung Hyunwoo</td><td>hyunwoo@teragrid.com</td><td>Auditor</td><td><span class="badge badge-success">Active</span></td><td>2024-10-02 16:45</td><td><div style="display: flex; gap: 8px;"><button class="btn btn-secondary" style="padding: 6px 12px;">Edit</button><button class="btn btn-danger" style="padding: 6px 12px;">Delete</button></div></td></tr><tr><td>Kang Minji</td><td>minji@teragrid.com</td><td>Vessel Manager</td><td><span class="badge badge-success">Active</span></td><td>2024-10-04 07:50</td><td><div style="display: flex; gap: 8px;"><button class="btn btn-secondary" style="padding: 6px 12px;">Edit</button><button class="btn btn-danger" style="padding: 6px 12px;">Delete</button></div></td></tr><tr><td>Yoon Taeyoung</td><td>taeyoung@teragrid.com</td><td>System Administrator</td><td><span class="badge badge-warning">Inactive</span></td><td>2024-09-15 11:20</td><td><div style="display: flex; gap: 8px;"><button class="btn btn-secondary" style="padding: 6px 12px;">Edit</button><button class="btn btn-danger" style="padding: 6px 12px;">Delete</button></div></td></tr><tr><td>Shin Donghyuk</td><td>donghyuk@teragrid.com</td><td>Security Analyst</td><td><span class="badge badge-success">Active</span></td><td>2024-10-03 19:05</td><td><div style="display: flex; gap: 8px;"><button class="btn btn-secondary" style="padding: 6px 12px;">Edit</button><button class="btn btn-danger" style="padding: 6px 12px;">Delete</button></div></td></tr><tr><td>Hong Seoyeon</td><td>seoyeon@teragrid.com</td><td>Operator</td><td><span class="badge badge-success">Active</span></td><td>2024-10-04 06:30</td><td><div style="display: flex; gap: 8px;"><button class="btn btn-secondary" style="padding: 6px 12px;">Edit</button><button class="btn btn-danger" style="padding: 6px 12px;">Delete</button></div></td></tr><tr><td>Jo Junho</td><td>junho@teragrid.com</td><td>Vessel Manager</td><td><span class="badge badge-danger">Disabled</span></td><td>2024-08-20 15:40</td><td><div style="display: flex; gap: 8px;"><button class="btn btn-secondary" style="padding: 6px 12px;">Edit</button><button class="btn btn-danger" style="padding: 6px 12px;">Delete</button></div></td></tr></tbody></table></div>
+</main>    <script>
+        lucide.createIcons();
+    </script>
+</body></html>

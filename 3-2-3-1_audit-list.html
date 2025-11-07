@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Audit List</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+        <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Details</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item active">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Configuration</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>        </div>
+    </aside>
+
+<main class="main-content">
+        <div class="breadcrumb">
+            <a href="2-1_fleet-dashboard.html">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="3-2-1_compliance-dashboard.html">Compliance</a>
+            <span class="breadcrumb-separator">/</span>
+            <span>Audit List</span>
+        </div>
+
+        <div class="page-header">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div>
+                    <h1>Audit List</h1>
+                    <p>View and manage internal and external audit records</p>
+                </div>
+                <button class="btn btn-primary" onclick="location.href='3-2-3-2_audit-form.html'">Register New Audit</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div style="display: flex; gap: 12px; flex: 1;">
+                    <input type="text" class="form-input" placeholder="Search audits..." style="max-width: 300px;">
+                    <select class="form-input" style="max-width: 150px;">
+                        <option>All Types</option>
+                        <option>Internal Audit</option>
+                        <option>External Audit</option>
+                        <option>Annual Survey</option>
+                    </select>
+                    <select class="form-input" style="max-width: 150px;">
+                        <option>All Status</option>
+                        <option>Scheduled</option>
+                        <option>In Progress</option>
+                        <option>Completed</option>
+                    </select>
+                </div>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Audit Type</th>
+                        <th>Target Vessel</th>
+                        <th>Schedule</th>
+                        <th>Auditor</th>
+                        <th>Status</th>
+                        <th>Result</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr onclick="location.href='3-2-3-3_audit-detail.html'" style="cursor: pointer;">
+                        <td>Annual Survey</td>
+                        <td>MV Arctic Wind</td>
+                        <td>2024-12-05</td>
+                        <td>DNV GL</td>
+                        <td><span class="badge badge-warning">Scheduled</span></td>
+                        <td>-</td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                    <tr onclick="location.href='3-2-3-3_audit-detail.html'" style="cursor: pointer;">
+                        <td>Internal Audit</td>
+                        <td>MV Atlantic Ocean</td>
+                        <td>2025-01-20</td>
+                        <td>Kim Minsu</td>
+                        <td><span class="badge badge-warning">Scheduled</span></td>
+                        <td>-</td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                    <tr onclick="location.href='3-2-3-3_audit-detail.html'" style="cursor: pointer;">
+                        <td>External Audit</td>
+                        <td>MV Pacific Star</td>
+                        <td>2024-08-15</td>
+                        <td>Lloyd's Register</td>
+                        <td><span class="badge badge-success">Completed</span></td>
+                        <td><span class="badge badge-success">Compliant</span></td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                    <tr onclick="location.href='3-2-3-3_audit-detail.html'" style="cursor: pointer;">
+                        <td>Internal Audit</td>
+                        <td>MV Indian Breeze</td>
+                        <td>2024-09-10</td>
+                        <td>Lee Sujin</td>
+                        <td><span class="badge badge-success">Completed</span></td>
+                        <td><span class="badge badge-warning">Partially Compliant</span></td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                    <tr onclick="location.href='3-2-3-3_audit-detail.html'" style="cursor: pointer;">
+                        <td>Annual Survey</td>
+                        <td>MV Southern Cross</td>
+                        <td>2024-07-20</td>
+                        <td>Bureau Veritas</td>
+                        <td><span class="badge badge-success">Completed</span></td>
+                        <td><span class="badge badge-success">Compliant</span></td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                    <tr onclick="location.href='3-2-3-3_audit-detail.html'" style="cursor: pointer;">
+                        <td>External Audit</td>
+                        <td>MV Northern Star</td>
+                        <td>2024-06-10</td>
+                        <td>ABS</td>
+                        <td><span class="badge badge-success">Completed</span></td>
+                        <td><span class="badge badge-success">Compliant</span></td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--gray-200);">
+                <div style="font-size: 14px; color: var(--gray-500);">
+                    Showing 1-4 of 32 total audits
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-secondary" style="padding: 8px 12px;">Previous</button>
+                    <button class="btn btn-primary" style="padding: 8px 12px;">1</button>
+                    <button class="btn btn-secondary" style="padding: 8px 12px;">2</button>
+                    <button class="btn btn-secondary" style="padding: 8px 12px;">Next</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

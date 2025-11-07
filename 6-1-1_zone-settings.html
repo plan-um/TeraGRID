@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Zone Settings</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Zone Tabs Styling */
+        .zone-tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .zone-tab {
+            background: var(--bg-main);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .zone-tab:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 86, 179, 0.1);
+        }
+
+        .zone-tab.active {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(0, 86, 179, 0.05) 0%, rgba(0, 86, 179, 0.02) 100%);
+            box-shadow: 0 4px 12px rgba(0, 86, 179, 0.15);
+        }
+
+        .zone-tab.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+        }
+
+        .zone-tab-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .zone-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .zone-tab.active .zone-icon {
+            box-shadow: 0 4px 12px rgba(0, 86, 179, 0.3);
+        }
+
+        .zone-tab-info {
+            flex: 1;
+        }
+
+        .zone-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .zone-fullname {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .zone-cbs-count {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: var(--gray-50);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .zone-tab.active .zone-cbs-count {
+            background: rgba(0, 86, 179, 0.08);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .cbs-count-label {
+            color: var(--gray-600);
+            font-size: 13px;
+        }
+
+        .cbs-count-number {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* Firewall Matrix Styling */
+        .firewall-matrix-card {
+            margin-bottom: 24px;
+        }
+
+        .matrix-container {
+            overflow-x: auto;
+        }
+
+        .firewall-matrix {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 600px;
+        }
+
+        .firewall-matrix th,
+        .firewall-matrix td {
+            padding: 16px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+
+        .firewall-matrix th {
+            background: var(--gray-50);
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .firewall-matrix th:first-child {
+            border-top-left-radius: 8px;
+        }
+
+        .firewall-matrix th:last-child {
+            border-top-right-radius: 8px;
+        }
+
+        .firewall-matrix .zone-label {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            font-weight: 600;
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .firewall-matrix .rule-cell {
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .firewall-matrix .rule-cell:hover {
+            transform: scale(1.05);
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .rule-allowed {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+            font-weight: 600;
+        }
+
+        .rule-denied {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            color: #991b1b;
+            font-weight: 600;
+        }
+
+        .rule-icon {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .matrix-legend {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+            padding: 16px;
+            background: var(--gray-50);
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .legend-color {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+        }
+
+        /* Content sections */
+        .zone-content {
+            display: none;
+        }
+
+        .zone-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .zone-tabs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .zone-tabs {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Details</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item active">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Configuration</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Zone Settings</h1>
+            <p>Manage inter-zone inbound/outbound firewall rules and isolation settings</p>
+        </div>
+
+        <!-- Zone Tabs -->
+        <div class="zone-tabs">
+            <div class="zone-tab active" data-zone="ecr">
+                <div class="zone-tab-header">
+                    <div class="zone-icon">
+                        <i data-lucide="cpu" style="width: 22px; height: 22px;"></i>
+                    </div>
+                    <div class="zone-tab-info">
+                        <div class="zone-name">ECR Zone</div>
+                        <div class="zone-fullname">Engine Control Room</div>
+                    </div>
+                </div>
+                <div class="zone-cbs-count">
+                    <span class="cbs-count-label">CBS Devices</span>
+                    <span class="cbs-count-number">10</span>
+                </div>
+            </div>
+
+            <div class="zone-tab" data-zone="bridge">
+                <div class="zone-tab-header">
+                    <div class="zone-icon">
+                        <i data-lucide="compass" style="width: 22px; height: 22px;"></i>
+                    </div>
+                    <div class="zone-tab-info">
+                        <div class="zone-name">Bridge Zone</div>
+                        <div class="zone-fullname">Navigation & Control</div>
+                    </div>
+                </div>
+                <div class="zone-cbs-count">
+                    <span class="cbs-count-label">CBS Devices</span>
+                    <span class="cbs-count-number">5</span>
+                </div>
+            </div>
+
+            <div class="zone-tab" data-zone="cargo">
+                <div class="zone-tab-header">
+                    <div class="zone-icon">
+                        <i data-lucide="package" style="width: 22px; height: 22px;"></i>
+                    </div>
+                    <div class="zone-tab-info">
+                        <div class="zone-name">Cargo Zone</div>
+                        <div class="zone-fullname">Cargo Management</div>
+                    </div>
+                </div>
+                <div class="zone-cbs-count">
+                    <span class="cbs-count-label">CBS Devices</span>
+                    <span class="cbs-count-number">8</span>
+                </div>
+            </div>
+
+            <div class="zone-tab" data-zone="it">
+                <div class="zone-tab-header">
+                    <div class="zone-icon">
+                        <i data-lucide="server" style="width: 22px; height: 22px;"></i>
+                    </div>
+                    <div class="zone-tab-info">
+                        <div class="zone-name">IT Zone</div>
+                        <div class="zone-fullname">IT Infrastructure</div>
+                    </div>
+                </div>
+                <div class="zone-cbs-count">
+                    <span class="cbs-count-label">CBS Devices</span>
+                    <span class="cbs-count-number">15</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Firewall Rules Matrix -->
+        <div class="card firewall-matrix-card">
+            <div class="card-header">
+                <h3 class="card-title">Inter-Zone Firewall Rules Matrix</h3>
+                <span class="badge badge-info">4 Zones Active</span>
+            </div>
+            <div class="matrix-container">
+                <table class="firewall-matrix">
+                    <thead>
+                        <tr>
+                            <th style="width: 150px;">Source → Destination</th>
+                            <th>ECR Zone</th>
+                            <th>Bridge Zone</th>
+                            <th>Cargo Zone</th>
+                            <th>IT Zone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="zone-label">ECR Zone</td>
+                            <td class="rule-cell rule-allowed">
+                                <span class="rule-icon">
+                                    <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+                                    Allow
+                                </span>
+                            </td>
+                            <td class="rule-cell rule-allowed">
+                                <span class="rule-icon">
+                                    <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+                                    Allow
+                                </span>
+                            </td>
+                            <td class="rule-cell rule-denied">
+                                <span class="rule-icon">
+                                    <i data-lucide="x-circle" style="width: 16px; height: 16px;"></i>
+                                    Deny
+                                </span>
+                            </td>
+                            <td class="rule-cell rule-denied">
+                                <span class="rule-icon">
+                                    <i data-lucide="x-circle" style="width: 16px; height: 16px;"></i>
+                                    Deny
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="zone-label">Bridge Zone</td>
+                            <td class="rule-cell rule-allowed">
+                                <span class="rule-icon">
+                                    <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+                                    Allow
+                                </span>
+                            </td>
+                            <td class="rule-cell rule-allowed">
+                                <span class="rule-icon">
+                                    <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+                                    Allow
+                                </span>
+                            </td>
+                            <td class="rule-cell rule-allowed">
+                                <span class="rule-icon">
+                                    <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+                                    Allow
+                                </span>
+                            </td>
+                            <td class="rule-cell rule-allowed">
+                                <span class="rule-icon">
+                                    <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+                                    Allow
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="zone-label">Cargo Zone</td>
+                            <td class="rule-cell rule-denied">
+                                <span class="rule-icon">
+                                    <i data-lucide="x-circle" style="width: 16px; height: 16px;"></i>
+                                    Deny
+                                </span>
+                            </td>
+                            <td class="rule-cell rule-allowed">
+                                <span class="rule-icon">
+                                    <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+                                    Allow
+                                </span>
+                            </td>
+                            <td class="rule-cell rule-allowed">
+                                <span class="rule-icon">
+                                    <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+                                    Allow
+                                </span>
+                            </td>
+                            <td class="rule-cell rule-denied">
+                                <span class="rule-icon">
+                                    <i data-lucide="x-circle" style="width: 16px; height: 16px;"></i>
+                                    Deny
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="zone-label">IT Zone</td>
+                            <td class="rule-cell rule-denied">
+                                <span class="rule-icon">
+                                    <i data-lucide="x-circle" style="width: 16px; height: 16px;"></i>
+                                    Deny
+                                </span>
+                            </td>
+                            <td class="rule-cell rule-allowed">
+                                <span class="rule-icon">
+                                    <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+                                    Allow
+                                </span>
+                            </td>
+                            <td class="rule-cell rule-denied">
+                                <span class="rule-icon">
+                                    <i data-lucide="x-circle" style="width: 16px; height: 16px;"></i>
+                                    Deny
+                                </span>
+                            </td>
+                            <td class="rule-cell rule-allowed">
+                                <span class="rule-icon">
+                                    <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+                                    Allow
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="matrix-legend">
+                <div class="legend-item">
+                    <div class="legend-color rule-allowed"></div>
+                    <span>Allow</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color rule-denied"></div>
+                    <span>Deny</span>
+                </div>
+                <div class="legend-item">
+                    <i data-lucide="info" style="width: 16px; height: 16px; color: var(--primary);"></i>
+                    <span>Click cells to edit rules in detail</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ECR Zone Content -->
+        <div class="zone-content active" id="zone-ecr">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">ECR Zone (Engine Control Room) - CBS Configuration</h3>
+                    <div style="display: flex; gap: 12px;">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <span>Isolation Mode</span>
+                            <input type="checkbox" style="width: 20px; height: 20px;" onclick="location.href='6-1-1-1_pin-entry.html'">
+                        </label>
+                        <button class="btn btn-primary">Add Rule</button>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>CBS IP</th>
+                            <th>Remote Control</th>
+                            <th>Active Sessions</th>
+                            <th>Firewall Rules</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>192.168.1.10</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>1 Active</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Terminate Session</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.1.15</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.1.20</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Blocked</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Deny: All</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.1.25</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>2 Active</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Terminate Session</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.1.30</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.0.0/16, 10.0.0.0/8</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.1.35</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>1 Active</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Terminate Session</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.1.40</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.1.45</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Blocked</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Deny: All</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.1.50</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.1.55</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>1 Active</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Terminate Session</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Bridge Zone Content -->
+        <div class="zone-content" id="zone-bridge">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Bridge Zone (Navigation & Control) - CBS Configuration</h3>
+                    <div style="display: flex; gap: 12px;">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <span>Isolation Mode</span>
+                            <input type="checkbox" style="width: 20px; height: 20px;" onclick="location.href='6-1-1-1_pin-entry.html'">
+                        </label>
+                        <button class="btn btn-primary">Add Rule</button>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>CBS IP</th>
+                            <th>Remote Control</th>
+                            <th>Active Sessions</th>
+                            <th>Firewall Rules</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>192.168.2.10</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.2.15</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>1 Active</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Terminate Session</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.2.20</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.2.25</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.2.30</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>2 Active</td>
+                            <td>Allow: 192.168.0.0/16, 10.0.0.0/8</td>
+                            <td>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Terminate Session</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Cargo Zone Content -->
+        <div class="zone-content" id="zone-cargo">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Cargo Zone (Cargo Management) - CBS Configuration</h3>
+                    <div style="display: flex; gap: 12px;">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <span>Isolation Mode</span>
+                            <input type="checkbox" style="width: 20px; height: 20px;" onclick="location.href='6-1-1-1_pin-entry.html'">
+                        </label>
+                        <button class="btn btn-primary">Add Rule</button>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>CBS IP</th>
+                            <th>Remote Control</th>
+                            <th>Active Sessions</th>
+                            <th>Firewall Rules</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>192.168.3.10</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.3.0/24</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.3.15</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>1 Active</td>
+                            <td>Allow: 192.168.3.0/24</td>
+                            <td>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Terminate Session</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.3.20</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.3.0/24</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.3.25</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Blocked</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Deny: All</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.3.30</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.3.0/24</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.3.35</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>1 Active</td>
+                            <td>Allow: 192.168.3.0/24</td>
+                            <td>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Terminate Session</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.3.40</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.3.0/24</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.3.45</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.3.0/24</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- IT Zone Content -->
+        <div class="zone-content" id="zone-it">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">IT Zone (IT Infrastructure) - CBS Configuration</h3>
+                    <div style="display: flex; gap: 12px;">
+                        <label style="display: flex; align-items: center; gap: 8px;">
+                            <span>Isolation Mode</span>
+                            <input type="checkbox" style="width: 20px; height: 20px;" onclick="location.href='6-1-1-1_pin-entry.html'">
+                        </label>
+                        <button class="btn btn-primary">Add Rule</button>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>CBS IP</th>
+                            <th>Remote Control</th>
+                            <th>Active Sessions</th>
+                            <th>Firewall Rules</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>192.168.4.10</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>3 Active</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Terminate Session</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.4.15</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>1 Active</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Terminate Session</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.4.20</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.4.25</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>2 Active</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Terminate Session</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.4.30</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.0.0/16, 10.0.0.0/8</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.4.35</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>1 Active</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Terminate Session</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.4.40</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.4.45</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.4.50</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Blocked</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Deny: All</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.4.55</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.4.60</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.4.65</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>1 Active</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Terminate Session</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.4.70</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.4.75</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>None</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;">Connect</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>192.168.4.80</td>
+                            <td>
+                                <label style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="checkbox" checked onclick="location.href='6-1-1-1_pin-entry.html'">
+                                    <span>Allowed</span>
+                                </label>
+                            </td>
+                            <td>2 Active</td>
+                            <td>Allow: 192.168.0.0/16</td>
+                            <td>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Terminate Session</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // Zone tab switching functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const zoneTabs = document.querySelectorAll('.zone-tab');
+            const zoneContents = document.querySelectorAll('.zone-content');
+
+            zoneTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const zoneId = this.getAttribute('data-zone');
+
+                    // Remove active class from all tabs and contents
+                    zoneTabs.forEach(t => t.classList.remove('active'));
+                    zoneContents.forEach(c => c.classList.remove('active'));
+
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    document.getElementById('zone-' + zoneId).classList.add('active');
+
+                    // Reinitialize lucide icons for the new content
+                    lucide.createIcons();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

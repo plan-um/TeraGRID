@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Hardware Asset Details</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+        <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item active">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Details</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Config</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>        </div>
+    </aside>
+
+<main class="main-content">
+        <div class="breadcrumb">
+            <a href="2-1_fleet-dashboard.html">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="3-1-1_vessel-detail-dashboard.html">Vessel Analysis</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="3-1-2-1_hw-asset-list.html">Hardware Asset Inventory</a>
+            <span class="breadcrumb-separator">/</span>
+            <span>Hardware Asset Details</span>
+        </div>
+
+        <div class="page-header">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div>
+                    <h1>Hardware Asset Details</h1>
+                    <p>Siemens SIMATIC S7-1500 (192.168.1.10)</p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-primary" onclick="location.href='3-1-2-3_hw-asset-form.html'">Edit</button>
+                    <button class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: grid; gap: 24px;">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Basic Information</h3>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                    <div>
+                        <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">IP Address</div>
+                        <div style="font-size: 16px; font-weight: 600;">192.168.1.10</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">MAC Address</div>
+                        <div style="font-size: 16px; font-weight: 600;">00:1A:2B:3C:4D:5E</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Manufacturer</div>
+                        <div style="font-size: 16px; font-weight: 600;">Siemens</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Model</div>
+                        <div style="font-size: 16px; font-weight: 600;">SIMATIC S7-1500</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Location</div>
+                        <div style="font-size: 16px; font-weight: 600;">Engine Room</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Status</div>
+                        <div><span class="badge badge-success">Online</span></div>
+                    </div>
+                    <div>
+                        <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Registration Date</div>
+                        <div style="font-size: 16px; font-weight: 600;">2024-06-15</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 14px; color: var(--gray-500); margin-bottom: 4px;">Last Checked</div>
+                        <div style="font-size: 16px; font-weight: 600;">5 min ago</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Installed Software</h3>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Version</th>
+                            <th>Manufacturer</th>
+                            <th>Vulnerabilities</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>TIA Portal</td>
+                            <td>V17</td>
+                            <td>Siemens</td>
+                            <td><span class="badge badge-success">None</span></td>
+                        </tr>
+                        <tr>
+                            <td>STEP 7</td>
+                            <td>V5.6</td>
+                            <td>Siemens</td>
+                            <td><span class="badge badge-warning">1</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Vulnerability Information</h3>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>CVE Code</th>
+                            <th>Severity</th>
+                            <th>Description</th>
+                            <th>Detected</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CVE-2024-1234</td>
+                            <td><span class="badge badge-warning">Medium</span></td>
+                            <td>Buffer overflow vulnerability</td>
+                            <td>2024-09-10</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Change History</h3>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Change Description</th>
+                            <th>Modified By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2024-09-20 14:30</td>
+                            <td>IP address changed (192.168.1.9 → 192.168.1.10)</td>
+                            <td>Kim Minsu</td>
+                        </tr>
+                        <tr>
+                            <td>2024-06-15 10:20</td>
+                            <td>Asset registered</td>
+                            <td>Lee Sujin</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

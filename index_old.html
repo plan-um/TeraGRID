@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - 육상 관제 대시보드</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="img/Logotype.svg" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <img src="img/search-lg.svg" alt="Search" class="search-icon">
+            <input type="text" placeholder="검색">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="#" class="nav-item">
+                <img src="img/home-line.svg" alt="" class="nav-icon">
+                <span>홈</span>
+            </a>
+            <a href="dashboard.html" class="nav-item active">
+                <img src="img/bar-chart-square-02.svg" alt="" class="nav-icon">
+                <span>대시보드</span>
+            </a>
+            <a href="#" class="nav-item">
+                <img src="img/layers-three-01.svg" alt="" class="nav-icon">
+                <span>선박 상세 분석</span>
+            </a>
+            <a href="#" class="nav-item">
+                <img src="img/check-done-01.svg" alt="" class="nav-icon">
+                <span>컴플라이언스</span>
+            </a>
+            <a href="#" class="nav-item">
+                <img src="img/pie-chart-03.svg" alt="" class="nav-icon">
+                <span>사이버 리스크</span>
+            </a>
+            <a href="#" class="nav-item">
+                <img src="img/users-01.svg" alt="" class="nav-icon">
+                <span>관리</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="#" class="nav-item">
+                <img src="img/life-buoy-01.svg" alt="" class="nav-icon">
+                <span>지원</span>
+            </a>
+            <a href="#" class="nav-item">
+                <img src="img/settings-01.svg" alt="" class="nav-icon">
+                <span>설정</span>
+            </a>
+        </div>
+
+        <div class="storage-widget">
+            <button class="close-btn">×</button>
+            <div class="storage-circle">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#e5e7eb" stroke-width="8"/>
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#7c3aed" stroke-width="8"
+                            stroke-dasharray="200 51" stroke-dashoffset="25" transform="rotate(-90 50 50)"/>
+                    <text x="50" y="55" text-anchor="middle" font-size="20" font-weight="600" fill="#111827">80%</text>
+                </svg>
+            </div>
+            <h3>사용 중인 저장공간</h3>
+            <p>팀이 사용 가능한 저장공간의 80%를 사용했습니다. 더 필요하신가요?</p>
+            <div class="storage-actions">
+                <button class="dismiss">무시</button>
+                <button class="upgrade">플랜 업그레이드</button>
+            </div>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">김민수</div>
+                <div class="user-email">minsu@teragrid.com</div>
+            </div>
+            <button class="logout-btn">→</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header Section -->
+        <header class="header-section">
+            <div class="page-header">
+                <h1>대시보드</h1>
+            </div>
+        </header>
+
+        <!-- Tabs and Filters -->
+        <div class="tabs-filters">
+            <div class="button-group">
+                <button class="tab-btn active">12개월</button>
+                <button class="tab-btn">30일</button>
+                <button class="tab-btn">7일</button>
+                <button class="tab-btn">24시간</button>
+            </div>
+            <div class="filter-actions">
+                <button class="btn-filter">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.5 6.66667H2.5M14.1667 10H5.83333M11.6667 13.3333H8.33333" stroke="currentColor" stroke-width="1.67" stroke-linecap="round"/>
+                    </svg>
+                    날짜 선택
+                </button>
+                <button class="btn-filter">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 10H15M2.5 5H17.5M7.5 15H12.5" stroke="currentColor" stroke-width="1.67" stroke-linecap="round"/>
+                    </svg>
+                    필터
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">전체 선박 수</span>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">18,880</div>
+                    <div class="stat-change positive">
+                        <img src="img/trend-up-01.svg" alt="↑" class="trend-icon">
+                        <span>7.4%</span>
+                    </div>
+                </div>
+                <div class="stat-chart">
+                    <img src="img/Line.svg" alt="Chart" class="chart-line">
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">정상 선박</span>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">4,862</div>
+                    <div class="stat-change positive">
+                        <img src="img/trend-up-01.svg" alt="↑" class="trend-icon">
+                        <span>9.2%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">경고 선박</span>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">2,671</div>
+                    <div class="stat-change positive">
+                        <img src="img/trend-up-01.svg" alt="↑" class="trend-icon">
+                        <span>6.6%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-label">규제 준수율</span>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">82%</div>
+                    <div class="stat-change positive">
+                        <img src="img/trend-up-01.svg" alt="↑" class="trend-icon">
+                        <span>8.1%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="content-section">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- Create Actions -->
+                <div class="card">
+                    <h3 class="section-title">작업 시작</h3>
+                    <div class="action-cards">
+                        <div class="action-card">
+                            <div class="action-icon">
+                                <img src="img/user-plus-01.svg" alt="Add">
+                            </div>
+                            <div class="action-content">
+                                <h4>선박 등록</h4>
+                                <p>새로운 선박을 추가하거나 CSV로 일괄 등록</p>
+                            </div>
+                        </div>
+                        <div class="action-card">
+                            <div class="action-icon">
+                                <img src="img/edit-04.svg" alt="Edit">
+                            </div>
+                            <div class="action-content">
+                                <h4>정책 설정</h4>
+                                <p>보안 정책을 생성하고 관리를 시작하세요</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="section-title">최근 활동</h3>
+                        <button class="menu-btn">
+                            <img src="img/dots-vertical.svg" alt="Menu">
+                        </button>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <img src="img/Image.png" alt="Activity" class="activity-image">
+                            <div class="activity-content">
+                                <div class="activity-meta">
+                                    <span class="activity-author">김민수</span>
+                                    <span class="activity-date">• 2025년 1월 20일</span>
+                                </div>
+                                <h4 class="activity-title">선박 보안 점검 완료</h4>
+                                <p class="activity-description">모든 선박의 네트워크 구성을 검토하고 취약점을 파악했습니다.</p>
+                                <div class="activity-tags">
+                                    <span class="tag">보안</span>
+                                    <span class="tag">검사</span>
+                                    <span class="tag">네트워크</span>
+                                </div>
+                            </div>
+                            <button class="activity-arrow">
+                                <img src="img/arrow-up-right.svg" alt="View">
+                            </button>
+                        </div>
+
+                        <div class="activity-item">
+                            <img src="img/Image-1.png" alt="Activity" class="activity-image">
+                            <div class="activity-content">
+                                <div class="activity-meta">
+                                    <span class="activity-author">이수진</span>
+                                    <span class="activity-date">• 2025년 1월 19일</span>
+                                </div>
+                                <h4 class="activity-title">컴플라이언스 문서 생성</h4>
+                                <p class="activity-description">UR E26 규제 준수를 위한 문서를 자동으로 생성했습니다.</p>
+                                <div class="activity-tags">
+                                    <span class="tag">규제</span>
+                                    <span class="tag">문서</span>
+                                </div>
+                            </div>
+                            <button class="activity-arrow">
+                                <img src="img/arrow-up-right.svg" alt="View">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Top Members -->
+            <div class="right-column">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="section-title">주요 선박</h3>
+                        <button class="menu-btn">
+                            <img src="img/dots-vertical.svg" alt="Menu">
+                        </button>
+                    </div>
+                    <div class="members-list">
+                        <div class="member-item">
+                            <img src="img/Avatar.png" alt="Member" class="member-avatar">
+                            <div class="member-info">
+                                <div class="member-name">Phoenix Baker</div>
+                                <div class="member-date">2024년 2월부터 운영</div>
+                            </div>
+                            <span class="status-dot active"></span>
+                        </div>
+                        <div class="member-item">
+                            <img src="img/Avatar-1.png" alt="Member" class="member-avatar">
+                            <div class="member-info">
+                                <div class="member-name">Lana Steiner</div>
+                                <div class="member-date">2024년 1월부터 운영</div>
+                            </div>
+                            <span class="status-dot active"></span>
+                        </div>
+                        <div class="member-item">
+                            <img src="img/Avatar.png" alt="Member" class="member-avatar">
+                            <div class="member-info">
+                                <div class="member-name">Demi Wilkinson</div>
+                                <div class="member-date">2024년 3월부터 운영</div>
+                            </div>
+                            <span class="status-dot active"></span>
+                        </div>
+                        <div class="member-item">
+                            <img src="img/Avatar-1.png" alt="Member" class="member-avatar">
+                            <div class="member-info">
+                                <div class="member-name">Candice Wu</div>
+                                <div class="member-date">2024년 2월부터 운영</div>
+                            </div>
+                            <span class="status-dot"></span>
+                        </div>
+                        <div class="member-item">
+                            <img src="img/Avatar.png" alt="Member" class="member-avatar">
+                            <div class="member-info">
+                                <div class="member-name">Natali Craig</div>
+                                <div class="member-date">2024년 3월부터 운영</div>
+                            </div>
+                            <span class="status-dot"></span>
+                        </div>
+                        <div class="member-item">
+                            <img src="img/Avatar-1.png" alt="Member" class="member-avatar">
+                            <div class="member-info">
+                                <div class="member-name">Orlando Diggs</div>
+                                <div class="member-date">2024년 2월부터 운영</div>
+                            </div>
+                            <span class="status-dot"></span>
+                        </div>
+                        <div class="member-item">
+                            <img src="img/Avatar.png" alt="Member" class="member-avatar">
+                            <div class="member-info">
+                                <div class="member-name">Drew Cano</div>
+                                <div class="member-date">2024년 4월부터 운영</div>
+                            </div>
+                            <span class="status-dot"></span>
+                        </div>
+                        <div class="member-item">
+                            <img src="img/Avatar-1.png" alt="Member" class="member-avatar">
+                            <div class="member-info">
+                                <div class="member-name">Kate Morrison</div>
+                                <div class="member-date">2024년 3월부터 운영</div>
+                            </div>
+                            <span class="status-dot"></span>
+                        </div>
+                        <div class="member-item">
+                            <img src="img/Avatar.png" alt="Member" class="member-avatar">
+                            <div class="member-info">
+                                <div class="member-name">Koray Okumus</div>
+                                <div class="member-date">2024년 2월부터 운영</div>
+                            </div>
+                            <span class="status-dot"></span>
+                        </div>
+                        <div class="member-item">
+                            <img src="img/Avatar-1.png" alt="Member" class="member-avatar">
+                            <div class="member-info">
+                                <div class="member-name">Ava Wright</div>
+                                <div class="member-date">2024년 3월부터 운영</div>
+                            </div>
+                            <span class="status-dot"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
