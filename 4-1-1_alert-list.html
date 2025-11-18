@@ -544,6 +544,7 @@
                 <table class="alerts-table">
                     <thead>
                         <tr>
+                            <th style="width: 40px;"><input type="checkbox" id="selectAll" style="width: 18px; height: 18px;"></th>
                             <th>Severity</th>
                             <th>Timestamp</th>
                             <th>Vessel</th>
@@ -554,7 +555,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr onclick="location.href='4-1-2_alert-detail.html'">
+                        <tr>
+                            <td><input type="checkbox" class="row-checkbox" style="width: 18px; height: 18px;"></td>
                             <td>
                                 <span class="severity-badge critical">
                                     <span class="severity-dot"></span>
@@ -562,10 +564,10 @@
                                 </span>
                             </td>
                             <td>2025-10-04 14:32</td>
-                            <td><strong>VESSEL-A</strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Pacific Star</span></td>
+                            <td><strong><a href="3-1-1_vessel-detail-dashboard.html" style="color: var(--primary); text-decoration: none;">VESSEL-A</a></strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Pacific Star</span></td>
                             <td>
                                 <div class="alert-content">
-                                    <div class="alert-title">Ransomware Detected</div>
+                                    <div class="alert-title"><a href="4-1-2_alert-detail.html" style="color: var(--gray-900); text-decoration: none;">Ransomware Detected</a></div>
                                     <div class="alert-description">Malicious file activity detected in ECR Zone</div>
                                 </div>
                             </td>
@@ -573,7 +575,8 @@
                             <td><span class="status-badge investigating">Investigating</span></td>
                             <td>Kim Min-su</td>
                         </tr>
-                        <tr onclick="location.href='4-1-2_alert-detail.html'">
+                        <tr>
+                            <td><input type="checkbox" class="row-checkbox" style="width: 18px; height: 18px;"></td>
                             <td>
                                 <span class="severity-badge high">
                                     <span class="severity-dot"></span>
@@ -581,10 +584,10 @@
                                 </span>
                             </td>
                             <td>2025-10-04 14:17</td>
-                            <td><strong>VESSEL-B</strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Atlantic Ocean</span></td>
+                            <td><strong><a href="3-1-1_vessel-detail-dashboard.html" style="color: var(--primary); text-decoration: none;">VESSEL-B</a></strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Atlantic Ocean</span></td>
                             <td>
                                 <div class="alert-content">
-                                    <div class="alert-title">Unauthorized USB Connection Attempt</div>
+                                    <div class="alert-title"><a href="4-1-2_alert-detail.html" style="color: var(--gray-900); text-decoration: none;">Unauthorized USB Connection Attempt</a></div>
                                     <div class="alert-description">Unapproved USB device connection blocked</div>
                                 </div>
                             </td>
@@ -592,7 +595,8 @@
                             <td><span class="status-badge new">New</span></td>
                             <td>-</td>
                         </tr>
-                        <tr onclick="location.href='4-1-2_alert-detail.html'">
+                        <tr>
+                            <td><input type="checkbox" class="row-checkbox" style="width: 18px; height: 18px;"></td>
                             <td>
                                 <span class="severity-badge medium">
                                     <span class="severity-dot"></span>
@@ -600,10 +604,10 @@
                                 </span>
                             </td>
                             <td>2025-10-04 13:45</td>
-                            <td><strong>VESSEL-C</strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Indian Breeze</span></td>
+                            <td><strong><a href="3-1-1_vessel-detail-dashboard.html" style="color: var(--primary); text-decoration: none;">VESSEL-C</a></strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Indian Breeze</span></td>
                             <td>
                                 <div class="alert-content">
-                                    <div class="alert-title">Software Vulnerability Detected</div>
+                                    <div class="alert-title"><a href="4-1-2_alert-detail.html" style="color: var(--gray-900); text-decoration: none;">Software Vulnerability Detected</a></div>
                                     <div class="alert-description">CVE-2024-1234 vulnerability found in Navigation System</div>
                                 </div>
                             </td>
@@ -611,7 +615,8 @@
                             <td><span class="status-badge resolved">Resolved</span></td>
                             <td>Lee Su-jin</td>
                         </tr>
-                        <tr onclick="location.href='4-1-2_alert-detail.html'">
+                        <tr>
+                            <td><input type="checkbox" class="row-checkbox" style="width: 18px; height: 18px;"></td>
                             <td>
                                 <span class="severity-badge high">
                                     <span class="severity-dot"></span>
@@ -619,10 +624,10 @@
                                 </span>
                             </td>
                             <td>2025-10-04 12:20</td>
-                            <td><strong>VESSEL-D</strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Arctic Wind</span></td>
+                            <td><strong><a href="3-1-1_vessel-detail-dashboard.html" style="color: var(--primary); text-decoration: none;">VESSEL-D</a></strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Arctic Wind</span></td>
                             <td>
                                 <div class="alert-content">
-                                    <div class="alert-title">Network Scan Detected</div>
+                                    <div class="alert-title"><a href="4-1-2_alert-detail.html" style="color: var(--gray-900); text-decoration: none;">Network Scan Detected</a></div>
                                     <div class="alert-description">Port scan attempt detected from external IP</div>
                                 </div>
                             </td>
@@ -630,7 +635,8 @@
                             <td><span class="status-badge investigating">Investigating</span></td>
                             <td>Park Jun-ho</td>
                         </tr>
-                        <tr onclick="location.href='4-1-2_alert-detail.html'">
+                        <tr>
+                            <td><input type="checkbox" class="row-checkbox" style="width: 18px; height: 18px;"></td>
                             <td>
                                 <span class="severity-badge critical">
                                     <span class="severity-dot"></span>
@@ -638,10 +644,10 @@
                                 </span>
                             </td>
                             <td>2025-10-04 11:55</td>
-                            <td><strong>VESSEL-A</strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Pacific Star</span></td>
+                            <td><strong><a href="3-1-1_vessel-detail-dashboard.html" style="color: var(--primary); text-decoration: none;">VESSEL-A</a></strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Pacific Star</span></td>
                             <td>
                                 <div class="alert-content">
-                                    <div class="alert-title">DDoS Attack Detected</div>
+                                    <div class="alert-title"><a href="4-1-2_alert-detail.html" style="color: var(--gray-900); text-decoration: none;">DDoS Attack Detected</a></div>
                                     <div class="alert-description">High volume traffic to Operations Zone</div>
                                 </div>
                             </td>
@@ -649,7 +655,8 @@
                             <td><span class="status-badge resolved">Resolved</span></td>
                             <td>Kim Min-su</td>
                         </tr>
-                        <tr onclick="location.href='4-1-2_alert-detail.html'">
+                        <tr>
+                            <td><input type="checkbox" class="row-checkbox" style="width: 18px; height: 18px;"></td>
                             <td>
                                 <span class="severity-badge medium">
                                     <span class="severity-dot"></span>
@@ -657,10 +664,10 @@
                                 </span>
                             </td>
                             <td>2025-10-04 10:30</td>
-                            <td><strong>VESSEL-E</strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Southern Cross</span></td>
+                            <td><strong><a href="3-1-1_vessel-detail-dashboard.html" style="color: var(--primary); text-decoration: none;">VESSEL-E</a></strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Southern Cross</span></td>
                             <td>
                                 <div class="alert-content">
-                                    <div class="alert-title">Abnormal Login Attempts</div>
+                                    <div class="alert-title"><a href="4-1-2_alert-detail.html" style="color: var(--gray-900); text-decoration: none;">Abnormal Login Attempts</a></div>
                                     <div class="alert-description">3+ failed login attempts recorded</div>
                                 </div>
                             </td>
@@ -668,7 +675,8 @@
                             <td><span class="status-badge closed">Closed</span></td>
                             <td>Jung Ji-young</td>
                         </tr>
-                        <tr onclick="location.href='4-1-2_alert-detail.html'">
+                        <tr>
+                            <td><input type="checkbox" class="row-checkbox" style="width: 18px; height: 18px;"></td>
                             <td>
                                 <span class="severity-badge low">
                                     <span class="severity-dot"></span>
@@ -676,10 +684,10 @@
                                 </span>
                             </td>
                             <td>2025-10-04 09:15</td>
-                            <td><strong>VESSEL-B</strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Atlantic Ocean</span></td>
+                            <td><strong><a href="3-1-1_vessel-detail-dashboard.html" style="color: var(--primary); text-decoration: none;">VESSEL-B</a></strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Atlantic Ocean</span></td>
                             <td>
                                 <div class="alert-content">
-                                    <div class="alert-title">Patch Required</div>
+                                    <div class="alert-title"><a href="4-1-2_alert-detail.html" style="color: var(--gray-900); text-decoration: none;">Patch Required</a></div>
                                     <div class="alert-description">OS security update pending</div>
                                 </div>
                             </td>
@@ -687,7 +695,8 @@
                             <td><span class="status-badge new">New</span></td>
                             <td>-</td>
                         </tr>
-                        <tr onclick="location.href='4-1-2_alert-detail.html'">
+                        <tr>
+                            <td><input type="checkbox" class="row-checkbox" style="width: 18px; height: 18px;"></td>
                             <td>
                                 <span class="severity-badge high">
                                     <span class="severity-dot"></span>
@@ -695,10 +704,10 @@
                                 </span>
                             </td>
                             <td>2025-10-04 08:45</td>
-                            <td><strong>VESSEL-C</strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Indian Breeze</span></td>
+                            <td><strong><a href="3-1-1_vessel-detail-dashboard.html" style="color: var(--primary); text-decoration: none;">VESSEL-C</a></strong><br><span style="font-size: 12px; color: var(--gray-500);">MV Indian Breeze</span></td>
                             <td>
                                 <div class="alert-content">
-                                    <div class="alert-title">Firewall Rule Violation</div>
+                                    <div class="alert-title"><a href="4-1-2_alert-detail.html" style="color: var(--gray-900); text-decoration: none;">Firewall Rule Violation</a></div>
                                     <div class="alert-description">Outbound connection attempt to unauthorized port</div>
                                 </div>
                             </td>
@@ -739,6 +748,12 @@
     </main>
     <script>
         lucide.createIcons();
+
+        // Select all checkboxes functionality
+        document.getElementById('selectAll').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
 
         // Initialize Alert Trend Chart (Line Chart)
         const trendCtx = document.getElementById('trendChart');

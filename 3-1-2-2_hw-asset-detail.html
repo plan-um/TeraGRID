@@ -86,6 +86,10 @@
                     <p>Siemens SIMATIC S7-1500 (192.168.1.10)</p>
                 </div>
                 <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-secondary" onclick="location.href='6-2-2-1_authorized-device-list.html'">
+                        <i data-lucide="shield-check" style="width: 16px; height: 16px;"></i>
+                        Device Policy Management
+                    </button>
                     <button class="btn btn-primary" onclick="location.href='3-1-2-3_hw-asset-form.html'">Edit</button>
                     <button class="btn btn-danger">Delete</button>
                 </div>
@@ -178,7 +182,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>CVE-2024-1234</td>
+                            <td><a href="4-2-2_vulnerability-detail.html" style="color: var(--primary); font-weight: 600; text-decoration: none;">CVE-2024-1234</a></td>
                             <td><span class="badge badge-warning">Medium</span></td>
                             <td>Buffer overflow vulnerability</td>
                             <td>2024-09-10</td>

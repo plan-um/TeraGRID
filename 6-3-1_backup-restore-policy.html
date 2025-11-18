@@ -69,8 +69,114 @@
     </aside>
 
 <main class="main-content"><div class="page-header"><h1>Backup/Restore Policy</h1><p>View and manage backup and restore status for each CBS</p></div>
-<div class="card"><table class="table"><thead><tr><th>CBS IP</th><th>Manufacturer</th><th>Model</th><th>Last Backup</th><th>Backup Status</th><th></th></tr></thead><tbody><tr><td>192.168.1.10</td><td>Siemens</td><td>SIMATIC S7-1500</td><td>2024-10-04 02:00</td><td><span class="badge badge-success">Success</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Restore</button></div></td></tr><tr><td>192.168.1.11</td><td>Schneider Electric</td><td>Modicon M580</td><td>2024-10-04 02:15</td><td><span class="badge badge-success">Success</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Restore</button></div></td></tr><tr><td>192.168.1.12</td><td>ABB</td><td>AC800M</td><td>2024-10-04 02:30</td><td><span class="badge badge-warning">Partial Success</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Restore</button></div></td></tr><tr><td>192.168.1.13</td><td>Honeywell</td><td>Experion PKS</td><td>2024-10-04 02:45</td><td><span class="badge badge-success">Success</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Restore</button></div></td></tr><tr><td>192.168.1.14</td><td>Rockwell</td><td>ControlLogix 5580</td><td>2024-10-03 02:00</td><td><span class="badge badge-danger">Failed</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Restore</button></div></td></tr><tr><td>192.168.1.15</td><td>Emerson</td><td>DeltaV System</td><td>2024-10-04 03:00</td><td><span class="badge badge-success">Success</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Restore</button></div></td></tr><tr><td>192.168.1.16</td><td>Yokogawa</td><td>CENTUM VP</td><td>2024-10-04 03:15</td><td><span class="badge badge-success">Success</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Restore</button></div></td></tr><tr><td>192.168.1.17</td><td>GE Digital</td><td>Mark VIe Control</td><td>2024-10-04 03:30</td><td><span class="badge badge-success">Success</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Restore</button></div></td></tr></tbody></table></div>
+<div class="card"><table class="table"><thead><tr><th>CBS IP</th><th>Manufacturer</th><th>Model</th><th>Last Backup</th><th>Backup Status</th><th></th></tr></thead><tbody><tr><td>192.168.1.10</td><td>Siemens</td><td>SIMATIC S7-1500</td><td>2024-10-04 02:00</td><td><span class="badge badge-success">Success</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Restore</button></div></td></tr><tr><td>192.168.1.11</td><td>Schneider Electric</td><td>Modicon M580</td><td>2024-10-04 02:15</td><td><span class="badge badge-success">Success</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Restore</button></div></td></tr><tr><td>192.168.1.12</td><td>ABB</td><td>AC800M</td><td>2024-10-04 02:30</td><td><span class="badge badge-warning">Partial Success</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Restore</button></div></td></tr><tr><td>192.168.1.13</td><td>Honeywell</td><td>Experion PKS</td><td>2024-10-04 02:45</td><td><span class="badge badge-success">Success</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Restore</button></div></td></tr><tr><td>192.168.1.14</td><td>Rockwell</td><td>ControlLogix 5580</td><td>2024-10-03 02:00</td><td><span class="badge badge-danger" style="cursor: pointer;" onclick="showFailureReason('192.168.1.14', 'CBS Offline')">Failed</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="showRestoreModal('192.168.1.14', 'ControlLogix 5580')">Restore</button></div></td></tr><tr><td>192.168.1.15</td><td>Emerson</td><td>DeltaV System</td><td>2024-10-04 03:00</td><td><span class="badge badge-success">Success</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Restore</button></div></td></tr><tr><td>192.168.1.16</td><td>Yokogawa</td><td>CENTUM VP</td><td>2024-10-04 03:15</td><td><span class="badge badge-success">Success</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Restore</button></div></td></tr><tr><td>192.168.1.17</td><td>GE Digital</td><td>Mark VIe Control</td><td>2024-10-04 03:30</td><td><span class="badge badge-success">Success</span></td><td><div style="display: flex; gap: 8px;"><button class="btn btn-primary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Backup</button><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='6-1-1-1_pin-entry.html'">Restore</button></div></td></tr></tbody></table></div>
+<!-- Failure Reason Modal -->
+<div id="failureModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;" onclick="closeFailureModal()">
+<div style="position: relative; max-width: 500px; margin: 100px auto; background: white; border-radius: 12px; padding: 24px;" onclick="event.stopPropagation()">
+<button onclick="closeFailureModal()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+<h2 style="margin-bottom: 16px; color: var(--danger);">Backup Failed</h2>
+<div id="failureContent"></div>
+<button onclick="closeFailureModal()" class="btn btn-secondary" style="margin-top: 16px;">Close</button>
+</div>
+</div>
+
+<!-- Restore Modal -->
+<div id="restoreModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;" onclick="closeRestoreModal()">
+<div style="position: relative; max-width: 600px; margin: 80px auto; background: white; border-radius: 12px; padding: 24px;" onclick="event.stopPropagation()">
+<button onclick="closeRestoreModal()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+<h2 style="margin-bottom: 16px;">Select Backup to Restore</h2>
+<div id="restoreContent" style="margin-bottom: 24px;"></div>
+<div style="display: flex; gap: 12px;">
+<button class="btn btn-primary" id="restoreButton" disabled>Restore</button>
+<button onclick="closeRestoreModal()" class="btn btn-secondary">Cancel</button>
+</div>
+</div>
+</div>
+
 </main>    <script>
         lucide.createIcons();
+
+        let selectedBackup = null;
+
+        function showFailureReason(cbsIp, reason) {
+            const modal = document.getElementById('failureModal');
+            const content = document.getElementById('failureContent');
+
+            content.innerHTML = `
+                <p style="margin-bottom: 12px;"><strong>CBS IP:</strong> ${cbsIp}</p>
+                <p style="margin-bottom: 12px;"><strong>Failure Reason:</strong> ${reason}</p>
+                <p style="color: var(--gray-600); font-size: 14px;">The backup process failed because the CBS device was offline. Please ensure the device is connected and try again.</p>
+            `;
+
+            modal.style.display = 'block';
+        }
+
+        function closeFailureModal() {
+            document.getElementById('failureModal').style.display = 'none';
+        }
+
+        function showRestoreModal(cbsIp, model) {
+            const modal = document.getElementById('restoreModal');
+            const content = document.getElementById('restoreContent');
+
+            // Sample backup points
+            const backups = [
+                {date: '2024-10-04 02:00', size: '2.3 MB', status: 'Complete'},
+                {date: '2024-10-03 02:00', size: '2.3 MB', status: 'Complete'},
+                {date: '2024-10-02 02:00', size: '2.2 MB', status: 'Complete'},
+                {date: '2024-10-01 02:00', size: '2.2 MB', status: 'Complete'}
+            ];
+
+            content.innerHTML = `
+                <p style="margin-bottom: 16px;"><strong>CBS:</strong> ${cbsIp} (${model})</p>
+                <div style="border: 1px solid var(--gray-200); border-radius: 8px; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead style="background: var(--gray-50);">
+                            <tr>
+                                <th style="padding: 12px; text-align: left; border-bottom: 1px solid var(--gray-200);"></th>
+                                <th style="padding: 12px; text-align: left; border-bottom: 1px solid var(--gray-200);">Backup Date</th>
+                                <th style="padding: 12px; text-align: left; border-bottom: 1px solid var(--gray-200);">Size</th>
+                                <th style="padding: 12px; text-align: left; border-bottom: 1px solid var(--gray-200);">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${backups.map((backup, index) => `
+                                <tr style="cursor: pointer; ${index % 2 === 0 ? '' : 'background: var(--gray-50);'}" onmouseover="this.style.background='var(--gray-100)'" onmouseout="this.style.background='${index % 2 === 0 ? 'white' : 'var(--gray-50)'}'" onclick="selectBackup('${backup.date}')">
+                                    <td style="padding: 12px;"><input type="radio" name="backup" value="${backup.date}"></td>
+                                    <td style="padding: 12px;">${backup.date}</td>
+                                    <td style="padding: 12px;">${backup.size}</td>
+                                    <td style="padding: 12px;"><span class="badge badge-success">${backup.status}</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            modal.style.display = 'block';
+
+            // Enable restore button when backup is selected
+            document.getElementById('restoreButton').onclick = function() {
+                if (selectedBackup) {
+                    // Navigate to PIN entry page
+                    location.href = '6-1-1-1_pin-entry.html';
+                }
+            };
+        }
+
+        function selectBackup(date) {
+            selectedBackup = date;
+            document.getElementById('restoreButton').disabled = false;
+            // Update radio selection
+            document.querySelectorAll('input[name="backup"]').forEach(radio => {
+                radio.checked = radio.value === date;
+            });
+        }
+
+        function closeRestoreModal() {
+            document.getElementById('restoreModal').style.display = 'none';
+            selectedBackup = null;
+            document.getElementById('restoreButton').disabled = true;
+        }
     </script>
 </body></html>

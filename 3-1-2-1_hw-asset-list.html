@@ -105,70 +105,87 @@
                         <th>Model</th>
                         <th>Location</th>
                         <th>Status</th>
+                        <th>Authorization</th>
                         <th>Last Checked</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr onclick="location.href='3-1-2-2_hw-asset-detail.html'" style="cursor: pointer;">
+                    <tr>
                         <td>192.168.1.10</td>
                         <td>00:1A:2B:3C:4D:5E</td>
                         <td>Siemens</td>
                         <td>SIMATIC S7-1500</td>
                         <td>Engine Room</td>
                         <td><span class="badge badge-success">Online</span></td>
+                        <td><span class="badge badge-success">Authorized</span></td>
                         <td>5 min ago</td>
-                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='3-1-2-2_hw-asset-detail.html'">Details</button></td>
                     </tr>
-                    <tr onclick="location.href='3-1-2-2_hw-asset-detail.html'" style="cursor: pointer;">
+                    <tr>
                         <td>192.168.1.11</td>
                         <td>00:1A:2B:3C:4D:5F</td>
                         <td>Schneider Electric</td>
                         <td>Modicon M580</td>
                         <td>Bridge</td>
                         <td><span class="badge badge-success">Online</span></td>
+                        <td><span class="badge badge-danger">Unauthorized</span></td>
                         <td>2 min ago</td>
-                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                        <td>
+                            <div style="display: flex; gap: 4px;">
+                                <button class="btn btn-primary" style="padding: 6px 12px;" onclick="alert('Device authorized')">Allow</button>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="alert('Device denied')">Deny</button>
+                            </div>
+                        </td>
                     </tr>
-                    <tr onclick="location.href='3-1-2-2_hw-asset-detail.html'" style="cursor: pointer;">
+                    <tr>
                         <td>192.168.1.12</td>
                         <td>00:1A:2B:3C:4D:60</td>
                         <td>ABB</td>
                         <td>AC800M</td>
                         <td>Cargo Control</td>
                         <td><span class="badge badge-warning">Warning</span></td>
+                        <td><span class="badge badge-success">Authorized</span></td>
                         <td>1 hour ago</td>
-                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='3-1-2-2_hw-asset-detail.html'">Details</button></td>
                     </tr>
-                    <tr onclick="location.href='3-1-2-2_hw-asset-detail.html'" style="cursor: pointer;">
+                    <tr>
                         <td>192.168.1.13</td>
                         <td>00:1A:2B:3C:4D:61</td>
                         <td>Honeywell</td>
                         <td>Experion PKS</td>
                         <td>HVAC Control</td>
                         <td><span class="badge badge-success">Online</span></td>
+                        <td><span class="badge badge-danger">Unauthorized</span></td>
                         <td>10 min ago</td>
-                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                        <td>
+                            <div style="display: flex; gap: 4px;">
+                                <button class="btn btn-primary" style="padding: 6px 12px;" onclick="alert('Device authorized')">Allow</button>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="alert('Device denied')">Deny</button>
+                            </div>
+                        </td>
                     </tr>
-                    <tr onclick="location.href='3-1-2-2_hw-asset-detail.html'" style="cursor: pointer;">
+                    <tr>
                         <td>192.168.1.14</td>
                         <td>00:1A:2B:3C:4D:62</td>
                         <td>Rockwell</td>
                         <td>ControlLogix 5580</td>
                         <td>Safety System</td>
                         <td><span class="badge badge-danger">Offline</span></td>
+                        <td><span class="badge badge-success">Authorized</span></td>
                         <td>3 hours ago</td>
-                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='3-1-2-2_hw-asset-detail.html'">Details</button></td>
                     </tr>
-                    <tr onclick="location.href='3-1-2-2_hw-asset-detail.html'" style="cursor: pointer;">
+                    <tr>
                         <td>192.168.1.15</td>
                         <td>00:1A:2B:3C:4D:63</td>
                         <td>Emerson</td>
                         <td>DeltaV System</td>
                         <td>Process Control</td>
                         <td><span class="badge badge-success">Online</span></td>
+                        <td><span class="badge badge-success">Authorized</span></td>
                         <td>8 min ago</td>
-                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='3-1-2-2_hw-asset-detail.html'">Details</button></td>
                     </tr>
                 </tbody>
             </table>

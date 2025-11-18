@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Remote Access Policy</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .policy-section {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, #9333ea 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info {
+            flex: 1;
+        }
+
+        .setting-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .setting-description {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background-color: var(--gray-300);
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-switch.active {
+            background-color: var(--success);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(24px);
+        }
+
+        .ip-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .ip-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background-color: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+        }
+
+        .ip-address {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .ip-label {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-left: 12px;
+        }
+
+        .time-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .time-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .time-input-label {
+            font-size: 13px;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .alert-config {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .alert-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background-color: var(--gray-50);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .alert-option:hover {
+            background-color: #f3e8ff;
+            border-color: var(--primary);
+        }
+
+        .alert-checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .alert-label {
+            font-size: 14px;
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+
+        .warning-box {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            padding: 16px;
+            background-color: #fef3c7;
+            border-left: 4px solid var(--warning);
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .warning-icon {
+            color: var(--warning);
+            flex-shrink: 0;
+        }
+
+        .warning-content {
+            flex: 1;
+        }
+
+        .warning-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 4px;
+        }
+
+        .warning-text {
+            font-size: 13px;
+            color: #78350f;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Details</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item active">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Config</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="breadcrumb">
+            <a href="2-1_fleet-dashboard.html">Dashboard</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="6-1-1_zone-settings.html">Policy & Config</a>
+            <span class="breadcrumb-separator">/</span>
+            <span>Remote Access Policy</span>
+        </div>
+
+        <div class="page-header">
+            <h1>Remote Access Policy</h1>
+            <p>Configure remote access control settings and security policies</p>
+        </div>
+
+        <!-- Basic Settings -->
+        <div class="policy-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i data-lucide="shield-check" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h2 class="section-title">Basic Access Control</h2>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <div class="setting-label">Enable Remote Access</div>
+                    <div class="setting-description">Allow remote connections to vessel systems</div>
+                </div>
+                <div class="setting-control">
+                    <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <div class="setting-label">Require Multi-Factor Authentication (MFA)</div>
+                    <div class="setting-description">Additional authentication layer for remote access</div>
+                </div>
+                <div class="setting-control">
+                    <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <div class="setting-label">Session Timeout</div>
+                    <div class="setting-description">Automatically disconnect inactive sessions</div>
+                </div>
+                <div class="setting-control">
+                    <select class="form-input" style="width: 150px;">
+                        <option value="15">15 minutes</option>
+                        <option value="30" selected>30 minutes</option>
+                        <option value="60">1 hour</option>
+                        <option value="120">2 hours</option>
+                        <option value="0">No timeout</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <div class="setting-label">Maximum Concurrent Sessions</div>
+                    <div class="setting-description">Limit number of simultaneous remote connections</div>
+                </div>
+                <div class="setting-control">
+                    <input type="number" class="form-input" value="2" min="1" max="10" style="width: 100px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- IP Whitelist -->
+        <div class="policy-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i data-lucide="globe" style="width: 24px; height: 24px;"></i>
+                </div>
+                <div style="flex: 1;">
+                    <h2 class="section-title">Authorized IP Addresses</h2>
+                </div>
+                <button class="btn btn-primary" onclick="alert('Add IP Address functionality')">
+                    <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+                    Add IP Address
+                </button>
+            </div>
+
+            <div class="ip-list">
+                <div class="ip-item">
+                    <div>
+                        <span class="ip-address">203.xxx.xxx.100</span>
+                        <span class="ip-label">Headquarters - Seoul</span>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-secondary" style="padding: 6px 12px;">Edit</button>
+                        <button class="btn btn-danger" style="padding: 6px 12px;">Remove</button>
+                    </div>
+                </div>
+
+                <div class="ip-item">
+                    <div>
+                        <span class="ip-address">203.xxx.xxx.101</span>
+                        <span class="ip-label">Regional Office - Busan</span>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-secondary" style="padding: 6px 12px;">Edit</button>
+                        <button class="btn btn-danger" style="padding: 6px 12px;">Remove</button>
+                    </div>
+                </div>
+
+                <div class="ip-item">
+                    <div>
+                        <span class="ip-address">203.xxx.xxx.102</span>
+                        <span class="ip-label">Emergency Response Center</span>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-secondary" style="padding: 6px 12px;">Edit</button>
+                        <button class="btn btn-danger" style="padding: 6px 12px;">Remove</button>
+                    </div>
+                </div>
+
+                <div class="ip-item">
+                    <div>
+                        <span class="ip-address">203.xxx.xxx.103</span>
+                        <span class="ip-label">Technical Support Team</span>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-secondary" style="padding: 6px 12px;">Edit</button>
+                        <button class="btn btn-danger" style="padding: 6px 12px;">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time Restrictions -->
+        <div class="policy-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i data-lucide="clock" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h2 class="section-title">Access Time Restrictions</h2>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <div class="setting-label">Enable Time-based Access Control</div>
+                    <div class="setting-description">Restrict remote access to specific time windows</div>
+                </div>
+                <div class="setting-control">
+                    <div class="toggle-switch" onclick="this.classList.toggle('active'); document.getElementById('time-settings').style.display = this.classList.contains('active') ? 'block' : 'none';"></div>
+                </div>
+            </div>
+
+            <div id="time-settings" style="display: none; margin-top: 20px;">
+                <div class="time-selector">
+                    <div class="time-input-group">
+                        <label class="time-input-label">Allowed Start Time</label>
+                        <input type="time" class="form-input" value="09:00">
+                    </div>
+                    <div class="time-input-group">
+                        <label class="time-input-label">Allowed End Time</label>
+                        <input type="time" class="form-input" value="18:00">
+                    </div>
+                </div>
+
+                <div style="margin-top: 16px;">
+                    <label class="form-label">Allowed Days</label>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+                        <label class="alert-option" style="padding: 8px 16px;">
+                            <input type="checkbox" class="alert-checkbox" checked>
+                            <span class="alert-label">Monday</span>
+                        </label>
+                        <label class="alert-option" style="padding: 8px 16px;">
+                            <input type="checkbox" class="alert-checkbox" checked>
+                            <span class="alert-label">Tuesday</span>
+                        </label>
+                        <label class="alert-option" style="padding: 8px 16px;">
+                            <input type="checkbox" class="alert-checkbox" checked>
+                            <span class="alert-label">Wednesday</span>
+                        </label>
+                        <label class="alert-option" style="padding: 8px 16px;">
+                            <input type="checkbox" class="alert-checkbox" checked>
+                            <span class="alert-label">Thursday</span>
+                        </label>
+                        <label class="alert-option" style="padding: 8px 16px;">
+                            <input type="checkbox" class="alert-checkbox" checked>
+                            <span class="alert-label">Friday</span>
+                        </label>
+                        <label class="alert-option" style="padding: 8px 16px;">
+                            <input type="checkbox" class="alert-checkbox">
+                            <span class="alert-label">Saturday</span>
+                        </label>
+                        <label class="alert-option" style="padding: 8px 16px;">
+                            <input type="checkbox" class="alert-checkbox">
+                            <span class="alert-label">Sunday</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert & Notification Settings -->
+        <div class="policy-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i data-lucide="bell" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h2 class="section-title">Alert & Notification Settings</h2>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <div class="setting-label">Enable Access Notifications</div>
+                    <div class="setting-description">Receive alerts for remote access events</div>
+                </div>
+                <div class="setting-control">
+                    <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <label class="form-label">Send Notifications For:</label>
+                <div class="alert-config" style="margin-top: 12px;">
+                    <label class="alert-option">
+                        <input type="checkbox" class="alert-checkbox" checked>
+                        <span class="alert-label">New Connection</span>
+                    </label>
+                    <label class="alert-option">
+                        <input type="checkbox" class="alert-checkbox" checked>
+                        <span class="alert-label">Connection Terminated</span>
+                    </label>
+                    <label class="alert-option">
+                        <input type="checkbox" class="alert-checkbox" checked>
+                        <span class="alert-label">Unauthorized Access Attempt</span>
+                    </label>
+                    <label class="alert-option">
+                        <input type="checkbox" class="alert-checkbox" checked>
+                        <span class="alert-label">Policy Violation</span>
+                    </label>
+                    <label class="alert-option">
+                        <input type="checkbox" class="alert-checkbox">
+                        <span class="alert-label">Session Timeout</span>
+                    </label>
+                    <label class="alert-option">
+                        <input type="checkbox" class="alert-checkbox">
+                        <span class="alert-label">Failed Authentication</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logging Settings -->
+        <div class="policy-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i data-lucide="file-text" style="width: 24px; height: 24px;"></i>
+                </div>
+                <h2 class="section-title">Logging & Audit</h2>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <div class="setting-label">Enable Detailed Logging</div>
+                    <div class="setting-description">Record all remote access activities for audit purposes</div>
+                </div>
+                <div class="setting-control">
+                    <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <div class="setting-label">Log Retention Period</div>
+                    <div class="setting-description">Duration to keep remote access logs</div>
+                </div>
+                <div class="setting-control">
+                    <select class="form-input" style="width: 150px;">
+                        <option value="30">30 days</option>
+                        <option value="90" selected>90 days</option>
+                        <option value="180">180 days</option>
+                        <option value="365">1 year</option>
+                        <option value="730">2 years</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <div class="setting-info">
+                    <div class="setting-label">Export Logs to SIEM</div>
+                    <div class="setting-description">Automatically send logs to Security Information and Event Management system</div>
+                </div>
+                <div class="setting-control">
+                    <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                </div>
+            </div>
+
+            <div style="margin-top: 16px;">
+                <button class="btn btn-secondary">
+                    <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+                    View Remote Access Logs
+                </button>
+            </div>
+        </div>
+
+        <!-- Warning Box -->
+        <div class="warning-box">
+            <i data-lucide="alert-triangle" class="warning-icon" style="width: 24px; height: 24px;"></i>
+            <div class="warning-content">
+                <div class="warning-title">Security Notice</div>
+                <div class="warning-text">
+                    Changes to remote access policies require administrator PIN verification.
+                    Ensure all authorized IP addresses are correctly configured before saving.
+                    Incorrect settings may block legitimate access or create security vulnerabilities.
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="card" style="margin-top: 24px;">
+            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                <button class="btn btn-secondary" onclick="location.href='6-1-1_zone-settings.html'">
+                    Cancel
+                </button>
+                <button class="btn btn-secondary">
+                    Reset to Default
+                </button>
+                <button class="btn btn-primary" onclick="location.href='6-1-1-1_pin-entry.html'">
+                    <i data-lucide="save" style="width: 16px; height: 16px;"></i>
+                    Save Changes (Requires PIN)
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

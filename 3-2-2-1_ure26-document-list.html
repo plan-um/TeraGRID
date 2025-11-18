@@ -140,14 +140,20 @@
                         <td><span class="badge badge-success">Completed</span></td>
                         <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
                     </tr>
-                    <tr onclick="location.href='3-2-2-3_ure26-document-detail.html'" style="cursor: pointer;">
+                    <tr>
                         <td>Asset Inventory</td>
                         <td>MV Indian Breeze</td>
                         <td>v1.0</td>
                         <td>2024-09-28</td>
                         <td>Park Chulsoo</td>
                         <td><span class="badge badge-warning">Under Review</span></td>
-                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">Details</button></td>
+                        <td>
+                            <div style="display: flex; gap: 6px;">
+                                <button class="btn btn-primary" style="padding: 6px 12px;" onclick="alert('Document approved'); location.reload();">Approve</button>
+                                <button class="btn btn-danger" style="padding: 6px 12px;" onclick="alert('Document rejected'); location.reload();">Reject</button>
+                                <button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='3-2-2-3_ure26-document-detail.html'">Details</button>
+                            </div>
+                        </td>
                     </tr>
                     <tr onclick="location.href='3-2-2-3_ure26-document-detail.html'" style="cursor: pointer;">
                         <td>Network Architecture</td>

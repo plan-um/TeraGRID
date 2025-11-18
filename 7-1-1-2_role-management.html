@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Role Management</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .role-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--gray-200);
+            padding-bottom: 0;
+        }
+
+        .role-tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-600);
+            transition: all 0.3s;
+            margin-bottom: -2px;
+        }
+
+        .role-tab:hover {
+            color: var(--primary);
+            background: var(--gray-50);
+        }
+
+        .role-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .role-content {
+            display: none;
+        }
+
+        .role-content.active {
+            display: block;
+        }
+
+        .permission-section {
+            margin-bottom: 32px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: var(--gray-50);
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .select-all-btn {
+            padding: 6px 12px;
+            font-size: 13px;
+            border: 1px solid var(--gray-300);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .select-all-btn:hover {
+            background: var(--gray-100);
+        }
+
+        .permission-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--gray-200);
+        }
+
+        .permission-table th {
+            background: var(--gray-50);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--gray-700);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .permission-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .permission-table tbody tr:hover {
+            background: var(--gray-50);
+        }
+
+        .permission-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .permission-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .menu-name {
+            font-weight: 500;
+            color: var(--gray-900);
+        }
+
+        .menu-description {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        .role-summary {
+            background: linear-gradient(135deg, var(--primary) 0%, #6d28d9 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+        }
+
+        .role-summary h2 {
+            margin: 0 0 8px 0;
+            font-size: 24px;
+        }
+
+        .role-summary p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 15px;
+        }
+
+        .permission-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .permission-badge.granted {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Detail</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Config</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item active">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Role Management</h1>
+            <p>Define access permissions and capabilities for each user role</p>
+        </div>
+
+        <!-- Role Tabs -->
+        <div class="role-tabs">
+            <button class="role-tab active" onclick="switchRole('administrator')">Administrator</button>
+            <button class="role-tab" onclick="switchRole('system-admin')">System Admin</button>
+            <button class="role-tab" onclick="switchRole('security-analyst')">Security Analyst</button>
+            <button class="role-tab" onclick="switchRole('operator')">Operator</button>
+            <button class="role-tab" onclick="switchRole('auditor')">Auditor</button>
+            <button class="role-tab" onclick="switchRole('vessel-manager')">Vessel Manager</button>
+        </div>
+
+        <!-- Administrator Role -->
+        <div id="administrator" class="role-content active">
+            <div class="role-summary">
+                <h2>Administrator</h2>
+                <p>Full system access with complete control over all features, settings, and user management. This role should be assigned only to trusted personnel.</p>
+            </div>
+
+            <div class="card">
+                <div class="permission-section">
+                    <div class="section-header">
+                        <div class="section-title">Menu Access Permissions</div>
+                        <button class="select-all-btn" onclick="selectAll('administrator', 'menu')">Select All</button>
+                    </div>
+
+                    <table class="permission-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%;">Menu / Feature</th>
+                                <th style="width: 12%; text-align: center;">View</th>
+                                <th style="width: 12%; text-align: center;">Create</th>
+                                <th style="width: 12%; text-align: center;">Edit</th>
+                                <th style="width: 12%; text-align: center;">Delete</th>
+                                <th style="width: 12%; text-align: center;">Execute</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Dashboard</div>
+                                    <div class="menu-description">Fleet overview and vessel status monitoring</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Vessel Details</div>
+                                    <div class="menu-description">Asset management and network configuration</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Compliance</div>
+                                    <div class="menu-description">UR E26 documents and audit management</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Cyber Risk</div>
+                                    <div class="menu-description">Alerts, incidents, and vulnerability management</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Infrastructure Logs</div>
+                                    <div class="menu-description">IP traffic and remote access logs</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Policy & Configuration</div>
+                                    <div class="menu-description">Network zones, whitelists, backup/restore, playbooks</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Management</div>
+                                    <div class="menu-description">User management and system settings</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="permission-section">
+                    <div class="section-header">
+                        <div class="section-title">Special Permissions</div>
+                    </div>
+                    <div style="padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <input type="checkbox" class="permission-checkbox" checked>
+                            <span><strong>PIN Authentication Bypass:</strong> Can perform critical operations without PIN verification</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <input type="checkbox" class="permission-checkbox" checked>
+                            <span><strong>Role Management:</strong> Can create, edit, and delete user roles and permissions</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <input type="checkbox" class="permission-checkbox" checked>
+                            <span><strong>System Configuration:</strong> Can modify system-wide security policies and settings</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <input type="checkbox" class="permission-checkbox" checked>
+                            <span><strong>Audit Log Access:</strong> Can view complete audit trails of all user actions</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: 24px;">
+                    <button class="btn btn-primary">Save Changes</button>
+                    <button class="btn btn-secondary" onclick="location.href='7-1-1_user-management.html'">Back to User Management</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Administrator Role -->
+        <div id="system-admin" class="role-content">
+            <div class="role-summary">
+                <h2>System Administrator</h2>
+                <p>Technical system management and configuration. Focus on system settings, backups, and technical operations without user management capabilities.</p>
+            </div>
+
+            <div class="card">
+                <div class="permission-section">
+                    <div class="section-header">
+                        <div class="section-title">Menu Access Permissions</div>
+                        <button class="select-all-btn" onclick="selectAll('system-admin', 'menu')">Select All</button>
+                    </div>
+
+                    <table class="permission-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%;">Menu / Feature</th>
+                                <th style="width: 12%; text-align: center;">View</th>
+                                <th style="width: 12%; text-align: center;">Create</th>
+                                <th style="width: 12%; text-align: center;">Edit</th>
+                                <th style="width: 12%; text-align: center;">Delete</th>
+                                <th style="width: 12%; text-align: center;">Execute</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Dashboard</div>
+                                    <div class="menu-description">Fleet overview and vessel status monitoring</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Vessel Details</div>
+                                    <div class="menu-description">Asset management and network configuration</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Infrastructure Logs</div>
+                                    <div class="menu-description">IP traffic and remote access logs</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Policy & Configuration</div>
+                                    <div class="menu-description">Network zones, whitelists, backup/restore, playbooks</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Management</div>
+                                    <div class="menu-description">User management and system settings (System Settings only)</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="permission-section">
+                    <div class="section-header">
+                        <div class="section-title">Special Permissions</div>
+                    </div>
+                    <div style="padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <input type="checkbox" class="permission-checkbox" checked>
+                            <span><strong>System Configuration:</strong> Can modify system-wide technical settings</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <input type="checkbox" class="permission-checkbox" checked>
+                            <span><strong>Backup/Restore Operations:</strong> Can perform CBS backup and restore operations</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <input type="checkbox" class="permission-checkbox">
+                            <span><strong>User Management:</strong> Cannot create or manage user accounts</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: 24px;">
+                    <button class="btn btn-primary">Save Changes</button>
+                    <button class="btn btn-secondary" onclick="location.href='7-1-1_user-management.html'">Back to User Management</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auditor Role -->
+        <div id="auditor" class="role-content">
+            <div class="role-summary">
+                <h2>Auditor</h2>
+                <p>Read-only access for compliance auditing and review. Can view all data and reports but cannot make any modifications to ensure audit integrity.</p>
+            </div>
+
+            <div class="card">
+                <div class="permission-section">
+                    <div class="section-header">
+                        <div class="section-title">Menu Access Permissions</div>
+                    </div>
+
+                    <table class="permission-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%;">Menu / Feature</th>
+                                <th style="width: 12%; text-align: center;">View</th>
+                                <th style="width: 12%; text-align: center;">Create</th>
+                                <th style="width: 12%; text-align: center;">Edit</th>
+                                <th style="width: 12%; text-align: center;">Delete</th>
+                                <th style="width: 12%; text-align: center;">Execute</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Dashboard</div>
+                                    <div class="menu-description">Fleet overview and vessel status monitoring</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Vessel Details</div>
+                                    <div class="menu-description">Asset management and network configuration</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Compliance</div>
+                                    <div class="menu-description">UR E26 documents and audit management</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Cyber Risk</div>
+                                    <div class="menu-description">Alerts, incidents, and vulnerability management</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Infrastructure Logs</div>
+                                    <div class="menu-description">IP traffic and remote access logs</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><span style="color: var(--gray-400);">-</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="menu-name">Policy & Configuration</div>
+                                    <div class="menu-description">Network zones, whitelists, backup/restore, playbooks</div>
+                                </td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox" checked></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                                <td style="text-align: center;"><input type="checkbox" class="permission-checkbox"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="permission-section">
+                    <div class="section-header">
+                        <div class="section-title">Special Permissions</div>
+                    </div>
+                    <div style="padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <input type="checkbox" class="permission-checkbox" checked>
+                            <span><strong>Audit Log Access:</strong> Can view complete audit trails of all user actions</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <input type="checkbox" class="permission-checkbox" checked>
+                            <span><strong>Export Data:</strong> Can export reports and logs for compliance purposes</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <input type="checkbox" class="permission-checkbox">
+                            <span><strong>Modification Restrictions:</strong> Cannot create, edit, or delete any records</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: 24px;">
+                    <button class="btn btn-primary">Save Changes</button>
+                    <button class="btn btn-secondary" onclick="location.href='7-1-1_user-management.html'">Back to User Management</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Analyst, Operator, Vessel Manager (Placeholder) -->
+        <div id="security-analyst" class="role-content">
+            <div class="role-summary">
+                <h2>Security Analyst</h2>
+                <p>Focused on security operations and incident response. Full access to cyber risk management, alerts, and vulnerabilities.</p>
+            </div>
+            <div class="card">
+                <p style="padding: 24px; text-align: center; color: var(--gray-500);">Permission configuration for Security Analyst role...</p>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-primary">Save Changes</button>
+                    <button class="btn btn-secondary" onclick="location.href='7-1-1_user-management.html'">Back to User Management</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="operator" class="role-content">
+            <div class="role-summary">
+                <h2>Operator</h2>
+                <p>Day-to-day operations monitoring with limited modification capabilities. Can view dashboards and logs.</p>
+            </div>
+            <div class="card">
+                <p style="padding: 24px; text-align: center; color: var(--gray-500);">Permission configuration for Operator role...</p>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-primary">Save Changes</button>
+                    <button class="btn btn-secondary" onclick="location.href='7-1-1_user-management.html'">Back to User Management</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="vessel-manager" class="role-content">
+            <div class="role-summary">
+                <h2>Vessel Manager</h2>
+                <p>Vessel-specific management access for managing vessel details, assets, and vessel-level configurations.</p>
+            </div>
+            <div class="card">
+                <p style="padding: 24px; text-align: center; color: var(--gray-500);">Permission configuration for Vessel Manager role...</p>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-primary">Save Changes</button>
+                    <button class="btn btn-secondary" onclick="location.href='7-1-1_user-management.html'">Back to User Management</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // Switch between roles
+        function switchRole(roleId) {
+            // Update tabs
+            document.querySelectorAll('.role-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.role-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(roleId).classList.add('active');
+        }
+
+        // Select all checkboxes
+        function selectAll(roleId, section) {
+            const container = document.getElementById(roleId);
+            const checkboxes = container.querySelectorAll('.permission-checkbox');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+
+            checkboxes.forEach(cb => {
+                cb.checked = !allChecked;
+            });
+
+            event.target.textContent = allChecked ? 'Select All' : 'Deselect All';
+        }
+    </script>
+</body>
+</html>

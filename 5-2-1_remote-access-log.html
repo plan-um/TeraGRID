@@ -70,8 +70,37 @@
 
 <main class="main-content"><div class="page-header"><h1>Remote Access Log</h1><p>View all remote access attempts and session logs</p></div>
 <div class="card"><div class="card-header"><select class="form-input" style="max-width: 150px;"><option>All Status</option><option>Allowed</option><option>Blocked</option><option>Terminated</option></select></div>
-<table class="table"><thead><tr><th>Time</th><th>CBS</th><th>Access IP</th><th>User</th><th>Protocol</th><th>Status</th><th>Session Duration</th></tr></thead><tbody><tr><td>14:00:00</td><td>192.168.1.10</td><td>203.0.113.10</td><td>admin</td><td>SSH</td><td><span class="badge badge-success">Allowed</span></td><td>45 min</td></tr><tr><td>13:30:15</td><td>192.168.1.11</td><td>198.51.100.20</td><td>engineer</td><td>RDP</td><td><span class="badge badge-danger">Blocked</span></td><td>-</td></tr><tr><td>13:15:30</td><td>192.168.1.12</td><td>203.0.113.15</td><td>operator</td><td>SSH</td><td><span class="badge badge-success">Allowed</span></td><td>2 hr 15 min</td></tr><tr><td>12:45:10</td><td>192.168.1.13</td><td>198.51.100.25</td><td>maintenance</td><td>VNC</td><td><span class="badge badge-warning">Terminated</span></td><td>1 hr 30 min</td></tr><tr><td>12:00:00</td><td>192.168.1.14</td><td>203.0.113.20</td><td>supervisor</td><td>SSH</td><td><span class="badge badge-success">Allowed</span></td><td>3 hr</td></tr><tr><td>11:30:45</td><td>192.168.1.15</td><td>198.51.100.30</td><td>unknown</td><td>SSH</td><td><span class="badge badge-danger">Blocked</span></td><td>-</td></tr><tr><td>11:00:20</td><td>192.168.1.16</td><td>203.0.113.25</td><td>technician</td><td>RDP</td><td><span class="badge badge-warning">Terminated</span></td><td>50 min</td></tr></tbody></table></div>
+<table class="table"><thead><tr><th>Time</th><th>CBS</th><th>Access IP</th><th>User</th><th>Protocol</th><th>Status</th><th>Session Duration</th></tr></thead><tbody><tr><td>14:00:00</td><td><a href="3-1-2-1_hw-asset-list.html" style="color: var(--primary); text-decoration: none;">192.168.1.10</a></td><td>203.0.113.10</td><td>admin</td><td>SSH</td><td><span class="badge badge-success">Allowed</span></td><td>45 min</td></tr><tr><td>13:30:15</td><td><a href="3-1-2-1_hw-asset-list.html" style="color: var(--primary); text-decoration: none;">192.168.1.11</a></td><td>198.51.100.20</td><td>engineer</td><td>RDP</td><td><span class="badge badge-danger" style="cursor: pointer;" onclick="showBlockedReason('198.51.100.20', 'Not in authorized remote access list')">Blocked</span></td><td>-</td></tr><tr><td>13:15:30</td><td><a href="3-1-2-1_hw-asset-list.html" style="color: var(--primary); text-decoration: none;">192.168.1.12</a></td><td>203.0.113.15</td><td>operator</td><td>SSH</td><td><span class="badge badge-success">Allowed</span></td><td>2 hr 15 min</td></tr><tr><td>12:45:10</td><td><a href="3-1-2-1_hw-asset-list.html" style="color: var(--primary); text-decoration: none;">192.168.1.13</a></td><td>198.51.100.25</td><td>maintenance</td><td>VNC</td><td><span class="badge badge-warning">Terminated</span></td><td>1 hr 30 min</td></tr><tr><td>12:00:00</td><td><a href="3-1-2-1_hw-asset-list.html" style="color: var(--primary); text-decoration: none;">192.168.1.14</a></td><td>203.0.113.20</td><td>supervisor</td><td>SSH</td><td><span class="badge badge-success">Allowed</span></td><td>3 hr</td></tr><tr><td>11:30:45</td><td><a href="3-1-2-1_hw-asset-list.html" style="color: var(--primary); text-decoration: none;">192.168.1.15</a></td><td>198.51.100.30</td><td>unknown</td><td>SSH</td><td><span class="badge badge-danger" style="cursor: pointer;" onclick="showBlockedReason('198.51.100.30', 'Unknown user - failed authentication')">Blocked</span></td><td>-</td></tr><tr><td>11:00:20</td><td><a href="3-1-2-1_hw-asset-list.html" style="color: var(--primary); text-decoration: none;">192.168.1.16</a></td><td>203.0.113.25</td><td>technician</td><td>RDP</td><td><span class="badge badge-warning">Terminated</span></td><td>50 min</td></tr></tbody></table></div>
+<!-- Blocked Reason Modal -->
+<div id="blockedModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;" onclick="closeBlockedModal()">
+<div style="position: relative; max-width: 600px; margin: 100px auto; background: white; border-radius: 12px; padding: 24px;" onclick="event.stopPropagation()">
+<button onclick="closeBlockedModal()" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+<h2 style="margin-bottom: 16px; color: var(--danger);">Access Blocked</h2>
+<div id="blockedContent" style="margin-bottom: 24px;"></div>
+<div style="padding: 16px; background: var(--gray-50); border-radius: 8px; margin-bottom: 16px;">
+<strong>Policy Reference:</strong> <a href="6-4-1_remote-control-policy.html" style="color: var(--primary);">Remote Access Control Policy</a>
+</div>
+<button onclick="closeBlockedModal()" class="btn btn-secondary">Close</button>
+</div>
+</div>
 </main>    <script>
         lucide.createIcons();
+
+        function showBlockedReason(ip, reason) {
+            const modal = document.getElementById('blockedModal');
+            const content = document.getElementById('blockedContent');
+
+            content.innerHTML = `
+                <p style="margin-bottom: 12px;"><strong>Access IP:</strong> ${ip}</p>
+                <p style="margin-bottom: 12px;"><strong>Block Reason:</strong> ${reason}</p>
+                <p style="color: var(--gray-600); font-size: 14px;">This IP address has been blocked according to the remote access control policy. Please review the policy for authorized IP ranges and procedures.</p>
+            `;
+
+            modal.style.display = 'block';
+        }
+
+        function closeBlockedModal() {
+            document.getElementById('blockedModal').style.display = 'none';
+        }
     </script>
 </body></html>

@@ -562,6 +562,15 @@
         <div class="bridge-content">
             <h1 class="page-title-large">Incident Response Guide</h1>
 
+            <!-- Real-time Sync Indicator -->
+            <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%); border: 2px solid #10b981; border-radius: 12px; padding: 16px 24px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px;">
+                <div style="width: 12px; height: 12px; border-radius: 50%; background: #10b981; animation: pulse 2s infinite;"></div>
+                <div>
+                    <div style="font-size: 16px; font-weight: 700; color: #10b981; margin-bottom: 4px;">Real-time Sync Active</div>
+                    <div style="font-size: 14px; color: #cbd5e1;">This playbook is synchronized with Shore Control Center. All actions are instantly reflected on both vessel and shore-side incident response screens.</div>
+                </div>
+            </div>
+
             <!-- Incident Info -->
             <div class="incident-info-card">
                 <div class="incident-title-large">ECR Zone Ransomware Detection</div>
@@ -748,9 +757,24 @@
 
         // Complete current step
         function completeStep() {
-            if (confirm('Mark current step as complete?')) {
-                alert('Step 3 completed. Proceeding to next step.');
-                // In a real app, this would update the backend and refresh the page
+            if (confirm('Mark Step 3 as complete?\n\nThis action will be immediately synchronized with Shore Control Center.')) {
+                // In a real app, this would update the backend via WebSocket/API
+                // The completion status is instantly reflected on both:
+                // - Vessel-side: 8-1-4 Incident Response Guide (this screen)
+                // - Shore-side: 4-1-4 Incident Response screen
+
+                // Show sync confirmation
+                alert('✓ Step 3 Completed\n\n🔄 Synchronized with Shore Control Center\n\nThe checklist status has been updated on both vessel and shore-side incident response screens.');
+
+                // In production, this would:
+                // 1. Send completion status to backend
+                // 2. Backend broadcasts to all connected clients via WebSocket
+                // 3. Shore-side screen at 4-1-4 updates in real-time
+                // 4. This screen refreshes to show next step
+
+                // For demo: show what would happen
+                console.log('[Real-time Sync] Step 3 completion sent to Shore Control Center');
+                console.log('[Real-time Sync] Shore-side 4-1-4 screen updated automatically');
             }
         }
 

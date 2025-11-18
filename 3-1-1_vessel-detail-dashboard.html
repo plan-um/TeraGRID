@@ -266,6 +266,25 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Incident-Playbook Connection Styles */
+        .incident-item.active {
+            border-color: var(--primary);
+            background-color: #f3e8ff;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .playbook-status.highlighted {
+            background-color: #f3e8ff;
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
+            animation: pulse 1s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.9; }
+        }
     </style>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -393,42 +412,42 @@
                     Incident Alerts
                 </h3>
                 <div>
-                    <div class="incident-item">
+                    <div class="incident-item" data-playbook="ransomware">
                         <div class="incident-title">
                             <span class="incident-severity" style="background-color: var(--danger);"></span>
                             Ransomware Detected
                         </div>
                         <div class="incident-time">ECR Zone • 5 min ago</div>
                     </div>
-                    <div class="incident-item">
+                    <div class="incident-item" data-playbook="none">
                         <div class="incident-title">
                             <span class="incident-severity" style="background-color: var(--warning);"></span>
                             Unauthorized USB Connection Attempt
                         </div>
                         <div class="incident-time">Bridge Network • 15 min ago</div>
                     </div>
-                    <div class="incident-item">
+                    <div class="incident-item" data-playbook="none">
                         <div class="incident-title">
                             <span class="incident-severity" style="background-color: #3b82f6;"></span>
                             SW Vulnerability Detected
                         </div>
                         <div class="incident-time">Navigation System • 1 hour ago</div>
                     </div>
-                    <div class="incident-item">
+                    <div class="incident-item" data-playbook="none">
                         <div class="incident-title">
                             <span class="incident-severity" style="background-color: var(--warning);"></span>
                             Network Scan Detected
                         </div>
                         <div class="incident-time">Cargo Control • 2 hours ago</div>
                     </div>
-                    <div class="incident-item">
+                    <div class="incident-item" data-playbook="none">
                         <div class="incident-title">
                             <span class="incident-severity" style="background-color: #3b82f6;"></span>
                             Policy Violation Detected
                         </div>
                         <div class="incident-time">HVAC Zone • 3 hours ago</div>
                     </div>
-                    <div class="incident-item">
+                    <div class="incident-item" data-playbook="none">
                         <div class="incident-title">
                             <span class="incident-severity" style="background-color: var(--warning);"></span>
                             Abnormal Traffic Detected
@@ -481,9 +500,14 @@
                         <strong>Allowed IP:</strong> 203.xxx.xxx.xxx
                     </div>
                 </div>
-                <button class="btn btn-danger" style="width: 100%; margin-top: 12px;">
-                    Terminate Remote Session
-                </button>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;">
+                    <button class="btn btn-secondary" onclick="location.href='6-4-1_remote-control-policy.html'">
+                        Access Policy Settings
+                    </button>
+                    <button class="btn btn-danger">
+                        Terminate Session
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -492,7 +516,7 @@
             <div class="card-header">
                 <h3 class="card-title">Response Playbook Status</h3>
             </div>
-            <div class="playbook-status">
+            <div class="playbook-status" id="playbook-ransomware" data-playbook-type="ransomware">
                 <div class="playbook-title">
                     Active Playbook: Ransomware Response Protocol
                 </div>
@@ -545,6 +569,50 @@
     </main>
     <script>
         lucide.createIcons();
+
+        // Incident-Playbook Connection Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const incidentItems = document.querySelectorAll('.incident-item');
+            const playbookStatus = document.querySelector('.playbook-status');
+            let highlightTimeout;
+
+            incidentItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const playbookType = this.getAttribute('data-playbook');
+
+                    // Remove active class from all incidents
+                    incidentItems.forEach(i => i.classList.remove('active'));
+
+                    // Add active class to clicked incident
+                    this.classList.add('active');
+
+                    // Clear previous highlight timeout
+                    if (highlightTimeout) {
+                        clearTimeout(highlightTimeout);
+                    }
+
+                    // If playbook exists, highlight it
+                    if (playbookType !== 'none' && playbookStatus) {
+                        const playbookTypeAttr = playbookStatus.getAttribute('data-playbook-type');
+
+                        if (playbookType === playbookTypeAttr) {
+                            playbookStatus.classList.remove('highlighted');
+                            // Trigger reflow to restart animation
+                            void playbookStatus.offsetWidth;
+                            playbookStatus.classList.add('highlighted');
+
+                            // Scroll to playbook
+                            playbookStatus.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                            // Remove highlight after 3 seconds
+                            highlightTimeout = setTimeout(() => {
+                                playbookStatus.classList.remove('highlighted');
+                            }, 3000);
+                        }
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>

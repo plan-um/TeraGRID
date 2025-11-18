@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - Edit UR E26 Document</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .editor-toolbar {
+            display: flex;
+            gap: 4px;
+            padding: 8px;
+            background: var(--gray-100);
+            border: 1px solid var(--gray-200);
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            flex-wrap: wrap;
+        }
+        .editor-btn {
+            padding: 6px 10px;
+            background: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+        .editor-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--primary);
+        }
+        .editor-content {
+            min-height: 300px;
+            padding: 16px;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 0 0 8px 8px;
+            font-size: 15px;
+            line-height: 1.6;
+            outline: none;
+        }
+        .editor-content:focus {
+            border-color: var(--primary);
+        }
+        .section-editor {
+            margin-bottom: 24px;
+        }
+        .comment-thread {
+            margin-top: 16px;
+            padding: 12px;
+            background: var(--gray-50);
+            border-left: 3px solid var(--primary);
+            border-radius: 4px;
+        }
+        .comment-item {
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        .version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            background: var(--gray-100);
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+        <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Details</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item active">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Configuration</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>        </div>
+    </aside>
+
+<main class="main-content">
+        <div class="breadcrumb">
+            <a href="2-1_fleet-dashboard.html">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="3-2-1_compliance-dashboard.html">Compliance</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="3-2-2-1_ure26-document-list.html">Document List</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="3-2-2-3_ure26-document-detail.html">Document Detail</a>
+            <span class="breadcrumb-separator">/</span>
+            <span>Edit</span>
+        </div>
+
+        <div class="page-header">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                        <h1>Edit Document</h1>
+                        <span class="version-badge">
+                            <i data-lucide="git-branch" style="width: 14px; height: 14px;"></i>
+                            v1.2 → v1.3 (draft)
+                        </span>
+                    </div>
+                    <p>Cyber Resilience Assessment • MV Pacific Star • Editing in progress</p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button class="btn btn-secondary" onclick="history.back()">Cancel</button>
+                    <button class="btn btn-secondary" onclick="saveDraft()">Save Draft</button>
+                    <button class="btn btn-primary" onclick="publishDocument()">Publish v1.3</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Document Metadata</h3>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                <div class="form-group">
+                    <label class="form-label">Document Type</label>
+                    <input type="text" class="form-input" value="Cyber Resilience Assessment" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Target Vessel</label>
+                    <select class="form-input">
+                        <option selected>MV Pacific Star (IMO: 9876543)</option>
+                        <option>MV Atlantic Ocean (IMO: 9876542)</option>
+                        <option>MV Indian Breeze (IMO: 9876541)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Version</label>
+                    <input type="text" class="form-input" value="1.3" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-input">
+                        <option>Draft</option>
+                        <option>Under Review</option>
+                        <option>Completed</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 class="card-title">Document Sections</h3>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <span style="font-size: 13px; color: var(--gray-500);">Auto-save:</span>
+                    <span class="badge badge-success">Active</span>
+                    <span style="font-size: 13px; color: var(--gray-500);">Last saved: 2 minutes ago</span>
+                </div>
+            </div>
+
+            <!-- Section 1: Executive Summary -->
+            <div class="section-editor">
+                <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">1. Executive Summary</h4>
+
+                <div class="editor-toolbar">
+                    <button class="editor-btn" onclick="formatText('bold')">
+                        <i data-lucide="bold" style="width: 14px; height: 14px;"></i>
+                        <span>Bold</span>
+                    </button>
+                    <button class="editor-btn" onclick="formatText('italic')">
+                        <i data-lucide="italic" style="width: 14px; height: 14px;"></i>
+                        <span>Italic</span>
+                    </button>
+                    <button class="editor-btn" onclick="formatText('underline')">
+                        <i data-lucide="underline" style="width: 14px; height: 14px;"></i>
+                        <span>Underline</span>
+                    </button>
+                    <div style="width: 1px; height: 24px; background: var(--gray-300);"></div>
+                    <button class="editor-btn" onclick="formatText('insertUnorderedList')">
+                        <i data-lucide="list" style="width: 14px; height: 14px;"></i>
+                        <span>Bullet List</span>
+                    </button>
+                    <button class="editor-btn" onclick="formatText('insertOrderedList')">
+                        <i data-lucide="list-ordered" style="width: 14px; height: 14px;"></i>
+                        <span>Number List</span>
+                    </button>
+                    <div style="width: 1px; height: 24px; background: var(--gray-300);"></div>
+                    <button class="editor-btn" onclick="insertLink()">
+                        <i data-lucide="link" style="width: 14px; height: 14px;"></i>
+                        <span>Link</span>
+                    </button>
+                    <button class="editor-btn" onclick="clearFormatting()">
+                        <i data-lucide="eraser" style="width: 14px; height: 14px;"></i>
+                        <span>Clear Format</span>
+                    </button>
+                </div>
+
+                <div class="editor-content" contenteditable="true" id="section1Content">
+                    <p>This Cyber Resilience Assessment has been conducted for <strong>MV Pacific Star (IMO: 9876543)</strong> in accordance with IACS UR E26 requirements. The assessment evaluates the vessel's cyber security posture and resilience capabilities.</p>
+                    <p>Key findings indicate that the vessel maintains a strong cyber security framework with an overall resilience score of <strong>7.2/10</strong>. Critical systems are properly segmented and protected.</p>
+                </div>
+            </div>
+
+            <div style="border-top: 1px solid var(--gray-200); margin: 24px 0;"></div>
+
+            <!-- Section 2: Asset Inventory -->
+            <div class="section-editor">
+                <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">2. Asset Inventory</h4>
+
+                <div class="editor-toolbar">
+                    <button class="editor-btn" onclick="formatText('bold')">
+                        <i data-lucide="bold" style="width: 14px; height: 14px;"></i>
+                        <span>Bold</span>
+                    </button>
+                    <button class="editor-btn" onclick="formatText('italic')">
+                        <i data-lucide="italic" style="width: 14px; height: 14px;"></i>
+                        <span>Italic</span>
+                    </button>
+                    <button class="editor-btn" onclick="formatText('underline')">
+                        <i data-lucide="underline" style="width: 14px; height: 14px;"></i>
+                        <span>Underline</span>
+                    </button>
+                    <div style="width: 1px; height: 24px; background: var(--gray-300);"></div>
+                    <button class="editor-btn" onclick="formatText('insertUnorderedList')">
+                        <i data-lucide="list" style="width: 14px; height: 14px;"></i>
+                        <span>Bullet List</span>
+                    </button>
+                    <button class="editor-btn" onclick="formatText('insertOrderedList')">
+                        <i data-lucide="list-ordered" style="width: 14px; height: 14px;"></i>
+                        <span>Number List</span>
+                    </button>
+                    <div style="width: 1px; height: 24px; background: var(--gray-300);"></div>
+                    <button class="editor-btn" onclick="insertDataLink()">
+                        <i data-lucide="database" style="width: 14px; height: 14px;"></i>
+                        <span>Insert Data</span>
+                    </button>
+                </div>
+
+                <div class="editor-content" contenteditable="true" id="section2Content">
+                    <p><strong>Total assets identified:</strong></p>
+                    <ul>
+                        <li>23 hardware devices (CBS)</li>
+                        <li>18 software applications</li>
+                        <li>All assets registered in TeraGRID system</li>
+                    </ul>
+                    <p>Asset inventory is maintained in accordance with UR E26 Section 3.2 requirements. All critical systems have been documented with detailed specifications.</p>
+                </div>
+            </div>
+
+            <div style="border-top: 1px solid var(--gray-200); margin: 24px 0;"></div>
+
+            <!-- Section 3: Network Architecture -->
+            <div class="section-editor">
+                <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">3. Network Architecture</h4>
+
+                <div class="editor-toolbar">
+                    <button class="editor-btn" onclick="formatText('bold')">
+                        <i data-lucide="bold" style="width: 14px; height: 14px;"></i>
+                        <span>Bold</span>
+                    </button>
+                    <button class="editor-btn" onclick="formatText('italic')">
+                        <i data-lucide="italic" style="width: 14px; height: 14px;"></i>
+                        <span>Italic</span>
+                    </button>
+                    <button class="editor-btn" onclick="insertLink()">
+                        <i data-lucide="link" style="width: 14px; height: 14px;"></i>
+                        <span>Link</span>
+                    </button>
+                </div>
+
+                <div class="editor-content" contenteditable="true" id="section3Content">
+                    <p>Network segmentation follows <strong>Purdue Model Level 0-5</strong> architecture:</p>
+                    <ul>
+                        <li>Level 0-1: Safety and control systems (isolated)</li>
+                        <li>Level 2: DMZ with controlled access</li>
+                        <li>Level 3: Business network</li>
+                        <li>Level 4: Internet access (restricted)</li>
+                    </ul>
+                    <p>All zones are protected by firewall policies and intrusion detection systems. Network diagram available in TeraGRID system.</p>
+                </div>
+            </div>
+
+            <div style="border-top: 1px solid var(--gray-200); margin: 24px 0;"></div>
+
+            <!-- Section 4: Risk Assessment -->
+            <div class="section-editor">
+                <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">4. Risk Assessment</h4>
+
+                <div class="editor-toolbar">
+                    <button class="editor-btn" onclick="formatText('bold')">
+                        <i data-lucide="bold" style="width: 14px; height: 14px;"></i>
+                        <span>Bold</span>
+                    </button>
+                    <button class="editor-btn" onclick="formatText('italic')">
+                        <i data-lucide="italic" style="width: 14px; height: 14px;"></i>
+                        <span>Italic</span>
+                    </button>
+                </div>
+
+                <div class="editor-content" contenteditable="true" id="section4Content">
+                    <p><strong>Overall cyber resilience score: 7.2/10</strong></p>
+                    <p>The assessment identified the following risk areas:</p>
+                    <ul>
+                        <li><strong>High Priority:</strong> 2 vulnerabilities requiring immediate attention</li>
+                        <li><strong>Medium Priority:</strong> 4 vulnerabilities with mitigation plans</li>
+                        <li><strong>Low Priority:</strong> 8 minor findings for future improvement</li>
+                    </ul>
+                    <p>Detailed vulnerability analysis and remediation recommendations are provided in separate documentation.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Document-wide Comments Section -->
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+                <h3 class="card-title">Document Comments & Discussion</h3>
+            </div>
+            <div style="padding: 20px;">
+                <div class="comment-item">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <img src="img/Avatar.png" style="width: 28px; height: 28px; border-radius: 50%;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 13px;">Lee Sujin</div>
+                            <div style="font-size: 12px; color: var(--gray-500);">2024-10-05 14:30</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 14px; color: var(--gray-700); margin-bottom: 12px;">
+                        Should we include more details about the vulnerability assessment results in the executive summary?
+                    </div>
+                </div>
+
+                <div class="comment-item">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <img src="img/Avatar.png" style="width: 28px; height: 28px; border-radius: 50%;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 13px;">Administrator</div>
+                            <div style="font-size: 12px; color: var(--gray-500);">2024-10-05 15:45</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 14px; color: var(--gray-700); margin-bottom: 12px;">
+                        Good suggestion. I've added a brief mention in the second paragraph. Full details remain in Section 4.
+                    </div>
+                </div>
+
+                <div class="comment-item">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <img src="img/Avatar.png" style="width: 28px; height: 28px; border-radius: 50%;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 13px;">Park Chulsoo</div>
+                            <div style="font-size: 12px; color: var(--gray-500);">2024-10-04 09:15</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 14px; color: var(--gray-700); margin-bottom: 12px;">
+                        Consider adding a reference to the network diagram page (3-1-3-1) for readers who want more details.
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--gray-200);">
+                    <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Add Comment</h4>
+                    <textarea class="form-input" rows="3" placeholder="Write your comment about this document..."></textarea>
+                    <button class="btn btn-primary" style="margin-top: 12px; padding: 8px 16px;">Post Comment</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+                <h3 class="card-title">Version History</h3>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Version</th>
+                        <th>Date</th>
+                        <th>Author</th>
+                        <th>Changes</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>v1.3</strong></td>
+                        <td>2024-10-05 (In Progress)</td>
+                        <td>Administrator</td>
+                        <td>Updated executive summary, added vulnerability details</td>
+                        <td><span class="badge badge-warning">Draft</span></td>
+                        <td><span style="font-size: 13px; color: var(--primary); font-weight: 600;">Current</span></td>
+                    </tr>
+                    <tr>
+                        <td>v1.2</td>
+                        <td>2024-10-02</td>
+                        <td>Kim Minsu</td>
+                        <td>Added network architecture section</td>
+                        <td><span class="badge badge-success">Published</span></td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;" onclick="location.href='3-2-2-3_ure26-document-detail.html'">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>v1.1</td>
+                        <td>2024-09-28</td>
+                        <td>Kim Minsu</td>
+                        <td>Updated asset inventory</td>
+                        <td><span class="badge badge-success">Published</span></td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>v1.0</td>
+                        <td>2024-09-15</td>
+                        <td>Lee Sujin</td>
+                        <td>Initial document creation</td>
+                        <td><span class="badge badge-success">Published</span></td>
+                        <td><button class="btn btn-secondary" style="padding: 6px 12px;">View</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script>
+        lucide.createIcons();
+
+        // Rich text editor functions
+        function formatText(command) {
+            document.execCommand(command, false, null);
+        }
+
+        function insertLink() {
+            const url = prompt('Enter URL:');
+            if (url) {
+                document.execCommand('createLink', false, url);
+            }
+        }
+
+        function clearFormatting() {
+            document.execCommand('removeFormat', false, null);
+        }
+
+        function insertDataLink() {
+            const options = [
+                { name: 'HW Asset List', url: '3-1-2-1_hw-asset-list.html' },
+                { name: 'SW Asset List', url: '3-1-2-4_sw-asset-list.html' },
+                { name: 'Network Diagram', url: '3-1-3-2_network-diagram.html' },
+                { name: 'Vulnerability List', url: '4-2-1_vulnerability-list.html' }
+            ];
+
+            const selection = prompt('Insert data reference:\n1. HW Asset List\n2. SW Asset List\n3. Network Diagram\n4. Vulnerability List\n\nEnter number (1-4):');
+
+            if (selection && selection >= 1 && selection <= 4) {
+                const option = options[selection - 1];
+                const link = `<a href="${option.url}" style="color: var(--primary); text-decoration: underline;">${option.name}</a>`;
+                document.execCommand('insertHTML', false, link);
+            }
+        }
+
+        function saveDraft() {
+            alert('Draft saved successfully!\n\nAll changes have been saved. You can continue editing or publish when ready.');
+        }
+
+        function publishDocument() {
+            if (confirm('Are you sure you want to publish v1.3?\n\nThis will:\n- Make the document available to all users\n- Create a permanent version record\n- Require approval for future changes')) {
+                alert('Document published successfully!\n\nVersion 1.3 is now available. Redirecting to document detail page...');
+                setTimeout(() => {
+                    location.href = '3-2-2-3_ure26-document-detail.html';
+                }, 1500);
+            }
+        }
+
+        // Auto-save simulation
+        setInterval(() => {
+            console.log('Auto-save triggered');
+        }, 120000); // Every 2 minutes
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + S to save
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                saveDraft();
+            }
+        });
+    </script>
+</body>
+</html>

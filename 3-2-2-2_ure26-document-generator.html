@@ -99,12 +99,12 @@
 
                 <div class="form-group">
                     <label class="form-label">Survey Type *</label>
-                    <select class="form-input" required>
+                    <select class="form-input" id="surveyType" required>
                         <option value="">Please select</option>
-                        <option>Annual Survey</option>
-                        <option>Periodical Survey</option>
-                        <option>Intermediate Survey</option>
-                        <option>Special Survey</option>
+                        <option value="annual">Annual Survey</option>
+                        <option value="periodical">Periodical Survey</option>
+                        <option value="intermediate">Intermediate Survey</option>
+                        <option value="special">Special Survey</option>
                     </select>
                 </div>
 
@@ -155,7 +155,7 @@
                 </div>
 
                 <div style="display: flex; gap: 12px; margin-top: 24px;">
-                    <button type="submit" class="btn btn-primary">Generate</button>
+                    <button type="submit" class="btn btn-primary" id="generateBtn">Generate</button>
                     <button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button>
                 </div>
             </form>
@@ -163,6 +163,37 @@
     </main>
     <script>
         lucide.createIcons();
+
+        // Survey Type auto-selection logic
+        const surveyType = document.getElementById('surveyType');
+        const checkboxes = document.querySelectorAll('input[name="doc_type"]');
+
+        surveyType.addEventListener('change', function() {
+            if (this.value === 'annual') {
+                // Annual Survey - select all 12 documents
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+            }
+        });
+
+        // Generate button handler with redirect
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Simulate document generation
+            const vessel = this.querySelector('select').value;
+            const survey = surveyType.value;
+
+            if (!vessel || !survey) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Redirect to document list with generating status
+            window.location.href = '3-2-2-1_ure26-document-list.html?generating=true';
+        });
     </script>
 </body>
 </html>

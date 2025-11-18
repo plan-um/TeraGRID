@@ -741,13 +741,15 @@
                 // In real implementation, this would filter the table and update the 12-document list
             });
 
-            // Add click handlers to document items for navigation
+            // Add click handlers to document items for navigation with filtering
             const docItems = document.querySelectorAll('.doc-item');
-            docItems.forEach(item => {
+            docItems.forEach((item, index) => {
                 item.style.cursor = 'pointer';
                 item.addEventListener('click', function() {
-                    // In real implementation, navigate to document detail page
-                    window.location.href = '3-2-2-3_ure26-document-detail.html';
+                    // Extract document type from title
+                    const titleText = this.querySelector('.doc-title').textContent.trim();
+                    // Navigate to document list with filter parameter
+                    window.location.href = '3-2-2-1_ure26-document-list.html?filter=' + encodeURIComponent(titleText);
                 });
             });
         });

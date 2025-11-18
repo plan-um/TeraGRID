@@ -90,8 +90,86 @@
                 <button class="btn btn-primary" onclick="location.href='6-1-1_zone-settings.html'">Configure Policy</button>
             </div>
 
-            <div class="diagram-placeholder">
-                Vessel Network Diagram - Display asset icons and connection lines
+            <div id="networkDiagram" style="background: var(--gray-50); padding: 40px; border-radius: 8px; min-height: 600px; position: relative;">
+                <!-- Zone 0-1: Safety & Control Systems -->
+                <div id="zone0" style="position: absolute; top: 40px; left: 40px; width: 280px; padding: 20px; background: white; border: 2px solid var(--gray-300); border-radius: 8px; z-index: 10;">
+                    <div style="font-weight: 600; margin-bottom: 16px; color: var(--gray-700);">Zone 0-1: Safety & Control</div>
+
+                    <div class="network-asset" data-status="online" style="padding: 12px; background: var(--gray-50); border: 2px solid var(--success); border-radius: 6px; margin-bottom: 8px; cursor: pointer;">
+                        <div style="font-weight: 600; font-size: 14px;">ECDIS-01</div>
+                        <div style="font-size: 12px; color: var(--gray-500);">192.168.1.10</div>
+                    </div>
+
+                    <div class="network-asset" data-status="online" style="padding: 12px; background: var(--gray-50); border: 2px solid var(--success); border-radius: 6px; margin-bottom: 8px; cursor: pointer;">
+                        <div style="font-weight: 600; font-size: 14px;">GPS-01</div>
+                        <div style="font-size: 12px; color: var(--gray-500);">192.168.1.11</div>
+                    </div>
+                </div>
+
+                <!-- Zone 2: DMZ -->
+                <div id="zone2" style="position: absolute; top: 40px; right: 40px; width: 280px; padding: 20px; background: white; border: 2px solid var(--warning); border-radius: 8px; z-index: 10;">
+                    <div style="font-weight: 600; margin-bottom: 16px; color: var(--gray-700);">Zone 2: DMZ</div>
+
+                    <div class="network-asset" data-status="blocked" data-zone="dmz" data-asset="Unauthorized-USB" onclick="showFirewallPolicy('dmz', 'Unauthorized USB Device', '10.0.2.50', 'blocked')" style="padding: 12px; background: #fef2f2; border: 2px solid var(--danger); border-radius: 6px; margin-bottom: 8px; cursor: pointer;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; font-size: 14px;">Unauthorized USB</div>
+                                <div style="font-size: 12px; color: var(--gray-500);">10.0.2.50</div>
+                            </div>
+                            <span class="badge badge-danger">Blocked</span>
+                        </div>
+                    </div>
+
+                    <div class="network-asset" data-status="online" style="padding: 12px; background: var(--gray-50); border: 2px solid var(--success); border-radius: 6px; cursor: pointer;">
+                        <div style="font-weight: 600; font-size: 14px;">File Server</div>
+                        <div style="font-size: 12px; color: var(--gray-500);">10.0.2.20</div>
+                    </div>
+                </div>
+
+                <!-- Zone 3: Business Network -->
+                <div id="zone3" style="position: absolute; bottom: 40px; left: 40px; width: 280px; padding: 20px; background: white; border: 2px solid var(--primary); border-radius: 8px; z-index: 10;">
+                    <div style="font-weight: 600; margin-bottom: 16px; color: var(--gray-700);">Zone 3: Business Network</div>
+
+                    <div class="network-asset" data-status="unauthorized" data-zone="business" data-asset="Unknown-Device" onclick="showFirewallPolicy('business', 'Unknown Device', '172.16.3.99', 'unauthorized')" style="padding: 12px; background: #fffbeb; border: 2px solid var(--warning); border-radius: 6px; margin-bottom: 8px; cursor: pointer;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; font-size: 14px;">Unknown Device</div>
+                                <div style="font-size: 12px; color: var(--gray-500);">172.16.3.99</div>
+                            </div>
+                            <span class="badge badge-warning">Unauthorized</span>
+                        </div>
+                    </div>
+
+                    <div class="network-asset" data-status="online" style="padding: 12px; background: var(--gray-50); border: 2px solid var(--success); border-radius: 6px; margin-bottom: 8px; cursor: pointer;">
+                        <div style="font-weight: 600; font-size: 14px;">Admin PC-01</div>
+                        <div style="font-size: 12px; color: var(--gray-500);">172.16.3.10</div>
+                    </div>
+                </div>
+
+                <!-- Zone 4: Internet -->
+                <div id="zone4" style="position: absolute; bottom: 40px; right: 40px; width: 280px; padding: 20px; background: white; border: 2px solid var(--gray-300); border-radius: 8px; z-index: 10;">
+                    <div style="font-weight: 600; margin-bottom: 16px; color: var(--gray-700);">Zone 4: Internet Access</div>
+
+                    <div class="network-asset" data-status="blocked" data-zone="internet" data-asset="Suspicious-IP" onclick="showFirewallPolicy('internet', 'Suspicious Connection', '203.0.113.45', 'blocked')" style="padding: 12px; background: #fef2f2; border: 2px solid var(--danger); border-radius: 6px; margin-bottom: 8px; cursor: pointer;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600; font-size: 14px;">Suspicious Connection</div>
+                                <div style="font-size: 12px; color: var(--gray-500);">203.0.113.45</div>
+                            </div>
+                            <span class="badge badge-danger">Blocked</span>
+                        </div>
+                    </div>
+
+                    <div class="network-asset" data-status="online" style="padding: 12px; background: var(--gray-50); border: 2px solid var(--success); border-radius: 6px; cursor: pointer;">
+                        <div style="font-weight: 600; font-size: 14px;">Internet Gateway</div>
+                        <div style="font-size: 12px; color: var(--gray-500);">203.0.113.1</div>
+                    </div>
+                </div>
+
+                <!-- Connection lines -->
+                <svg id="connectionLines" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;">
+                    <!-- Lines will be drawn dynamically by JavaScript -->
+                </svg>
             </div>
 
             <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--gray-200);">
@@ -103,26 +181,266 @@
                     </div>
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <div style="width: 20px; height: 20px; background: var(--warning); border-radius: 4px;"></div>
-                        <span style="font-size: 14px;">Warning</span>
+                        <span style="font-size: 14px;">Unauthorized</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <div style="width: 20px; height: 20px; background: var(--danger); border-radius: 4px;"></div>
-                        <span style="font-size: 14px;">Critical</span>
+                        <span style="font-size: 14px;">Blocked</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <div style="width: 20px; height: 2px; background: var(--gray-700);"></div>
                         <span style="font-size: 14px;">Connected</span>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <div style="width: 20px; height: 2px; background: var(--danger); border-top: 2px dashed var(--danger);"></div>
-                        <span style="font-size: 14px;">Blocked</span>
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: var(--gray-100); border-radius: 6px;">
+                        <i data-lucide="mouse-pointer-click" style="width: 16px; height: 16px;"></i>
+                        <span style="font-size: 14px; font-weight: 600;">Click blocked/unauthorized assets to view firewall policy</span>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Firewall Policy Modal -->
+        <div id="firewallModal" class="modal-overlay" style="display: none;">
+            <div class="modal" style="max-width: 800px;">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Firewall Policy</h3>
+                    <button onclick="closeFirewallModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--gray-500);">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div style="background: var(--gray-50); padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                            <div>
+                                <div style="font-size: 13px; color: var(--gray-500); margin-bottom: 4px;">Asset Name</div>
+                                <div id="modalAssetName" style="font-weight: 600;"></div>
+                            </div>
+                            <div>
+                                <div style="font-size: 13px; color: var(--gray-500); margin-bottom: 4px;">IP Address</div>
+                                <div id="modalAssetIP" style="font-weight: 600;"></div>
+                            </div>
+                            <div>
+                                <div style="font-size: 13px; color: var(--gray-500); margin-bottom: 4px;">Zone</div>
+                                <div id="modalZone" style="font-weight: 600;"></div>
+                            </div>
+                            <div>
+                                <div style="font-size: 13px; color: var(--gray-500); margin-bottom: 4px;">Status</div>
+                                <div id="modalStatus"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Firewall Rules</h4>
+
+                    <div id="firewallRulesContainer">
+                        <!-- Rules will be inserted here dynamically -->
+                    </div>
+
+                    <div style="margin-top: 20px; padding: 16px; background: #fffbeb; border-left: 4px solid var(--warning); border-radius: 4px;">
+                        <div style="display: flex; gap: 8px; align-items: start;">
+                            <i data-lucide="alert-triangle" style="width: 20px; height: 20px; color: var(--warning); flex-shrink: 0;"></i>
+                            <div style="font-size: 14px; color: var(--gray-700);">
+                                <strong>Warning:</strong> Modifying firewall rules may affect network security and vessel operations. Changes require administrator approval.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeFirewallModal()">Close</button>
+                    <button class="btn btn-primary" onclick="editFirewallRules()">Edit Rules</button>
+                    <button class="btn btn-success" onclick="authorizeAsset()" id="authorizeBtn" style="display: none;">Authorize Asset</button>
                 </div>
             </div>
         </div>
     </main>
     <script>
         lucide.createIcons();
+
+        // Function to draw connection lines dynamically
+        function drawConnectionLines() {
+            const svg = document.getElementById('connectionLines');
+            const zone0 = document.getElementById('zone0');
+            const zone2 = document.getElementById('zone2');
+            const zone3 = document.getElementById('zone3');
+            const zone4 = document.getElementById('zone4');
+
+            if (!zone0 || !zone2 || !zone3 || !zone4) return;
+
+            // Get zone positions
+            const getCenter = (element) => {
+                const rect = element.getBoundingClientRect();
+                const parentRect = svg.parentElement.getBoundingClientRect();
+                return {
+                    x: rect.left - parentRect.left + rect.width / 2,
+                    y: rect.top - parentRect.top + rect.height / 2,
+                    right: rect.right - parentRect.left,
+                    left: rect.left - parentRect.left,
+                    top: rect.top - parentRect.top,
+                    bottom: rect.bottom - parentRect.top
+                };
+            };
+
+            const z0 = getCenter(zone0);
+            const z2 = getCenter(zone2);
+            const z3 = getCenter(zone3);
+            const z4 = getCenter(zone4);
+
+            // Clear existing lines
+            svg.innerHTML = '';
+
+            // Helper function to create line
+            const createLine = (x1, y1, x2, y2, dashed = false) => {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', x1);
+                line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2);
+                line.setAttribute('y2', y2);
+                line.setAttribute('stroke', '#cbd5e1');
+                line.setAttribute('stroke-width', '2');
+                if (dashed) {
+                    line.setAttribute('stroke-dasharray', '5,5');
+                    line.setAttribute('opacity', '0.5');
+                }
+                return line;
+            };
+
+            // Zone 0-1 to Zone 2 (horizontal top)
+            svg.appendChild(createLine(z0.right, z0.y, z2.left, z2.y));
+
+            // Zone 0-1 to Zone 3 (vertical left)
+            svg.appendChild(createLine(z0.x, z0.bottom, z3.x, z3.top));
+
+            // Zone 2 to Zone 4 (vertical right)
+            svg.appendChild(createLine(z2.x, z2.bottom, z4.x, z4.top));
+
+            // Zone 3 to Zone 4 (horizontal bottom)
+            svg.appendChild(createLine(z3.right, z3.y, z4.left, z4.y));
+
+            // Central vertical connection (dashed)
+            const centerX = (z0.right + z2.left) / 2;
+            svg.appendChild(createLine(centerX, z0.bottom, centerX, z3.top, true));
+
+            // Central horizontal connection (dashed)
+            const centerY = (z0.bottom + z3.top) / 2;
+            svg.appendChild(createLine(z0.right, centerY, z2.left, centerY, true));
+        }
+
+        // Draw lines on load
+        window.addEventListener('load', drawConnectionLines);
+
+        // Redraw lines on window resize
+        window.addEventListener('resize', drawConnectionLines);
+
+        // Firewall policy data for different zones
+        const firewallPolicies = {
+            dmz: {
+                'Unauthorized USB Device': {
+                    rules: [
+                        { id: 1, source: '10.0.2.50', destination: 'Any', port: 'Any', protocol: 'Any', action: 'DENY', reason: 'Unauthorized device detected' },
+                        { id: 2, source: 'DMZ', destination: 'Zone 0-1', port: 'Any', protocol: 'Any', action: 'DENY', reason: 'Zone isolation policy' },
+                        { id: 3, source: 'DMZ', destination: 'Zone 3', port: '443,80', protocol: 'TCP', action: 'ALLOW', reason: 'HTTP/HTTPS traffic permitted' }
+                    ]
+                }
+            },
+            business: {
+                'Unknown Device': {
+                    rules: [
+                        { id: 1, source: '172.16.3.99', destination: 'Any', port: 'Any', protocol: 'Any', action: 'DENY', reason: 'Device not in whitelist' },
+                        { id: 2, source: 'Zone 3', destination: 'Zone 0-1', port: 'Any', protocol: 'Any', action: 'DENY', reason: 'Business network isolated from control systems' },
+                        { id: 3, source: 'Zone 3', destination: 'Internet', port: '443,80', protocol: 'TCP', action: 'ALLOW', reason: 'Internet access for business operations' }
+                    ]
+                }
+            },
+            internet: {
+                'Suspicious Connection': {
+                    rules: [
+                        { id: 1, source: '203.0.113.45', destination: 'Any', port: 'Any', protocol: 'Any', action: 'DENY', reason: 'IP address on threat intelligence blocklist' },
+                        { id: 2, source: 'Internet', destination: 'Zone 0-1', port: 'Any', protocol: 'Any', action: 'DENY', reason: 'No direct internet access to control systems' },
+                        { id: 3, source: 'Internet', destination: 'DMZ', port: '443', protocol: 'TCP', action: 'ALLOW', reason: 'HTTPS access to DMZ services' }
+                    ]
+                }
+            }
+        };
+
+        function showFirewallPolicy(zone, assetName, ipAddress, status) {
+            const modal = document.getElementById('firewallModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalAssetName = document.getElementById('modalAssetName');
+            const modalAssetIP = document.getElementById('modalAssetIP');
+            const modalZone = document.getElementById('modalZone');
+            const modalStatus = document.getElementById('modalStatus');
+            const rulesContainer = document.getElementById('firewallRulesContainer');
+            const authorizeBtn = document.getElementById('authorizeBtn');
+
+            // Set modal content
+            modalTitle.textContent = 'Firewall Policy - ' + zone.toUpperCase();
+            modalAssetName.textContent = assetName;
+            modalAssetIP.textContent = ipAddress;
+            modalZone.textContent = zone.charAt(0).toUpperCase() + zone.slice(1);
+
+            // Set status badge
+            if (status === 'blocked') {
+                modalStatus.innerHTML = '<span class="badge badge-danger">Blocked</span>';
+                authorizeBtn.style.display = 'none';
+            } else if (status === 'unauthorized') {
+                modalStatus.innerHTML = '<span class="badge badge-warning">Unauthorized</span>';
+                authorizeBtn.style.display = 'inline-block';
+            }
+
+            // Get rules for this asset
+            const rules = firewallPolicies[zone][assetName].rules;
+
+            // Build rules table
+            let rulesHTML = '<table class="table" style="margin-top: 12px;"><thead><tr>' +
+                '<th>Rule ID</th><th>Source</th><th>Destination</th><th>Port</th><th>Protocol</th><th>Action</th><th>Reason</th>' +
+                '</tr></thead><tbody>';
+
+            rules.forEach(rule => {
+                const actionClass = rule.action === 'ALLOW' ? 'badge-success' : 'badge-danger';
+                rulesHTML += `<tr>
+                    <td>#${rule.id}</td>
+                    <td>${rule.source}</td>
+                    <td>${rule.destination}</td>
+                    <td>${rule.port}</td>
+                    <td>${rule.protocol}</td>
+                    <td><span class="badge ${actionClass}">${rule.action}</span></td>
+                    <td style="font-size: 13px;">${rule.reason}</td>
+                </tr>`;
+            });
+
+            rulesHTML += '</tbody></table>';
+            rulesContainer.innerHTML = rulesHTML;
+
+            // Show modal
+            modal.style.display = 'flex';
+
+            // Reinitialize icons
+            setTimeout(() => lucide.createIcons(), 100);
+        }
+
+        function closeFirewallModal() {
+            document.getElementById('firewallModal').style.display = 'none';
+        }
+
+        function editFirewallRules() {
+            if (confirm('You will be redirected to the Zone Settings page to edit firewall rules. Continue?')) {
+                window.location.href = '6-1-1_zone-settings.html';
+            }
+        }
+
+        function authorizeAsset() {
+            if (confirm('Are you sure you want to authorize this asset? This will update the firewall rules to allow this device.')) {
+                alert('Asset authorized successfully! Firewall rules have been updated.');
+                closeFirewallModal();
+                // In a real implementation, this would update the backend and refresh the diagram
+                location.reload();
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('firewallModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeFirewallModal();
+            }
+        });
     </script>
 </body>
 </html>

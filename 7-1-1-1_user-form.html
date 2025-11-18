@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeraGRID - User Form</title>
+    <link rel="stylesheet" href="common.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">
+            <img src="img/TG_logo-02.png" alt="TeraGRID" class="logo-svg">
+        </div>
+
+        <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search">
+        </div>
+
+        <nav class="nav-menu">
+            <a href="2-1_fleet-dashboard.html" class="nav-item">
+                <i data-lucide="home" class="nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="3-1-1_vessel-detail-dashboard.html" class="nav-item">
+                <i data-lucide="layers" class="nav-icon"></i>
+                <span>Vessel Detail</span>
+            </a>
+            <a href="3-2-1_compliance-dashboard.html" class="nav-item">
+                <i data-lucide="check-circle-2" class="nav-icon"></i>
+                <span>Compliance</span>
+            </a>
+            <a href="4-1-1_alert-list.html" class="nav-item">
+                <i data-lucide="alert-circle" class="nav-icon"></i>
+                <span>Cyber Risk</span>
+            </a>
+            <a href="5-1-1_ip-traffic-log.html" class="nav-item">
+                <i data-lucide="file-text" class="nav-icon"></i>
+                <span>Infrastructure Logs</span>
+            </a>
+            <a href="6-1-1_zone-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>Policy & Config</span>
+            </a>
+            <a href="7-1-1_user-management.html" class="nav-item active">
+                <i data-lucide="users" class="nav-icon"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="1-3_profile-settings.html" class="nav-item">
+                <i data-lucide="user" class="nav-icon"></i>
+                <span>My Profile</span>
+            </a>
+            <a href="7-2-1_system-settings.html" class="nav-item">
+                <i data-lucide="settings" class="nav-icon"></i>
+                <span>System Settings</span>
+            </a>
+        </div>
+
+        <div class="user-profile">
+            <img src="img/Avatar.png" alt="User" class="profile-img">
+            <div class="user-info">
+                <div class="user-name">Administrator</div>
+                <div class="user-email">admin@teragrid.com</div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 id="pageTitle">Add User</h1>
+            <p>Create a new user account or edit existing user information</p>
+        </div>
+
+        <div class="card" style="max-width: 800px;">
+            <form id="userForm">
+                <div class="form-group">
+                    <label class="form-label">Full Name *</label>
+                    <input type="text" class="form-input" id="userName" placeholder="e.g., Kim Minsu" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address *</label>
+                    <input type="email" class="form-input" id="userEmail" placeholder="e.g., user@teragrid.com" required>
+                    <small style="color: var(--gray-500); font-size: 13px; margin-top: 4px; display: block;">This will be used as the login username</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Role *</label>
+                    <select class="form-input" id="userRole" required onchange="showRoleDescription()">
+                        <option value="">Select a role...</option>
+                        <option value="administrator">Administrator</option>
+                        <option value="system-administrator">System Administrator</option>
+                        <option value="security-analyst">Security Analyst</option>
+                        <option value="operator">Operator</option>
+                        <option value="auditor">Auditor</option>
+                        <option value="vessel-manager">Vessel Manager</option>
+                    </select>
+                    <div id="roleDescription" style="margin-top: 12px; padding: 12px; background: var(--gray-50); border-radius: 8px; border: 1px solid var(--gray-200); display: none;">
+                        <div style="font-weight: 600; margin-bottom: 8px; color: var(--gray-900);">Role Permissions:</div>
+                        <div id="roleDescriptionText" style="color: var(--gray-600); font-size: 14px; line-height: 1.6;"></div>
+                        <a href="7-1-1-2_role-management.html" style="color: var(--primary); font-size: 13px; margin-top: 8px; display: inline-block;">View detailed role permissions →</a>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Status *</label>
+                    <select class="form-input" id="userStatus" required>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="disabled">Disabled</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="passwordSection">
+                    <label class="form-label">Initial Password *</label>
+                    <input type="password" class="form-input" id="userPassword" placeholder="Minimum 8 characters">
+                    <small style="color: var(--gray-500); font-size: 13px; margin-top: 4px; display: block;">User will be required to change password on first login</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-input" id="userPhone" placeholder="e.g., +82-10-1234-5678">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Department</label>
+                    <input type="text" class="form-input" id="userDepartment" placeholder="e.g., Operations, IT, Security">
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="sendWelcomeEmail">
+                        <span>Send welcome email with login credentials</span>
+                    </label>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: 32px;">
+                    <button type="submit" class="btn btn-primary">Save User</button>
+                    <button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="deleteButton" style="margin-left: auto; display: none;">Delete User</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // Role descriptions
+        const roleDescriptions = {
+            'administrator': 'Full system access including user management, system configuration, and all security operations. Can modify critical settings and manage all users.',
+            'system-administrator': 'System configuration and maintenance access. Can manage system settings, backups, and technical configurations but cannot manage users.',
+            'security-analyst': 'Security operations and incident response. Full access to cyber risk, alerts, vulnerabilities, and incident management. Cannot modify system settings.',
+            'operator': 'Day-to-day operations monitoring. Can view dashboards, logs, and basic operations. Limited modification capabilities.',
+            'auditor': 'Read-only access for compliance and auditing. Can view all compliance documents, audit reports, and system logs but cannot make changes.',
+            'vessel-manager': 'Vessel-specific management access. Can manage vessel details, assets, and vessel-level configurations. Limited access to fleet-wide settings.'
+        };
+
+        // Check if editing existing user
+        const urlParams = new URLSearchParams(window.location.search);
+        const editEmail = urlParams.get('email');
+        const isEditMode = !!editEmail;
+
+        if (isEditMode) {
+            document.getElementById('pageTitle').textContent = 'Edit User';
+            document.getElementById('deleteButton').style.display = 'block';
+
+            // Hide password section when editing
+            document.getElementById('passwordSection').style.display = 'none';
+
+            // Pre-fill form with user data (in production, fetch from backend)
+            // For demo, using sample data based on email
+            const sampleUsers = {
+                'minsu@teragrid.com': { name: 'Kim Minsu', role: 'administrator', status: 'active', phone: '+82-10-1234-5678', department: 'IT Operations' },
+                'sujin@teragrid.com': { name: 'Lee Sujin', role: 'operator', status: 'active', phone: '+82-10-2345-6789', department: 'Operations' },
+                'jihoon@teragrid.com': { name: 'Park Jihoon', role: 'security-analyst', status: 'active', phone: '+82-10-3456-7890', department: 'Security' }
+            };
+
+            const userData = sampleUsers[editEmail];
+            if (userData) {
+                document.getElementById('userName').value = userData.name;
+                document.getElementById('userEmail').value = editEmail;
+                document.getElementById('userEmail').disabled = true; // Email cannot be changed
+                document.getElementById('userRole').value = userData.role;
+                document.getElementById('userStatus').value = userData.status;
+                document.getElementById('userPhone').value = userData.phone || '';
+                document.getElementById('userDepartment').value = userData.department || '';
+                showRoleDescription();
+            }
+        }
+
+        // Show role description
+        function showRoleDescription() {
+            const role = document.getElementById('userRole').value;
+            const descContainer = document.getElementById('roleDescription');
+            const descText = document.getElementById('roleDescriptionText');
+
+            if (role && roleDescriptions[role]) {
+                descText.textContent = roleDescriptions[role];
+                descContainer.style.display = 'block';
+            } else {
+                descContainer.style.display = 'none';
+            }
+        }
+
+        // Form submission
+        document.getElementById('userForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = {
+                name: document.getElementById('userName').value,
+                email: document.getElementById('userEmail').value,
+                role: document.getElementById('userRole').value,
+                status: document.getElementById('userStatus').value,
+                phone: document.getElementById('userPhone').value,
+                department: document.getElementById('userDepartment').value,
+                sendEmail: document.getElementById('sendWelcomeEmail').checked
+            };
+
+            if (!isEditMode) {
+                formData.password = document.getElementById('userPassword').value;
+            }
+
+            // In production, send to backend API
+            console.log('User data:', formData);
+
+            if (isEditMode) {
+                alert('User updated successfully!');
+            } else {
+                alert('User created successfully!\n\nThe user will receive a welcome email with login credentials.');
+            }
+
+            // Redirect back to user management
+            window.location.href = '7-1-1_user-management.html';
+        });
+
+        // Delete user
+        document.getElementById('deleteButton').addEventListener('click', function() {
+            if (confirm('Are you sure you want to delete this user?\n\nThis action cannot be undone.')) {
+                // In production, call delete API
+                alert('User deleted successfully!');
+                window.location.href = '7-1-1_user-management.html';
+            }
+        });
+    </script>
+</body>
+</html>

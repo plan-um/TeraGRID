@@ -69,8 +69,52 @@
     </aside>
 
 <main class="main-content"><div class="page-header"><h1>Playbook Create/Edit</h1><p>Define response procedures step-by-step to create or edit playbooks</p></div>
-<div class="card" style="max-width: 800px;"><form><div class="form-group"><label class="form-label">Playbook Name *</label><input type="text" class="form-input" placeholder="e.g., Ransomware Response" required></div><div class="form-group"><label class="form-label">Incident Type *</label><select class="form-input" required><option>Ransomware</option><option>Unauthorized Access</option><option>Network Attack</option><option>Data Breach</option></select></div><div class="form-group"><label class="form-label">Description</label><textarea class="form-input" rows="3" placeholder="Playbook description"></textarea></div><div class="form-group"><label class="form-label">Step-by-Step Checklist</label><div style="display: flex; flex-direction: column; gap: 8px;"><input type="text" class="form-input" placeholder="1. Isolate network"><input type="text" class="form-input" placeholder="2. Verify backup"><input type="text" class="form-input" placeholder="3. Perform forensic analysis"><button type="button" class="btn btn-secondary" style="width: fit-content;">Add Step</button></div></div><div style="display: flex; gap: 12px; margin-top: 24px;"><button type="submit" class="btn btn-primary">Save</button><button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button><button type="button" class="btn btn-danger">Delete</button></div></form></div>
+<div class="card" style="max-width: 800px;"><form><div class="form-group"><label class="form-label">Playbook Name *</label><input type="text" class="form-input" placeholder="e.g., Ransomware Response" value="Ransomware Response" required></div><div class="form-group"><label class="form-label">Incident Type *</label><select class="form-input" required><option value="ransomware">Ransomware</option><option value="unauthorized-access">Unauthorized Access</option><option value="network-attack">Network Attack</option><option value="data-breach">Data Breach</option></select><small style="color: var(--gray-500); font-size: 13px; margin-top: 4px; display: block;">This will link to alert types in <a href="4-1-2_alert-detail.html" style="color: var(--primary);">Alert Detail</a> page</small></div>
+
+<div class="form-group"><label class="form-label">Auto-Suggestion Settings</label><div style="border: 1px solid var(--gray-200); border-radius: 8px; padding: 16px; background: var(--gray-50);"><div style="margin-bottom: 12px;"><label class="form-label">Severity Level</label><div style="display: flex; gap: 12px;"><label style="display: flex; align-items: center; gap: 8px;"><input type="checkbox" name="severity" value="critical" checked><span>Critical</span></label><label style="display: flex; align-items: center; gap: 8px;"><input type="checkbox" name="severity" value="high"><span>High</span></label><label style="display: flex; align-items: center; gap: 8px;"><input type="checkbox" name="severity" value="medium"><span>Medium</span></label></div></div><div><label class="form-label">Keywords (comma-separated)</label><input type="text" class="form-input" placeholder="e.g., ransomware, encrypt, lockbit" value="ransomware, encrypt, lockbit"><small style="color: var(--gray-500); font-size: 13px; margin-top: 4px; display: block;">This playbook will be automatically suggested when alerts match these severity levels and keywords</small></div></div></div>
+
+<div class="form-group"><label class="form-label">Description</label><textarea class="form-input" rows="3" placeholder="Playbook description">Immediate response procedures for ransomware incidents</textarea></div><div class="form-group"><label class="form-label">Step-by-Step Checklist</label><div style="display: flex; flex-direction: column; gap: 8px;" id="stepsList"><div style="border: 1px solid var(--gray-200); border-radius: 8px; padding: 12px; background: white;"><input type="text" class="form-input" placeholder="Step description" value="1. Isolate network" style="margin-bottom: 8px;"><label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;"><input type="checkbox" class="automation-checkbox"><span style="font-size: 14px;">Link to automated action</span></label><select class="form-input automation-action" style="display: none; font-size: 14px;"><option value="">Select automation...</option><option value="isolation-mode">Zone Settings - Enable Isolation Mode</option><option value="terminate-sessions">Zone Settings - Terminate All Sessions</option><option value="block-remote">Remote Access - Block All Remote Access</option><option value="backup-cbs">Backup/Restore - Backup All CBS</option></select></div><div style="border: 1px solid var(--gray-200); border-radius: 8px; padding: 12px; background: white;"><input type="text" class="form-input" placeholder="Step description" value="2. Verify backup integrity" style="margin-bottom: 8px;"><label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;"><input type="checkbox" class="automation-checkbox"><span style="font-size: 14px;">Link to automated action</span></label><select class="form-input automation-action" style="display: none; font-size: 14px;"><option value="">Select automation...</option><option value="isolation-mode">Zone Settings - Enable Isolation Mode</option><option value="terminate-sessions">Zone Settings - Terminate All Sessions</option><option value="block-remote">Remote Access - Block All Remote Access</option><option value="backup-cbs">Backup/Restore - Backup All CBS</option></select></div><div style="border: 1px solid var(--gray-200); border-radius: 8px; padding: 12px; background: white;"><input type="text" class="form-input" placeholder="Step description" value="3. Perform forensic analysis" style="margin-bottom: 8px;"><label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;"><input type="checkbox" class="automation-checkbox"><span style="font-size: 14px;">Link to automated action</span></label><select class="form-input automation-action" style="display: none; font-size: 14px;"><option value="">Select automation...</option><option value="isolation-mode">Zone Settings - Enable Isolation Mode</option><option value="terminate-sessions">Zone Settings - Terminate All Sessions</option><option value="block-remote">Remote Access - Block All Remote Access</option><option value="backup-cbs">Backup/Restore - Backup All CBS</option></select></div><button type="button" class="btn btn-secondary" style="width: fit-content;" onclick="addStep()">Add Step</button></div></div><div style="display: flex; gap: 12px; margin-top: 24px;"><button type="submit" class="btn btn-primary">Save</button><button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button><button type="button" class="btn btn-danger">Delete</button></div></form></div>
 </main>    <script>
         lucide.createIcons();
+
+        // Toggle automation action dropdown
+        document.addEventListener('change', function(e) {
+            if (e.target.classList.contains('automation-checkbox')) {
+                const actionSelect = e.target.closest('div').querySelector('.automation-action');
+                if (e.target.checked) {
+                    actionSelect.style.display = 'block';
+                } else {
+                    actionSelect.style.display = 'none';
+                    actionSelect.value = '';
+                }
+            }
+        });
+
+        function addStep() {
+            const stepsList = document.getElementById('stepsList');
+            const stepCount = stepsList.querySelectorAll('input[type="text"]').length + 1;
+
+            const newStep = document.createElement('div');
+            newStep.style.border = '1px solid var(--gray-200)';
+            newStep.style.borderRadius = '8px';
+            newStep.style.padding = '12px';
+            newStep.style.background = 'white';
+            newStep.innerHTML = `
+                <input type="text" class="form-input" placeholder="Step description" value="${stepCount}. " style="margin-bottom: 8px;">
+                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                    <input type="checkbox" class="automation-checkbox">
+                    <span style="font-size: 14px;">Link to automated action</span>
+                </label>
+                <select class="form-input automation-action" style="display: none; font-size: 14px;">
+                    <option value="">Select automation...</option>
+                    <option value="isolation-mode">Zone Settings - Enable Isolation Mode</option>
+                    <option value="terminate-sessions">Zone Settings - Terminate All Sessions</option>
+                    <option value="block-remote">Remote Access - Block All Remote Access</option>
+                    <option value="backup-cbs">Backup/Restore - Backup All CBS</option>
+                </select>
+            `;
+
+            stepsList.insertBefore(newStep, stepsList.lastElementChild);
+        }
     </script>
 </body></html>
